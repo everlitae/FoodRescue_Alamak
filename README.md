@@ -1,42 +1,78 @@
-# Alamak_Agile_IFA-Sore
+# 🍽️ Food Rescue Web  
+### *Alamak Agile IFA - Sore*
 
-## Food Rescue Web adalah sebuah platform digital yang dirancang untuk membantu mengurangi pemborosan makanan dengan cara menghubungkan individu atau pihak yang memiliki kelebihan makanan dengan mereka yang membutuhkan. Melalui platform ini, pengguna dapat mengunggah informasi terkait donasi makanan, seperti jenis makanan, jumlah, serta lokasi pengambilan.
+## 📌 Deskripsi
+**Food Rescue Web** adalah platform digital yang bertujuan untuk mengurangi pemborosan makanan (*food waste*) dengan menghubungkan pihak yang memiliki kelebihan makanan dengan mereka yang membutuhkan.
 
-## Informasi tersebut kemudian dapat diakses oleh relawan maupun penerima, sehingga proses pengambilan dan penyaluran makanan dapat dilakukan dengan lebih cepat dan efisien. Dengan adanya Food Rescue Web, diharapkan kegiatan donasi makanan menjadi lebih terorganisir, mudah diakses, serta memberikan manfaat yang lebih luas bagi masyarakat.
+Melalui platform ini, pengguna dapat membagikan informasi donasi makanan seperti jenis, jumlah, dan lokasi pengambilan. Informasi tersebut kemudian dapat diakses oleh relawan maupun penerima, sehingga proses distribusi makanan menjadi lebih cepat, efisien, dan terorganisir.
 
-## Fitur-Fitur yang ada di Food Rescue Web :
-## 1. Manajemen Pengguna
-### - Registrasi akun
-### - Login & logout
-### - Pengelolaan profil (lihat & edit informasi)
-### - Penentuan peran pengguna (Donor / Receiver / Volunteer)
+Dengan adanya platform ini, diharapkan kegiatan donasi makanan menjadi lebih mudah diakses dan memberikan dampak sosial yang lebih luas.
 
-## 2. Donasi Makanan
-### - Membuat postingan donasi makanan
-### - Upload foto makanan
-### - Menambahkan deskripsi makanan
-### - Menentukan kategori makanan
-### - Mengatur jumlah makanan
-### - Menentukan batas waktu (expired / pickup deadline)
-### - Menentukan lokasi pengambilan
+---
 
-## 3. Interaksi & Transaksi
-### - Klaim donasi makanan
-### - Status donasi (Available / Claimed / Completed)
-### - Notifikasi saat donasi diklaim
-### - Chat / pesan antara donor dan penerima
-### - Pencarian donasi
-### - Filter donasi (berdasarkan kategori atau lokasi)
+## 🚀 Fitur Utama
 
-## 4. Riwayat & Tracking
-### - Riwayat donasi (yang diberikan & diterima)
-### - Tracking donasi yang diklaim
-### - Pelaporan makanan kadaluarsa / tidak tersedia
-### - Sistem rating / kepercayaan pengguna
+### 👤 1. Manajemen Pengguna
+- Registrasi akun  
+- Login & logout  
+- Pengelolaan profil (lihat & edit informasi)  
+- Penentuan peran pengguna:
+  - Donor  
+  - Receiver  
+  - Volunteer  
 
-## 5. Admin Panel
-### - Login admin
-### - Manajemen pengguna
-### - Manajemen postingan donasi
-### - Statistik platform (total donasi, jumlah pengguna, dll.)
+---
 
+### 🍱 2. Donasi Makanan
+- Membuat postingan donasi makanan  
+- Upload foto makanan  
+- Menambahkan deskripsi makanan  
+- Menentukan kategori makanan  
+- Mengatur jumlah makanan  
+- Menentukan batas waktu (expired / pickup deadline)  
+- Menentukan lokasi pengambilan  
+
+---
+
+### 🔄 3. Interaksi & Transaksi
+- Klaim donasi makanan  
+- Status donasi:
+  - Available  
+  - Claimed  
+  - Completed  
+- Notifikasi saat donasi diklaim  
+- Chat / pesan antara donor dan penerima  
+- Pencarian donasi  
+- Filter donasi (kategori & lokasi)  
+
+---
+
+### 📊 4. Riwayat & Tracking
+- Riwayat donasi (diberikan & diterima)  
+- Tracking donasi yang diklaim  
+- Pelaporan makanan kadaluarsa / tidak tersedia  
+- Sistem rating / kepercayaan pengguna  
+
+---
+
+### 🛠️ 5. Admin Panel
+- Login admin  
+- Manajemen pengguna  
+- Manajemen postingan donasi  
+- Statistik platform:
+  - Total donasi  
+  - Jumlah pengguna  
+  - Aktivitas platform  
+
+---
+
+## 🎯 Tujuan
+- Mengurangi pemborosan makanan  
+- Mempermudah proses donasi  
+- Meningkatkan efisiensi distribusi makanan  
+- Memberikan dampak sosial yang positif bagi masyarakat  
+
+---
+
+## 📌 Catatan
+Project ini dikembangkan sebagai bagian dari tugas **Agile Development** oleh tim *Alamak Agile IFA - Sore*.
