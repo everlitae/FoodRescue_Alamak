@@ -1,0 +1,23 @@
+[{
+  "_id": {
+    "$oid": "69e6f478be5613c435005fc5"
+  },
+  "NIK": "1223188909060001",
+  "full_name": "Pauline Angelicca Grechen",
+  "email": "pauline@gmail.com",
+  "username": "pauline123",
+  "password": "HASHED_PASSWORD",
+  "address": "Jl. Titipapan, Marelan, Kota Medan",
+  "birthdate": {
+    "$date": "2006-09-23T00:00:00.000Z"
+  },
+  "current_employment": "Admin",
+  "salary": 4000000,
+  "marriage_status": "Single",
+  "created_at": {
+    "$date": "2026-04-21T03:52:24.391Z"
+  },
+  "updated_at": {
+    "$date": "2026-04-21T03:52:24.391Z"
+  }
+}]
