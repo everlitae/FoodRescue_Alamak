@@ -1,12 +1,17 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
 const userSchema = new mongoose.Schema({
   NIK: {
     type: String,
     unique: true,
-    sparse: true
+    sparse: true,
+    trim: true
   },
-  full_name: String,
+  full_name: {
+    type: String,
+    trim: true
+  },
   email: {
     type: String,
     required: true,
@@ -17,17 +22,34 @@ const userSchema = new mongoose.Schema({
   },
   username: {
     type: String,
-    trim: true,
     unique: true,
-    sparse: true
+    sparse: true,
+    trim: true,
+    lowercase: true,
+    minlength: 6
   },
   password: {
     type: String,
-    required: true
+    required: true,
+    select: false,
+    minlength: 6
   },
-  address: String,
+
+  phone_number: {
+    type: String,
+    trim: true,
+    match: [/^(?:\+62|62|0)\d{9,13}$/, "Nomor tidak valid"]
+  },
+
+  address: {
+    type: String,
+    trim: true
+  },
   birthdate: Date,
-  current_employment: String,
+  current_employment: {
+    type: String,
+    trim: true
+  },
   salary: {
     type: Number,
     default: 0
@@ -42,6 +64,20 @@ const userSchema = new mongoose.Schema({
     updatedAt: "updated_at"
   }
 });
+
+
+// Hash Password
+userSchema.pre("save", async function(next) {
+  if (!this.isModified("password")) return next();
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
+
+
+// Compare Password
+userSchema.methods.comparePassword = function(password) {
+  return bcrypt.compare(password, this.password);
+};
 
 const Users = mongoose.model("Users", userSchema);
 
