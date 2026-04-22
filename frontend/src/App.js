@@ -1,10 +1,10 @@
 import React from 'react';
 import { Route, Routes } from 'react-router';
-import MainLayout from './Layout/MainLayout.jsx';
-import SignInRegisterLayout from './Layout/SignInRegisterLayout.jsx';
 
-import SignInCard from './Component/SignInCard.jsx';
-import RegisterCard from './Component/RegisterCard.jsx';
+import MainLayout from './Layout/MainLayout.jsx';
+
+import SignInPage from './Page/SignInPage.jsx';
+import RegisterPage from './Page/RegisterPage.jsx';
 
 function App() {
     return (
@@ -13,10 +13,8 @@ function App() {
                 <Route path="about" element={<div>About</div>} />       
             </Route> 
 
-            <Route path="user" element={<SignInRegisterLayout />}>
-                <Route path="signin" element={<SignInCard />} />
-                <Route path="register" element= {<RegisterCard />} />
-            </Route>
+            <Route path="signin" element={<SignInPage />} />
+            <Route path="register" element= {<RegisterPage />} />
 
             <Route path="*" element={<div>404 Not Found</div>} />
 

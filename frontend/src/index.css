@@ -1,4 +1,28 @@
-html, body {
+:root{
+  --g1:#5f8b4c;--g2:#7aaf60;--g3:#a8d48a;--g4:#d4efbf;--g5:#eef7e6;
+  --cr1:#945034;--cr2:#b8694a;--cr3:#ffddab;--cr4:#fff3d9;
+  --sa1:#e05050;--sa2:#ff7070;--sa3:#ff9a9a;--sa4:#ffd5d5;--sa5:#fff5f5;
+  --bg:#f5faf2;--bg2:#edf5e6;
+  --surface:#fff;--surf2:#f0f7e9;
+  --grid-color: rgba(0,0,0,0.10);
+  --border:rgba(95,139,76,.16);
+  --txt:#1a2e14;--txt2:#3b5830;--txt3:#6b8c5a;--txt4:#9ab88a;
+  --shadow:0 2px 20px rgba(60,100,40,.20);--shadow2:0 8px 48px rgba(60,100,40,.26);
+}
+
+[data-theme="dark"]{
+  --bg:#0b1509;--bg2:#111d0e;
+  --surface:#162010;--surf2:#1c2a16;
+  --grid-color: rgba(255,255,255,0.5);
+  --border:rgba(122,175,96,.16);
+  --txt:#dff0cc;--txt2:#a8cc88;--txt3:#6a9050;--txt4:#3d5830;
+  --shadow:0 2px 20px rgba(0,0,0,.45);--shadow2:0 8px 48px rgba(0,0,0,.60);
+  --g5:rgba(95,139,76,.12);
+  --cr4:rgba(255,221,171,.12);
+  --sa5:rgba(255,154,154,.06);
+}
+
+html, body, #root {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -10,65 +34,149 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+p, h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
-.collapse-horizontal {
-  background-color: aliceblue;
-  height: 100%;
-  overflow: auto;
-  transform: translateX(-100%);
-  transition: transform 0.3s ease;
+/* BOOTSTRAP OVERRIDE - START */
+
+.form-check-input {
+  border-color: var(--g3);
 }
 
-.collapse-horizontal.show {
-  transform: translateX(0);
+.form-check-input:checked {
+  background-color: var(--g3);
+  border-color: var(--g3);
 }
 
-.btn-sidebar {
-  position: relative;
-  overflow: hidden;
+.form-check-input:focus {
+  border-color: var(--g3);
+  box-shadow: var(--shadow);
+}
+
+/* BOOTSTRAP OVERRIDE - END */
+
+.text-green1 {
+  color: var(--txt);
+}
+
+.text-green2 {
+  color: var(--txt2);
+}
+
+.text-green3 {
+  color: var(--txt3);
+}
+
+.text-green4 {
+  color: var(--txt4);
+}
+
+.syne-h1 {
+  font-family: "Syne", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+}
+
+.outfit {
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+
+}
+
+.left-signin, .left-register {
+  background-image: linear-gradient(155deg,#2e5220 0%,var(--g1) 45%,var(--cr2) 100%);
+}
+
+.right-signin, .right-register {
+  background-color: var(--surface);
+}
+
+.btn-light-green{
   background-color: transparent;
+  color: var(--txt2);
+  text-decoration: none;
+  transition: background-color 0.2s ease-in;
+}
+
+.btn-light-green:hover{
+  background-color: var(--g5);
+}
+
+.btn-green-gradient {
+  background-image: linear-gradient(90deg, var(--g1), var(--g2));
+  color: #FFFFFF;
   border: none;
+  box-shadow: var(--shadow);
+  transition: all 0.15s ease-in;
 }
 
-.btn-sidebar::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background-color: rgb(159, 80, 159);
-  transition: left 0.4s ease;
-  z-index: 0;
+.btn-green-gradient:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow2);
+  color: #FFFFFF;
 }
 
-.btn-sidebar span {
-  position: relative;
-  z-index: 1;
-  transition: color 0.2s ease-in-out;
+.input-green {
+  background-color: var(--g5);
+  color: var(--txt);
+  border-color: var(--g4);
 }
 
-.btn-sidebar:hover::before {
-  left: 0;
+.input-green:focus {
+  background-color: var(--surface);
+  border-color: var(--g4);
+  box-shadow: 0px 0px 0px 3px var(--g4);
 }
 
-.btn-sidebar:hover span {
-  color: white;
+.input-green::placeholder{
+  color: var(--g2);
 }
 
-.btn-forestgreen {
-    background-color: #5F8B4C;
-    border: none;
-    color: #FFFFFF;
-
-    text-decoration: none;
-    cursor: pointer;
+.card-transparent {
+  background-color: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(8px);
 }
 
-.btn-forestgreen:hover {
-    background-color: #4A6B3B;
+.grid-detail-light::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
+  background-size:44px 44px;
+}
+
+.grid-detail-responsive::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:linear-gradient(var(--grid-color) 1px,transparent 1px),linear-gradient(90deg,var(--grid-color) 1px,transparent 1px);
+  background-size:44px 44px;
+}
+
+/* Define the fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* optional slide effect */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Apply animation to the element */
+.fade-in {
+  opacity: 0; /* start hidden */
+  animation: fadeIn 0.6s ease-out forwards;
+  /* forwards keeps the final state after animation */
 }
