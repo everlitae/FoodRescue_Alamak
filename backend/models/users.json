@@ -1,0 +1,40 @@
+{
+  "first_name": "Budi",
+  "last_name": "Santoso",
+  "email": "budi@example.com",
+  "password_hash": "123456",
+  "role": "food_provider",
+
+  "city": "Jakarta",
+  "is_verified": true,
+  "is_active": true,
+  "trust_score": 4.8,
+  "total_points": 120,
+
+  "profile": {
+    "bio": "Restoran keluarga sejak 2010",
+    "total_donations": 42,
+    "food_saved_kg": 180.5,
+    "co2_saved_kg": 451.25
+  },
+
+  "addresses": [
+    {
+      "label": "Restoran",
+      "address_line": "Jl. Sudirman No. 12",
+      "city": "Jakarta Selatan",
+      "province": "DKI Jakarta",
+      "location": {
+        "type": "Point",
+        "coordinates": [106.823, -6.2088]
+      },
+      "is_primary": true
+    }
+  ],
+
+  "achievements": [
+    {
+      "achievement_id": "first_donation"
+    }
+  ]
+}
