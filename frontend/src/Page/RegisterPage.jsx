@@ -5,6 +5,13 @@ class RegisterPage extends React.Component {
         super(props);
     }
 
+    setTheme(){
+        const currentTheme = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+
+        document.documentElement.setAttribute("data-theme", currentTheme);
+        localStorage.setItem("theme", currentTheme);
+    }
+
     async postUser() {
         const emailInp = document.getElementById("email_input").value
         const usernameInp = document.getElementById("username_input").value
@@ -43,14 +50,24 @@ class RegisterPage extends React.Component {
         }
     }
 
+    componentDidMount() {
+        const savedTheme = localStorage.getItem("theme");
+        if(savedTheme){
+            document.documentElement.setAttribute("data-theme", savedTheme);
+        }
+    }
+
     render() {
         return (
             <>
                 <div className="w-100 min-vh-100 h-100 d-flex flex-row">
                     <div className="d-none d-md-flex col-6 h-100 flex-column justify-content-between p-5 left-signin position-relative grid-detail text-white">
-                        <div className="">
-                            <h5 className="syne-h1">FoodRescue</h5>
-                            <p className="outfit"><small>WEB PLATFORM</small></p>
+                        <div className="d-flex flex-wrap align-items-center justify-content-start gap-3">
+                            <img src="/assets/logo/foodrescue_logo_only.png" width={"55px"} height={"50px"} alt="" />
+                            <div>
+                                <h5 className="syne-h1">FoodRescue</h5>
+                                <p className="outfit"><small>WEB PLATFORM</small></p>
+                            </div>
                         </div>
                         <div className="fade-in">
                             <h1 className="syne-h1">Bergabung & Buat Dampak <span style={{color: "var(--cr3)"}}>Nyata</span></h1>
@@ -80,7 +97,7 @@ class RegisterPage extends React.Component {
                         <div className="d-flex flex-row align-items-center justify-content-between mb-5">
                             <p className="outfit text-green3 fw-light"> <i class="bi bi-arrow-left-short"></i> Kembali</p>
 
-                            <button className="btn btn-green-gradient"><i className="bi bi-brightness-high"></i></button>
+                            <button className="btn btn-green-gradient" onClick={this.setTheme}><i className="bi bi-brightness-high"></i></button>
                         </div>
 
                         <div className="mb-5">
@@ -90,7 +107,7 @@ class RegisterPage extends React.Component {
 
                         <div className="d-flex flex-column gap-3">
                             
-                            <div className="d-flex flex-row gap-3">
+                            <div className="d-flex flex-column flex-md-row gap-3">
                                 <div className="flex-grow-1 d-flex flex-column gap-1">
                                     <label className="text-green3 fw-semibold" htmlFor="email">NAMA DEPAN</label>
                                     <div className="input-group rounded-3">
@@ -159,7 +176,7 @@ class RegisterPage extends React.Component {
                             </div>
 
                             <div className="d-flex flex-column gap-1 rounded-3">
-                                <label className="text-green3 fw-semibold fs-6" htmlFor="password">KONFIMAS PASSWORD</label>
+                                <label className="text-green3 fw-semibold fs-6" htmlFor="password">KONFIRMASI PASSWORD</label>
                                 <div className="input-group">
                                     <input type="text" className="form-control py-2 px-3 input-green" placeholder="Password"/> 
                                     <span className="input-group-text input-green">

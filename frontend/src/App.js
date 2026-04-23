@@ -5,12 +5,13 @@ import MainLayout from './Layout/MainLayout.jsx';
 
 import SignInPage from './Page/SignInPage.jsx';
 import RegisterPage from './Page/RegisterPage.jsx';
+import LandingPage from './Page/LandingPage.jsx';
 
 function App() {
     return (
         <Routes>
             <Route path="/" element={<MainLayout />}>
-                <Route path="about" element={<div>About</div>} />       
+                <Route path="landing" element={<LandingPage/>} />       
             </Route> 
 
             <Route path="signin" element={<SignInPage />} />

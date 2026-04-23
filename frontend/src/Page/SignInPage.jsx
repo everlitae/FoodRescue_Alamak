@@ -6,6 +6,13 @@ class SignInPage extends React.Component {
         super(props);
     }
 
+    setTheme(){
+        const currentTheme = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+
+        document.documentElement.setAttribute("data-theme", currentTheme);
+        localStorage.setItem("theme", currentTheme);
+    }
+
     async getUser() {
         const userInput = document.getElementById("user_input").value;
         const passwordInput = document.getElementById("password_input").value;
@@ -26,6 +33,13 @@ class SignInPage extends React.Component {
             alert("Login Berhasil!");
         } else {
             alert("Login Gagal: " + data.message);
+        }
+    }
+
+    componentDidMount() {
+        const savedTheme = localStorage.getItem("theme");
+        if(savedTheme){
+            document.documentElement.setAttribute("data-theme", savedTheme);
         }
     }
 
@@ -58,7 +72,7 @@ class SignInPage extends React.Component {
                         <div className="d-flex flex-row align-items-center justify-content-between mb-5">
                             <p className="outfit text-green3 fw-light"> <i class="bi bi-arrow-left-short"></i> Kembali</p>
 
-                            <button className="btn btn-green-gradient"><i class="bi bi-brightness-high"></i></button>
+                            <button className="btn btn-green-gradient" onClick={this.setTheme}><i class="bi bi-brightness-high"></i></button>
                         </div>
 
                         <div className="mb-5">

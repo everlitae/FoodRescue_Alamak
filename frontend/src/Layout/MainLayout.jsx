@@ -7,8 +7,11 @@ class MainLayout extends React.Component {
     render() {
         return (
             <>
-                <NavBar/>
-                <Outlet/>
+                <div className="position-relative">
+                    <NavBar/>
+                    <Outlet/>
+                </div>
+                
             </>
         );
     }

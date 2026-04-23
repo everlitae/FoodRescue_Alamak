@@ -4,7 +4,7 @@
   --sa1:#e05050;--sa2:#ff7070;--sa3:#ff9a9a;--sa4:#ffd5d5;--sa5:#fff5f5;
   --bg:#f5faf2;--bg2:#edf5e6;
   --surface:#fff;--surf2:#f0f7e9;
-  --grid-color: rgba(0,0,0,0.10);
+  --grid-color: rgba(0,0,0,0.05);
   --border:rgba(95,139,76,.16);
   --txt:#1a2e14;--txt2:#3b5830;--txt3:#6b8c5a;--txt4:#9ab88a;
   --shadow:0 2px 20px rgba(60,100,40,.20);--shadow2:0 8px 48px rgba(60,100,40,.26);
@@ -13,13 +13,20 @@
 [data-theme="dark"]{
   --bg:#0b1509;--bg2:#111d0e;
   --surface:#162010;--surf2:#1c2a16;
-  --grid-color: rgba(255,255,255,0.5);
+  --grid-color: rgba(255,255,255,0.05);
   --border:rgba(122,175,96,.16);
   --txt:#dff0cc;--txt2:#a8cc88;--txt3:#6a9050;--txt4:#3d5830;
-  --shadow:0 2px 20px rgba(0,0,0,.45);--shadow2:0 8px 48px rgba(0,0,0,.60);
+  --shadow:0 2px 20px rgba(70, 100, 40, 0.45);--shadow2:0 8px 48px rgba(70,100,40,.60);
   --g5:rgba(95,139,76,.12);
   --cr4:rgba(255,221,171,.12);
   --sa5:rgba(255,154,154,.06);
+}
+
+* {
+  transition: 
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 html, body, #root {
@@ -48,6 +55,7 @@ code {
 /* BOOTSTRAP OVERRIDE - START */
 
 .form-check-input {
+  background-color: var(--surface);
   border-color: var(--g3);
 }
 
@@ -62,6 +70,27 @@ code {
 }
 
 /* BOOTSTRAP OVERRIDE - END */
+
+/* SCROLLBAR OVERRIDE - START */
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--g3);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* SCROLLBAR OVERRIDE - END */
 
 .text-green1 {
   color: var(--txt);
@@ -91,6 +120,10 @@ code {
 
 }
 
+.main-bg-color {
+  background-color: var(--bg);
+}
+
 .left-signin, .left-register {
   background-image: linear-gradient(155deg,#2e5220 0%,var(--g1) 45%,var(--cr2) 100%);
 }
@@ -110,6 +143,19 @@ code {
   background-color: var(--g5);
 }
 
+.btn-white {
+  background-color: #FFFFFF;
+  color: #3d5830;
+  border: none;
+  box-shadow: var(--shadow);
+  transition: all 0.15s ease-in;
+}
+
+.btn-white:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow2);
+}
+
 .btn-green-gradient {
   background-image: linear-gradient(90deg, var(--g1), var(--g2));
   color: #FFFFFF;
@@ -127,17 +173,49 @@ code {
 .input-green {
   background-color: var(--g5);
   color: var(--txt);
-  border-color: var(--g4);
+  border-color: var(--border);
 }
 
 .input-green:focus {
   background-color: var(--surface);
-  border-color: var(--g4);
+  color: var(--txt);
+  border-color: var(--border);
   box-shadow: 0px 0px 0px 3px var(--g4);
 }
 
 .input-green::placeholder{
-  color: var(--g2);
+  color: var(--txt4);
+}
+
+.card-basic {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.card-basic:hover{
+  background-color: var(--surf2);
+}
+
+.card-gradient-orange {
+  background: linear-gradient(180deg, var(--cr3) 20%, var(--surface) 40%);
+  border: none;
+  box-shadow: var(--shadow);
+}
+
+.card-gradient-orange:hover {
+  border: 1px solid var(--txt2);
+  box-shadow: var(--shadow2);
+}
+
+.card-gradient-green {
+  background-image: linear-gradient(180deg, var(--g3) 20%, var(--surface) 40%);
+  border: none;
+  box-shadow: var(--shadow);
+}
+
+.card-gradient-green:hover {
+  border: 1px solid var(--txt2);
+  box-shadow: var(--shadow2);
 }
 
 .card-transparent {
@@ -146,20 +224,38 @@ code {
   backdrop-filter: blur(8px);
 }
 
+.btn-outline-green{
+  background-color: var(--g5);
+  color: var(--txt4);
+  border: 1px solid var(--txt3);
+}
+
+.btn-outline-green:hover{
+  color: #FFFFFF;
+  background-color: var(--txt3);
+}
+
+.badge-green {
+  background-color: var(--g5);
+  color: var(--txt3);
+  font-size: x-small;
+  border: 1px solid var(--txt3);
+}
+
 .grid-detail-light::before{
   content:'';
   position:absolute;
   inset:0;
   background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
-  background-size:44px 44px;
+  background-size:64px 64px;
 }
 
 .grid-detail-responsive::before{
   content:'';
-  position:absolute;
+  position: absolute;
   inset:0;
   background-image:linear-gradient(var(--grid-color) 1px,transparent 1px),linear-gradient(90deg,var(--grid-color) 1px,transparent 1px);
-  background-size:44px 44px;
+  background-size:64px 64px;
 }
 
 /* Define the fade-in animation */
