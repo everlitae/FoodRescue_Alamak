@@ -212,14 +212,6 @@ code {
   color: var(--txt4);
 }
 
-.input-group .form-control {
-  padding-right: 80px; /* ruang buat icon */
-}
-
-.input-group-text:first-of-type {
-  border-left: none !important;
-}
-
 .input-eye {
   border-left: none !important;
   border-right: none !important;
@@ -241,6 +233,14 @@ code {
 
 .input-group-text i {
   color: inherit;
+}
+
+.input-group .form-control {
+  padding-right: 80px;
+}
+
+.input-group-text:first-of-type {
+  border-left: none !important;
 }
 
 .input-group .input-error ~ .eye-inside {
