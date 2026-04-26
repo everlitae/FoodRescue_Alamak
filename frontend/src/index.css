@@ -79,6 +79,32 @@ code {
   box-shadow: var(--shadow);
 }
 
+.nav-tabs {
+  border-color: var(--g2);
+}
+
+.nav-tabs .nav-link {
+  border: none;
+  color: var(--txt4);
+}
+
+.nav-tabs .nav-link:hover {
+  border: none;
+  color: var(--txt3);
+}
+
+.nav-tabs .nav-link.active {
+  background-color: var(--surface);
+  color: var(--txt2);
+  border: 1px solid var(--g2);
+}
+
+.nav-tabs .nav-link.active:hover {
+  background-color: var(--surface);
+  color: var(--txt);
+  border-color: var(--g2);
+}
+
 /* BOOTSTRAP OVERRIDE - END */
 
 /* SCROLLBAR OVERRIDE - START */
