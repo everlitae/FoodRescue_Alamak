@@ -179,6 +179,18 @@ code {
   color: var(--txt4);
 }
 
+input[type="file"]::file-selector-button {
+  background-color: var(--g5);
+  color: var(--txt3);
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+
+input[type="file"]::file-selector-button:hover {
+  color: var(--txt);
+  background-color: var(--g4);
+}
+
 .card-basic {
   background-color: var(--surface);
   border: 1px solid var(--border);
@@ -238,7 +250,7 @@ code {
 
 .btn-outline-green{
   background-color: var(--g5);
-  color: var(--txt4);
+  color: var(--txt3);
   border: 1px solid var(--txt3);
 }
 
@@ -299,4 +311,34 @@ code {
   opacity: 0; /* start hidden */
   animation: fadeIn 0.6s ease-out forwards;
   /* forwards keeps the final state after animation */
+}
+
+.custom-range {
+  appearance: none; /* remove default style */
+  width: 100%;
+  height: 6px;
+  background: #dee2e6;
+  border-radius: 5px;
+  outline: none;
+}
+
+.custom-range::-webkit-slider-runnable-track {
+  height: 6px;
+  background: var(--g4);
+  border-radius: 5px;
+}
+
+.custom-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 18px;
+  width: 18px;
+  background: var(--g1); /* Bootstrap primary */
+  border-radius: 50%;
+  margin-top: -6px; /* center thumb */
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.custom-range::-webkit-slider-thumb:hover {
+  background: var(--g1);
 }
