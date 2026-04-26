@@ -129,7 +129,7 @@ function MapView({ donations, userPos }) {
         height: "100%",
         width: "100%",
         borderRadius: "8px",
-        overflow: "hidden",
+        
       }}
     />
         <button

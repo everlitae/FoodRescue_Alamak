@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
 import api from '../utils/api';
 import MapView from '../Component/MapView';
+import BadgeGreen from '../Component/BadgeGreen';
 
 function Donations() {
   const [donations, setDonations] = useState([]);
@@ -129,21 +130,21 @@ const filteredDonations = donations.filter(d => {
 
   return (
     <div className="container-fluid py-4">
-      <div className="row g-0" style={{ height: 'calc(100vh - 80px)' }}>
+      <div className="row g-0 outfit">
         {/* Kiri — Peta */}
         <div className="col-md-5 pe-3 d-flex flex-column" style={{ height: 'calc(100vh - 80px)' }}>
-          <h5 className="fw-bold mb-2">
-            <i className="bi bi-map text-primary me-2"></i>Peta Donasi
+          <h5 className="text-green1 syne-h1 mb-2">
+            <i className="bi bi-map me-2"></i>Peta Donasi
           </h5>
         <div style={{ flex: 1, minHeight: 0}}>
           <MapView donations={filteredDonations} userPos={userPos} />
         </div>
 
           {/* Slider Radius */}
-          <div className="card p-3 mt-3">
-            <label className="form-label fw-semibold mb-1">
-              <i className="bi bi-geo-alt text-primary me-1"></i>
-              Radius: <span className="text-primary">{radius} km</span>
+          <div className="card p-3 mt-3" style={{backgroundColor: "var(--surface)", borderColor:"var(--border)", boxShadow:"var(--shadow)"}}>
+            <label className="form-label text-green1 fw-semibold mb-1">
+              <i className="bi bi-geo-alt me-1"></i>
+              Radius: <span className="text-green3">{radius} km</span>
             </label>
 
             {locationLoading && (
@@ -154,7 +155,7 @@ const filteredDonations = donations.filter(d => {
             )}
 
             {!userPos && !locationLoading && (
-              <button className="btn btn-outline-primary btn-sm mb-2 w-100"
+              <button className="btn btn-outline-green btn-sm text-green1 mb-2 w-100"
                 onClick={() => {
                   setLocationLoading(true);
                   setLocationError('');
@@ -211,34 +212,34 @@ const filteredDonations = donations.filter(d => {
               </small>
             )}
 
-            <input type="range" className="form-range" min="1" max="50" value={radius}
+            <input type="range" className="form-range custom-range" min="1" max="50" value={radius}
               onChange={e => setRadius(Number(e.target.value))}
               disabled={!userPos} />
             <div className="d-flex justify-content-between">
-              <small className="text-muted">1 km</small>
-              <small className="text-muted">50 km</small>
+              <small className="text-green2">1 km</small>
+              <small className="text-green2">50 km</small>
             </div>
           </div>
         </div>
 
         {/* Kanan — Filter + List */}
-        <div className="col-md-7" style={{ overflowY: 'auto', height: 'calc(100vh - 80px)' }}>
-          <h5 className="fw-bold mb-2">
-            <i className="bi bi-basket2 text-primary me-2"></i>
+        <div className="col-md-7 mt-3 mt-md-0" style={{ overflowY: 'auto', height: 'calc(100vh - 80px)' }}>
+          <h5 className="mb-2 text-green1 syne-h1">
+            <i className="bi bi-basket2 me-2"></i>
             Donasi Tersedia
-            <span className="badge bg-primary ms-2">{filteredDonations.length}</span>
+            <span className="badge badge-green outfit fs-6 ms-2">{filteredDonations.length}</span>
           </h5>
 
           {/* Filter */}
-          <div className="card p-3 mb-3">
+          <div className="card p-3 mb-3" style={{backgroundColor: "var(--surface)", borderColor:"var(--border)", boxShadow:"var(--shadow)"}}>
             <div className="row g-2">
               <div className="col-12">
-                <input className="form-control" placeholder="🔍 Cari donasi..."
+                <input className="form-control input-green" placeholder="🔍 Cari donasi..."
                   value={filter.search}
                   onChange={e => setFilter({ ...filter, search: e.target.value })} />
               </div>
               <div className="col-md-6">
-                <select className="form-select" value={filter.category}
+                <select className="form-select input-green" value={filter.category}
                   onChange={e => setFilter({ ...filter, category: e.target.value })}>
                   <option value="">🏷️ Semua Kategori</option>
                   {categories.map(c => (
@@ -247,12 +248,12 @@ const filteredDonations = donations.filter(d => {
                 </select>
               </div>
               <div className="col-md-6">
-                <input className="form-control" placeholder="📍 Filter kota..."
+                <input className="form-control input-green" placeholder="📍 Filter kota..."
                   value={filter.city}
                   onChange={e => setFilter({ ...filter, city: e.target.value })} />
               </div>
               <div className="col-md-4">
-                <select className="form-select" value={filter.halal}
+                <select className="form-select input-green" value={filter.halal}
                   onChange={e => setFilter({ ...filter, halal: e.target.value })}>
                   <option value="">🍽️ Semua</option>
                   <option value="true">✅ Halal</option>
@@ -261,7 +262,7 @@ const filteredDonations = donations.filter(d => {
               </div>
               <div className="col-md-4">
                 <label className="form-label small text-muted mb-1">⏰ Masih Buka Sampai</label>
-                <input type="time" className="form-control form-control-sm"
+                <input type="time" className="form-control form-control-sm input-green"
                   value={filter.pickup_end}
                   onChange={e => setFilter({ ...filter, pickup_end: e.target.value })} />
               </div>
@@ -287,8 +288,8 @@ const filteredDonations = donations.filter(d => {
             </div>
           ) : filteredDonations.length === 0 ? (
             <div className="text-center py-5">
-              <i className="bi bi-basket2 display-3 text-muted"></i>
-              <p className="text-muted mt-2">Tidak ada donasi yang sesuai filter</p>
+              <i className="bi bi-basket2 display-3 text-green4"></i>
+              <p className="text-green4 mt-2">Tidak ada donasi yang sesuai filter</p>
             </div>
           ) : (
             <div className="row g-3">

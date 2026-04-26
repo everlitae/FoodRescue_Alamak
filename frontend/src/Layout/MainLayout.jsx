@@ -8,7 +8,7 @@ class MainLayout extends React.Component {
     render() {
         return (
             <>
-                <div className="position-relative grid-detail-responsive main-bg-color no-grid">
+                <div className="position-relative grid-detail-responsive main-bg-color">
                     <NavBar/>
                     <Outlet/>
                     <Footer/>
