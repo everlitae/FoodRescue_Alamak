@@ -9,6 +9,8 @@
   --txt:#1a2e14;--txt2:#3b5830;--txt3:#6b8c5a;--txt4:#9ab88a;
   --txtcr1:#945034;--txtcr2:#b8694a;--txtcr3:#ffddab;--txtcr4:#fff3d9;
   --shadow:0 2px 20px rgba(60,100,40,.20);--shadow2:0 8px 48px rgba(60,100,40,.26);
+  --error-bg: #ffe5e5;
+  --error-color: #dc3545;
 }
 
 [data-theme="dark"]{
@@ -22,6 +24,8 @@
   --txtcr1:#c7a55d;--txtcr2:#f0c39b;--txtcr3:#b8694a;--txtcr4:#945034;
   --cr4:rgba(255,221,171,.12);
   --sa5:rgba(255,154,154,.06);
+  --error-bg: rgba(220, 53, 69, 0.15);
+  --error-color: #ff6b6b;
 }
 
 * {
@@ -29,6 +33,10 @@
     background-color 0.3s ease,
     color 0.3s ease,
     border-color 0.3s ease;
+}
+
+input, textarea, select {
+  color: var(--txt) !important;
 }
 
 html, body, #root {
@@ -124,6 +132,31 @@ code {
   background-color: var(--surface);
 }
 
+.login-link {
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}
+
+.back-btn {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--txt3);
+}
+
+.back-btn:hover {
+  text-decoration: underline;
+  color: var(--g1);
+}
+
+[data-theme="dark"] .back-btn:hover {
+  color: var(--g2);
+}
+
 .btn-light-green{
   background-color: transparent;
   color: var(--txt2);
@@ -153,18 +186,18 @@ code {
   color: #FFFFFF;
   border: none;
   box-shadow: var(--shadow);
-  transition: all 0.15s ease-in;
+  transition: all 0.2s ease-in;
 }
 
 .btn-green-gradient:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   box-shadow: var(--shadow2);
   color: #FFFFFF;
 }
 
 .input-green {
   background-color: var(--g5);
-  color: var(--txt);
+  color: var(--txt) !important;
   border-color: var(--border);
 }
 
@@ -176,6 +209,56 @@ code {
 }
 
 .input-green::placeholder{
+  color: var(--txt4);
+}
+
+.input-group .form-control {
+  padding-right: 80px; /* ruang buat icon */
+}
+
+.input-group-text:first-of-type {
+  border-left: none !important;
+}
+
+.input-eye {
+  border-left: none !important;
+  border-right: none !important;
+  background-color: var(--g5);
+}
+
+.input-eye i {
+  color: var(--txt4);
+}
+
+.input-error {
+    background-color: var(--error-bg) !important;
+    border: 1px solid var(--error-color) !important;
+}
+
+.input-group .input-error ~ .input-group-text {
+  color: var(--error-color);
+}
+
+.input-group-text i {
+  color: inherit;
+}
+
+.input-group .input-error ~ .eye-inside {
+  color: var(--error-color) !important;
+}
+
+.input-error:focus {
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.eye-inside {
+  position: absolute;
+  right: 50px; /* jarak dari kanan (biar gak tabrakan sama lock) */
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #888;
+  z-index: 5;
   color: var(--txt4);
 }
 
@@ -247,6 +330,46 @@ code {
   background-color: var(--txt3);
 }
 
+.theme-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background-color: var(--g5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-btn i {
+  font-size: 18px;
+  color: var(--txt3);
+  transition: all 0.2s ease;
+}
+
+.theme-btn:hover {
+  background: var(--g5);
+  border-color: var(--g2);
+}
+
+.theme-btn:hover i {
+  color: var(--g1);
+}
+
+[data-theme="dark"] .theme-btn {
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .theme-btn:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+[data-theme="dark"] .theme-btn i {
+  color: var(--txt2);
+}
+
 .badge-green {
   background-color: var(--g5);
   color: var(--txt3);
@@ -280,6 +403,26 @@ code {
   border-radius: 6px;
   background: white;
   border: 1px solid #ccc;
+}
+
+.pw-str {
+  width: 100%;
+  height: 6px;
+  background: var(--g5);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.pw-fill {
+  height: 100%;
+  width: 0%;
+  transition: all 0.3s ease;
+}
+
+.pw-hint {
+  font-size: 12px;
+  margin-top: 4px;
+  color: var(--txt3);
 }
 
 /* Define the fade-in animation */
