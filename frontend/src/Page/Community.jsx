@@ -28,6 +28,7 @@ function Community() {
     finally { setLoading(false); }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { fetchPosts(); }, [tab]);
 
   const handleSubmitPost = async (e) => {
@@ -110,7 +111,7 @@ function Community() {
   ];
 
   return (
-    <div className="container position-relative py-4 outfit">
+    <div className="container position-relative py-4 outfit" style={{ minHeight: '100vh', backgroundColor: 'var(--bg)' }}>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h4 className="syne-h1 text-green1 mb-0">
           <i className="bi bi-people me-2"></i>Komunitas

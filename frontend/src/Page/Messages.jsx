@@ -74,7 +74,7 @@ function Messages() {
         <i className="bi bi-chat-dots me-2"></i>Pesan
       </h4>
 
-      <div className="row g-0 rounded overflow-hidden" style={{ height: '70vh', border: "1px solid var(--txt3)" }}>
+      <div className="row g-0 rounded overflow-hidden" style={{ height: 'calc(100vh - 200px)', border: "1px solid var(--txt3)" }}>
 
         {/* Sidebar Conversation List */}
         <div className="col-md-4" style={{ overflowY: 'auto' , borderInlineEnd:"1px solid var(--txt3)", borderBlockEnd:"1px solid var(--txt3)"}}>
@@ -156,7 +156,7 @@ function Messages() {
               </div>
 
               {/* Messages */}
-              <div className="flex-grow-1 p-3 overflow-y-auto">
+              <div className="flex-grow-1 p-3" style={{ overflowY: 'auto', height: 0 }}>
                 {active.messages?.length === 0 ? (
                   <div className="text-center text-green4 py-4">
                     <p>Belum ada pesan. Mulai percakapan!</p>

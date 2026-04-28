@@ -2,10 +2,6 @@ import React from "react";
 import BadgeGreen from "./BadgeGreen";
 
 class ExampleFoodCard extends React.Component {
-    constructor(props){
-        super(props);
-    }
-
     render(){
         return(
             <div className="card-gradient-green col px-4 py-4 rounded-4" style={{minWidth:"250px", maxWidth:"400px"}}>

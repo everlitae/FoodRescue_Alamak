@@ -1,8 +1,11 @@
 import React from "react";
 import api from "../utils/api";
 import { Navigate } from "react-router";
+import { AuthContext } from "../Context/AuthContext";
 
 class SignInPage extends React.Component {
+  static contextType = AuthContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -105,7 +108,8 @@ class SignInPage extends React.Component {
         password,
       });
 
-      localStorage.setItem("token", res.data.token);
+      // Pake login dari AuthContext biar navbar langsung update tanpa refresh
+      this.context.login(res.data.token, res.data.user);
       this.setState({ redirect: true });
     } catch (err) {
       console.log("LOGIN ERROR:", err.response || err);
