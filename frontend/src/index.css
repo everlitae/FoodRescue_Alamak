@@ -212,19 +212,21 @@ code {
   background-image: linear-gradient(90deg, var(--g1), var(--g2));
   color: #FFFFFF;
   border: none;
-  box-shadow: var(--shadow);
+  box-shadow: 0 4px 18px rgba(95, 139, 76, 0.45);
   transition: all 0.25s ease;
+  font-size: 14px;
+  letter-spacing: 0.02em;
 }
 
 .btn-green-gradient:hover {
   transform: translateY(-3px);
-  box-shadow: var(--shadow2);
+  box-shadow: 0 8px 28px rgba(95, 139, 76, 0.55);
   color: #FFFFFF;
 }
 
 .btn-green-gradient:active {
   transform: translateY(-1px);
-  box-shadow: var(--shadow);
+  box-shadow: 0 4px 14px rgba(95, 139, 76, 0.35);
 }
 
 .input-green {
@@ -367,15 +369,39 @@ input[type="file"]::file-selector-button:hover {
   backdrop-filter: blur(8px);
 }
 
-.btn-outline-green{
-  background-color: var(--g5);
-  color: var(--txt3);
-  border: 1px solid var(--txt3);
+.btn-outline-green {
+  background-color: transparent;
+  color: var(--txt2);
+  border: 1.5px solid var(--g2);
+  transition: all 0.25s ease;
+  font-size: 14px;
+  letter-spacing: 0.02em;
 }
 
-.btn-outline-green:hover{
-  color: #FFFFFF;
-  background-color: var(--txt3);
+.btn-outline-green:hover {
+  color: var(--g1);
+  background-color: var(--surface);
+  border-color: var(--g1);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(95, 139, 76, 0.20);
+}
+
+.btn-outline-green:active {
+  transform: translateY(-1px);
+  background-color: var(--cr2);
+  border-color: var(--cr2);
+}
+
+[data-theme="dark"] .btn-outline-green {
+  color: var(--txt2);
+  border-color: var(--g3);
+}
+
+[data-theme="dark"] .btn-outline-green:hover {
+  color: var(--g2);
+  background-color: var(--surf2);
+  border-color: var(--g2);
+  box-shadow: 0 8px 24px rgba(122, 175, 96, 0.15);
 }
 
 .theme-btn {

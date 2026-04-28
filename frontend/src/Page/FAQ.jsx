@@ -590,7 +590,7 @@ class FaqHelpBox extends React.Component {
         </div>
         <div className="faq-help-box__buttons">
           <button
-            onClick={() => navigate("/kontak")}
+            onClick={() => navigate("/contact")}
             className="faq-help-box__btn-primary"
           >
             <i className="bi bi-envelope-fill" /> Hubungi Kami

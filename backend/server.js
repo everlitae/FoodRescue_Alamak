@@ -28,6 +28,8 @@ app.use("/api/ratings", require("./routes/ratings"));
 app.use("/api/notifications", require("./routes/notifications"));
 app.use("/api/community", require("./routes/community"));
 app.use("/api/admin", require("./routes/admin"));
+app.use("/api/otp", require("./routes/otp"));
+app.use("/api/contact", require("./routes/contact"));
 
 // MongoDB
 mongoose
