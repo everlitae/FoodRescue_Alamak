@@ -236,8 +236,12 @@ code {
 .input-green:focus {
   background-color: var(--surface);
   color: var(--txt);
-  border-color: var(--border);
-  box-shadow: 0px 0px 0px 3px var(--g4);
+  border-color: var(--g2);
+  outline: none;
+
+  box-shadow:
+    0 0 0 2px rgba(140, 200, 120, 0.25),
+    0 0 12px rgba(140, 200, 120, 0.35);
 }
 
 .input-green::placeholder{

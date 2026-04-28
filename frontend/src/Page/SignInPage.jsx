@@ -270,7 +270,12 @@ class SignInPage extends React.Component {
                     Ingat saya
                   </label>
                 </div>
-                <p className="outfit fw-semibold text-green3">Lupa Password?</p>
+                <p
+                  className="outfit fw-semibold text-green3 login-link"
+                  onClick={() => (window.location.href = "/forgot-password")}
+                >
+                  Lupa Password?
+                </p>
               </div>
 
               <button

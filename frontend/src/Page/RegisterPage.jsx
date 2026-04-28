@@ -721,6 +721,64 @@ class RegisterPage extends React.Component {
                   ></div>
                 </div>
                 <div className="pw-hint">{this.state.passwordLabel}</div>
+                <div
+                  className="card-green"
+                  style={{
+                    borderRadius: 12,
+                    padding: "12px 16px",
+                    marginTop: 12,
+                  }}
+                >
+                  <p
+                    style={{
+                      fontSize: 11,
+                      color: "var(--txt3)",
+                      fontWeight: 700,
+                      marginBottom: 6,
+                    }}
+                  >
+                    <i className="bi bi-lightbulb me-1" /> Tips password yang
+                    kuat:
+                  </p>
+
+                  {[
+                    {
+                      text: "Minimal 8 karakter",
+                      met: this.state.password.length >= 8,
+                    },
+                    {
+                      text: "Mengandung huruf kapital",
+                      met: /[A-Z]/.test(this.state.password),
+                    },
+                    {
+                      text: "Mengandung angka",
+                      met: /[0-9]/.test(this.state.password),
+                    },
+                    {
+                      text: "Mengandung karakter spesial",
+                      met: /[^A-Za-z0-9]/.test(this.state.password),
+                    },
+                  ].map((tip, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                        fontSize: 11,
+                        color: tip.met ? "var(--g1)" : "var(--txt4)",
+                        marginBottom: 2,
+                      }}
+                    >
+                      <i
+                        className={`bi ${
+                          tip.met ? "bi-check-circle-fill" : "bi-circle"
+                        }`}
+                      />
+                      {tip.text}
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div className="d-flex flex-column gap-1 rounded-3">
