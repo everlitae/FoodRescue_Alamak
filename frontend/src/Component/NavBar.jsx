@@ -5,23 +5,19 @@ import { withRouter } from "../Wrapper/withRouter";
 class NavBar extends React.Component {
     constructor(props){
         super(props);
+        this.state={
+            theme: document.documentElement.getAttribute("data-theme")
+        }
     }
 
-    setTheme(){
-        const currentTheme = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    setTheme = () => {
+        const newTheme = this.state.theme === "dark" ? "light" : "dark";
 
-        document.documentElement.setAttribute("data-theme", currentTheme);
-        localStorage.setItem("theme", currentTheme);
-    }
+        document.documentElement.setAttribute("data-theme", newTheme);
+        localStorage.setItem("theme", newTheme);
 
-    handleLogout = () => {
-        this.props.auth?.logout();
-        this.props.navigate('/login');
-    }
-
-    // get isProvider() {
-    //     this.props.auth.user?.role === "food_provider"
-    // }
+        this.setState({ theme: newTheme });
+    };
 
     componentDidMount() {
         const savedTheme = localStorage.getItem("theme");
@@ -35,7 +31,7 @@ class NavBar extends React.Component {
 
         return(
             <>
-                <div className="container-fluid d-flex flex-row align-items-center justify-content-between position-sticky z-1 p-3" style={{borderBottom: "1px solid var(--g5)", backgroundColor: "var(--surface)"}}>
+                <div className="container-fluid d-flex flex-row align-items-center justify-content-between sticky-top z-100 p-3" style={{borderBottom: "1px solid var(--g5)", backgroundColor: "var(--surface)"}}>
                     <div className="d-flex flex-wrap align-item-center gap-2">
 
                         <div className="d-flex flex-wrap align-items-center gap-3">
@@ -79,7 +75,7 @@ class NavBar extends React.Component {
                                 </>
                             )}
                         </div>
-
+                        
                     </div>
 
                     <div className="d-flex flex-wrap align-items-center gap-1">
@@ -103,9 +99,6 @@ class NavBar extends React.Component {
                                             }
                                         </span>
                                 </Link>
-                                <button className="btn-green-gradient btn-sm fw-semibold rounded-3" onClick={this.handleLogout} style={{fontSize:"small"}}>
-                                    Logout
-                                </button>
                             </>
                         ) : (
                             <>
@@ -119,9 +112,15 @@ class NavBar extends React.Component {
                         )
                         }
 
-                        <button className="btn btn-green-gradient" onClick={this.setTheme}><i class="bi bi-brightness-high"></i></button>
+                        <button className="theme-btn ms-2" onClick={this.setTheme}>
+                            <i
+                            className={`bi ${
+                                this.state.theme === "dark" ? "bi-moon-fill" : "bi-sun-fill"
+                            }`}
+                            ></i>
+                        </button>
 
-                        <button className="btn btn-green-gradient outfit fw-semibold fs-6 py-2 px-3" href="">Mulai Donasi</button>
+                        
                     </div>
                     
                     

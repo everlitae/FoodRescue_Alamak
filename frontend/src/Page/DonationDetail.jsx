@@ -191,11 +191,11 @@ function DonationDetail() {
 
   return (
     <div className="container py-4">
-      <button className="position-relative btn btn-outline-green mb-3" onClick={() => navigate(-1)}>
+      <p className="position-relative text-green3 mb-3" onClick={() => navigate(-1)}>
         <i className="bi bi-arrow-left me-1"></i>Kembali
-      </button>
+      </p>
 
-      {msg && <div className="alert alert-info">{msg}</div>}
+      {msg && <div className="alert alert-info" style={{boxShadow:"var(--shadow)"}}>{msg}</div>}
 
       <div className="row g-4">
         {/* Kiri */}
@@ -229,31 +229,31 @@ function DonationDetail() {
             </div>
           )}
 
-          <h3 className="fw-bold">{donation.title}</h3>
+          <h2 className="outfit text-green1 fw-bold">{donation.title}</h2>
           <div className="mb-2">{getStatusBadge(donation.status)}</div>
-          <p className="text-muted">{donation.description}</p>
-          <hr />
+          <p className="text-green3">{donation.description}</p>
+          <hr style={{borderColor:"var(--txt)"}}/>
 
-          <div className="row g-2 small">
+          <div className="row g-2 small  outfit text-green2">
             <div className="col-6">
-              <i className="bi bi-tag text-primary me-1"></i>
+              <i className="bi bi-tag me-1"></i>
               <strong>Kategori:</strong> {donation.category_id?.icon_emoji} {donation.category_id?.name}
             </div>
             <div className="col-6">
-              <i className="bi bi-box text-primary me-1"></i>
+              <i className="bi bi-box me-1"></i>
               <strong>Jumlah:</strong> {donation.quantity_remaining} / {donation.quantity} {donation.quantity_unit} tersisa
             </div>
             <div className="col-6">
-              <i className="bi bi-geo-alt text-primary me-1"></i>
+              <i className="bi bi-geo-alt me-1"></i>
               <strong>Lokasi:</strong> {donation.pickup_address}, {donation.pickup_city}
             </div>
             <div className="col-6">
-              <i className="bi bi-clock text-primary me-1"></i>
+              <i className="bi bi-clock me-1"></i>
               <strong>Expired:</strong> {formatDate(donation.expired_at)}
             </div>
             {donation.pickup_start_time && (
               <div className="col-6">
-                <i className="bi bi-alarm text-primary me-1"></i>
+                <i className="bi bi-alarm me-1"></i>
                 <strong>Jam Pickup:</strong> {donation.pickup_start_time} - {donation.pickup_end_time}
               </div>
             )}
@@ -272,7 +272,7 @@ function DonationDetail() {
             )}
             {donation.allergen_notes && (
               <div className="col-12">
-                <i className="bi bi-exclamation-triangle text-warning me-1"></i>
+                <i className="bi bi-exclamation-triangle text-cream2 me-1"></i>
                 <strong>Alergen:</strong> {donation.allergen_notes}
               </div>
             )}
@@ -282,27 +282,27 @@ function DonationDetail() {
         {/* Kanan */}
         <div className="col-md-5">
           {/* Info Provider */}
-          <div className="card p-3 mb-3">
-            <h6 className="fw-bold mb-3">
-              <i className="bi bi-person-circle text-primary me-2"></i>Info Provider
+          <div className="card p-3 mb-3 outfit" style={{backgroundColor:" var(--surface)", border: "1px solid var(--border)", boxShadow:"var(--shadow)"}}>
+            <h6 className="fw-bold mb-3 text-green1">
+              <i className="bi bi-person-circle me-2"></i>Info Provider
             </h6>
-            <p className="mb-1 fw-semibold">
+            <p className="mb-1 fw-semibold text-green2">
               {donation.provider_id?.first_name} {donation.provider_id?.last_name}
             </p>
             {donation.provider_id?.city && (
-              <p className="mb-1 text-muted small">
+              <p className="mb-1 text-green4 small">
                 <i className="bi bi-geo me-1"></i>{donation.provider_id.city}
               </p>
             )}
             {donation.provider_id?.phone && (
-              <p className="mb-1 text-muted small">
+              <p className="mb-1 text-green3 small">
                 <i className="bi bi-telephone me-1"></i>{donation.provider_id.phone}
               </p>
             )}
-            <div className="text-warning">
+            <div className="text-cream3">
               {'★'.repeat(Math.round(donation.provider_id?.trust_score || 0))}
               {'☆'.repeat(5 - Math.round(donation.provider_id?.trust_score || 0))}
-              <small className="text-muted ms-1">
+              <small className="text-green3 ms-1">
                 {donation.provider_id?.trust_score?.toFixed(1) || '5.0'} / 5
               </small>
             </div>
@@ -310,17 +310,17 @@ function DonationDetail() {
 
           {/* Status Klaim User */}
           {userClaim && (
-            <div className="card p-3 mb-3">
-              <h6 className="fw-bold mb-2">
-                <i className="bi bi-receipt text-primary me-2"></i>Status Klaim Kamu
+            <div className="card p-3 mb-3" style={{backgroundColor:" var(--surface)", border: "1px solid var(--border)", boxShadow:"var(--shadow)"}}>
+              <h6 className="fw-bold text-green1 mb-2">
+                <i className="bi bi-receipt me-2"></i>Status Klaim Kamu
               </h6>
               <div className="mb-1">{getClaimBadge(userClaim.status)}</div>
-              <small className="text-muted">
+              <small className="text-green3">
                 {userClaim.quantity_claimed} {donation.quantity_unit} •
                 Diklaim {formatDateTime(userClaim.created_at)}
               </small>
               {userClaim.pickup_scheduled_at && (
-                <p className="mb-0 mt-1 small">
+                <p className="mb-0 mt-1 text-green2 small">
                   <i className="bi bi-calendar me-1"></i>
                   Jadwal pickup: {formatDateTime(userClaim.pickup_scheduled_at)}
                 </p>
@@ -336,30 +336,30 @@ function DonationDetail() {
 
           {/* Form Klaim */}
           {canClaim && (
-            <div className="card p-3 mb-3">
-              <h6 className="fw-bold mb-3">
-                <i className="bi bi-hand-index text-primary me-2"></i>Klaim Donasi
+            <div className="card p-3 mb-3 outfit" style={{backgroundColor:" var(--surface)", border: "1px solid var(--border)", boxShadow:"var(--shadow)"}}>
+              <h6 className="fw-bold text-green1 mb-3">
+                <i className="bi bi-hand-index me-2"></i>Klaim Donasi
               </h6>
               <div className="mb-2">
-                <label className="form-label small">Jumlah ({donation.quantity_unit})</label>
-                <input type="number" className="form-control form-control-sm"
+                <label className="form-label text-green2 small">Jumlah ({donation.quantity_unit})</label>
+                <input type="number" className="form-control form-control-sm input-green"
                   min={1} max={donation.quantity_remaining}
                   value={claimForm.quantity_claimed}
                   onChange={e => setClaimForm({ ...claimForm, quantity_claimed: Number(e.target.value) })} />
               </div>
               <div className="mb-2">
-                <label className="form-label small">Jadwal Pickup (opsional)</label>
-                <input type="datetime-local" className="form-control form-control-sm"
+                <label className="form-label text-green2 small">Jadwal Pickup (opsional)</label>
+                <input type="datetime-local" className="form-control form-control-sm input-green"
                   value={claimForm.pickup_scheduled_at}
                   onChange={e => setClaimForm({ ...claimForm, pickup_scheduled_at: e.target.value })} />
               </div>
               <div className="mb-3">
-                <label className="form-label small">Catatan (opsional)</label>
-                <textarea className="form-control form-control-sm" rows={2}
+                <label className="form-label small text-green2">Catatan (opsional)</label>
+                <textarea className="form-control form-control-sm input-green" rows={2}
                   value={claimForm.notes}
                   onChange={e => setClaimForm({ ...claimForm, notes: e.target.value })} />
               </div>
-              <button className="btn btn-primary w-100" onClick={handleClaim} disabled={actionLoading}>
+              <button className="btn btn-green-gradient w-100" onClick={handleClaim} disabled={actionLoading}>
                 <i className="bi bi-hand-index me-1"></i>Klaim Sekarang
               </button>
             </div>
@@ -367,7 +367,7 @@ function DonationDetail() {
 
           {/* Manajemen Klaim (Provider) */}
           {isProvider && claims.length > 0 && (
-            <div className="card p-3 mb-3">
+            <div className="card p-3 mb-3 outfit" style={{backgroundColor:" var(--surface)", border: "1px solid var(--border)", boxShadow:"var(--shadow)"}}>
               <h6 className="fw-bold mb-3">
                 <i className="bi bi-people text-primary me-2"></i>Daftar Klaim ({claims.length})
               </h6>
@@ -417,9 +417,9 @@ function DonationDetail() {
 
           {/* Chat */}
           {canChat && (
-            <div className="card p-3 mb-3">
-              <h6 className="fw-bold mb-3">
-                <i className="bi bi-chat text-primary me-2"></i>Chat
+            <div className="card p-3 mb-3 outfit" style={{backgroundColor:" var(--surface)", border: "1px solid var(--border)", boxShadow:"var(--shadow)"}}>
+              <h6 className="fw-bold text-green1 mb-3">
+                <i className="bi bi-chat me-2"></i>Chat
               </h6>
               {!conversation ? (
                 <button className="btn btn-outline-primary w-100" onClick={handleStartChat}>
@@ -427,20 +427,20 @@ function DonationDetail() {
                 </button>
               ) : (
                 <>
-                  <div className="border rounded p-2 mb-2" style={{ height: '200px', overflowY: 'auto' }}>
+                  <div className="rounded p-2 mb-2" style={{ height: '200px', overflowY: 'auto', border:"2px solid var(--border)"}}>
                     {conversation.messages?.length === 0 ? (
-                      <p className="text-muted small text-center mt-3">Belum ada pesan</p>
+                      <p className="text-green3 small text-center mt-3">Belum ada pesan</p>
                     ) : conversation.messages?.map(m => {
                       const isMe = m.sender_id === userId || m.sender_id?._id === userId;
                       return (
                         <div key={m._id} className={`mb-2 d-flex flex-column ${isMe ? 'align-items-end' : 'align-items-start'}`}>
-                          <div className={`px-2 py-1 rounded ${isMe ? 'bg-primary text-white' : 'bg-light text-dark border'}`}
+                          <div className={`px-2 py-1 rounded ${isMe ? 'bg-success text-white' : 'bg-light text-success border border-success'}`}
                             style={{ maxWidth: '80%', wordBreak: 'break-word' }}>
                             {m.is_deleted_by_sender
-                              ? <em className="text-muted">Pesan dihapus</em>
+                              ? <em className="text-green3">Pesan dihapus</em>
                               : m.content}
                           </div>
-                          <small className="text-muted" style={{ fontSize: '0.7rem' }}>
+                          <small className="text-green3" style={{ fontSize: '0.7rem' }}>
                             {new Date(m.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
                           </small>
                         </div>
@@ -450,7 +450,7 @@ function DonationDetail() {
                   <form onSubmit={handleSendMessage}>
                     <div className="d-flex gap-2 align-items-end">
                       <textarea
-                        className="form-control form-control-sm"
+                        className="form-control form-control-sm input-green"
                         placeholder="Tulis pesan... (Shift+Enter untuk baris baru)"
                         value={chatMsg}
                         rows={1}
@@ -463,7 +463,7 @@ function DonationDetail() {
                           }
                         }}
                       />
-                      <button className="btn btn-primary btn-sm flex-shrink-0" type="submit">
+                      <button className="btn btn-green-gradient btn-sm flex-shrink-0" type="submit">
                         <i className="bi bi-send"></i>
                       </button>
                     </div>
@@ -475,7 +475,7 @@ function DonationDetail() {
 
           {/* Rating */}
           {canRate && (
-            <div className="card p-3">
+            <div className="card outfit p-3" style={{backgroundColor:" var(--surface)", border: "1px solid var(--border)", boxShadow:"var(--shadow)"}}>
               <h6 className="fw-bold mb-3">
                 <i className="bi bi-star text-warning me-2"></i>Beri Rating Provider
               </h6>
@@ -499,7 +499,7 @@ function DonationDetail() {
           )}
 
           {hasRated && (
-            <div className="card p-3">
+            <div className="card outfit p-3" style={{backgroundColor:" var(--surface)", border: "1px solid var(--border)", boxShadow:"var(--shadow)"}}>
               <p className="text-success mb-0">
                 <i className="bi bi-check-circle me-1"></i>Kamu sudah memberi rating
               </p>
@@ -507,7 +507,7 @@ function DonationDetail() {
           )}
 
           {isProvider && ['available', 'expired', 'cancelled'].includes(donation.status) && (
-            <div className="card p-3 mt-3">
+            <div className="card outfit p-3 mt-3" style={{backgroundColor:" var(--surface)", border: "1px solid var(--border)", boxShadow:"var(--shadow)"}}>
               <button className="btn btn-outline-danger w-100" onClick={handleDelete}>
                 <i className="bi bi-trash me-1"></i>Hapus Donasi
               </button>

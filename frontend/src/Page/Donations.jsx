@@ -295,7 +295,7 @@ const filteredDonations = donations.filter(d => {
             <div className="row g-3">
               {filteredDonations.map(d => (
                 <div className="col-md-6" key={d._id}>
-                  <div className="card h-100 outfit" style={{backgroundColor:" var(--surface)", border: "1px solid var(--border)", boxShadow:"var(--shadow)",maxWidth: "900px"}}>
+                  <div className="card h-100 outfit" style={{backgroundColor:" var(--surface)", border: "1px solid var(--border)", boxShadow:"var(--shadow)"}}>
                     {d.photos?.length > 0 ? (
                       <img src={`/uploads/${d.photos[0].photo_url}`}
                         className="card-img-top" alt={d.title}

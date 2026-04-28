@@ -56,16 +56,16 @@ function History() {
   );
 
   return (
-    <div className="container py-4">
-      <h4 className="fw-bold mb-4">
-        <i className="bi bi-clock-history text-primary me-2"></i>Riwayat
+    <div className="container position-relative outfit py-4">
+      <h4 className="syne-h1 text-green1 mb-4">
+        <i className="bi bi-clock-history me-2"></i>Riwayat
       </h4>
 
       {/* Tab — provider bisa lihat keduanya */}
       {user?.role === 'food_provider' && (
         <ul className="nav nav-tabs mb-4">
           <li className="nav-item">
-            <button className={`nav-link ${tab === 'provided' ? 'active text-primary fw-semibold' : 'text-muted'}`}
+            <button className={`nav-link ${tab === 'provided' ? 'active text-green1 fw-semibold' : 'text-green3'}`}
               onClick={() => setTab('provided')}>
               🍱 Donasi Saya ({provided.length})
             </button>
@@ -78,39 +78,39 @@ function History() {
         claimed.length === 0 ? (
           <div className="text-center py-5">
             <i className="bi bi-inbox display-3 text-muted"></i>
-            <p className="text-muted mt-2">Belum ada riwayat klaim</p>
-            <Link to="/donations" className="btn btn-primary mt-2">Cari Donasi</Link>
+            <p className="text-green4 mt-2">Belum ada riwayat klaim</p>
+            <Link to="/donations" className="btn btn-outline-green mt-2">Cari Donasi</Link>
           </div>
         ) : (
           <div className="row g-3">
             {claimed.map(c => (
               <div className="col-md-6" key={c._id}>
-                <div className="card p-3 h-100">
+                <div className="card p-3 h-100" style={{backgroundColor:" var(--surface)", border: "1px solid var(--border)", boxShadow:"var(--shadow)"}}>
                   <div className="d-flex justify-content-between align-items-start mb-2">
-                    <h6 className="fw-bold mb-0">
+                    <h6 className="fw-bold text-green1 mb-0">
                       {c.donation_id?.category_id?.icon_emoji} {c.donation_id?.title}
                     </h6>
                     {getStatusBadge(c.status)}
                   </div>
-                  <p className="text-muted small mb-1">
+                  <p className="text-green3 small mb-1">
                     <i className="bi bi-box me-1"></i>
                     {c.quantity_claimed} {c.donation_id?.quantity_unit}
                   </p>
-                  <p className="text-muted small mb-1">
+                  <p className="text-green3 small mb-1">
                     <i className="bi bi-geo-alt me-1"></i>
                     {c.donation_id?.pickup_city}
                   </p>
-                  <p className="text-muted small mb-2">
+                  <p className="text-green3 small mb-2">
                     <i className="bi bi-calendar me-1"></i>
                     {formatDate(c.created_at)}
                   </p>
 
                   {/* Tracking Log */}
                   {c.tracking_log?.length > 0 && (
-                    <div className="border rounded p-2 mb-2 small">
-                      <p className="fw-semibold mb-1">📋 Tracking:</p>
+                    <div className="rounded p-2 mb-2 small" style={{border:"1px solid var(--g1)"}}>
+                      <p className="fw-semibold text-green2 mb-1">📋 Tracking:</p>
                       {c.tracking_log.map((log, i) => (
-                        <div key={i} className="text-muted">
+                        <div key={i} className="text-green4">
                           <i className="bi bi-arrow-right me-1"></i>
                           {log.new_status}
                           {log.note && ` — ${log.note}`}
@@ -121,7 +121,7 @@ function History() {
 
                   {c.donation_id?._id && (
                     <Link to={`/donations/${c.donation_id._id}`}
-                      className="btn btn-outline-primary btn-sm mt-auto">
+                      className="btn btn-outline-green btn-sm mt-auto">
                       Lihat Donasi
                     </Link>
                   )}
@@ -136,34 +136,34 @@ function History() {
       {tab === 'provided' && (
         provided.length === 0 ? (
           <div className="text-center py-5">
-            <i className="bi bi-basket2 display-3 text-muted"></i>
-            <p className="text-muted mt-2">Belum ada donasi</p>
-            <Link to="/donations/create" className="btn btn-primary mt-2">Buat Donasi</Link>
+            <i className="bi bi-basket2 display-3 text-green4"></i>
+            <p className="text-green4 mt-2">Belum ada donasi</p>
+            <Link to="/donations/create" className="btn btn-green-gradient mt-2">Buat Donasi</Link>
           </div>
         ) : (
           <div className="row g-3">
             {provided.map(d => (
               <div className="col-md-6" key={d._id}>
-                <div className="card p-3 h-100">
+                <div className="card p-3 h-100" style={{backgroundColor:" var(--surface)", border: "1px solid var(--border)", boxShadow:"var(--shadow)"}}>
                   <div className="d-flex justify-content-between align-items-start mb-2">
-                    <h6 className="fw-bold mb-0">
+                    <h6 className="fw-bold text-green1 mb-0">
                       {d.category_id?.icon_emoji} {d.title}
                     </h6>
                     {getStatusBadge(d.status)}
                   </div>
-                  <p className="text-muted small mb-1">
+                  <p className="text-green3 small mb-1">
                     <i className="bi bi-box me-1"></i>
                     {d.quantity_remaining} / {d.quantity} {d.quantity_unit} tersisa
                   </p>
-                  <p className="text-muted small mb-1">
+                  <p className="text-green3 small mb-1">
                     <i className="bi bi-geo-alt me-1"></i>{d.pickup_city}
                   </p>
-                  <p className="text-muted small mb-2">
+                  <p className="text-green3 small mb-2">
                     <i className="bi bi-calendar me-1"></i>
                     {formatDate(d.created_at)}
                   </p>
                   <Link to={`/donations/${d._id}`}
-                    className="btn btn-outline-primary btn-sm mt-auto">
+                    className="btn btn-outline-green btn-sm mt-auto">
                     Lihat Detail
                   </Link>
                 </div>

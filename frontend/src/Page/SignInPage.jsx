@@ -1,6 +1,6 @@
 import React from "react";
 import api from "../utils/api";
-import { Navigate } from "react-router-dom";
+import { Navigate } from "react-router";
 
 class SignInPage extends React.Component {
   constructor(props) {

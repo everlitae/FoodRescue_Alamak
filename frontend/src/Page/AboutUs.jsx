@@ -80,28 +80,28 @@ const teamData = [
 const timelineData = [
   {
     emoji: "💡",
-    date: "Februari 2025",
+    date: "Maret 2026",
     title: "Ide Awal",
     desc: "Tim mulai melihat masalah food waste dan mencari solusi yang bisa membantu banyak orang.",
     isLast: false,
   },
   {
     emoji: "🎨",
-    date: "Maret 2025",
+    date: "April 2026",
     title: "Perancangan",
     desc: "Kami merancang tampilan dan pengalaman pengguna agar mudah digunakan.",
     isLast: false,
   },
   {
     emoji: "⚙️",
-    date: "April 2025",
+    date: "April 2026",
     title: "Pengembangan",
     desc: "Fitur mulai dikembangkan secara bertahap dan terus diperbaiki.",
     isLast: false,
   },
   {
     emoji: "🚀",
-    date: "Mei 2025",
+    date: "Mei 2026",
     title: "Peluncuran",
     desc: "Platform mulai digunakan dan memberikan dampak nyata bagi masyarakat.",
     isLast: true,
@@ -120,7 +120,7 @@ const impactStatsData = [
 class AboutHero extends React.Component {
   render() {
     return (
-      <section className="about-hero">
+      <section className="about-hero z-0">
         <div className="container-md about-hero__inner py-5 px-4 px-md-5">
           <div className="about-hero-badge mb-3">
             <i className="bi bi-info-circle-fill"></i>
@@ -144,7 +144,7 @@ class AboutHero extends React.Component {
               <i className="bi bi-people-fill"></i> Alamak Agile IFA · Sore
             </span>
             <span className="about-hero__tag">
-              <i className="bi bi-calendar3"></i> Didirikan 2025
+              <i className="bi bi-calendar3"></i> Didirikan 2026
             </span>
             <span className="about-hero__tag">
               <i className="bi bi-geo-alt-fill"></i> Medan, Indonesia
@@ -194,7 +194,7 @@ class AboutMission extends React.Component {
                 {missionStatsData.map((stat) => (
                   <div
                     key={stat.label}
-                    className={`about-stat-card ${stat.colorClass}`}
+                    className={`about-stat-card ${stat.colorClass} position-relative`}
                   >
                     <div className="about-stat-card__emoji">{stat.emoji}</div>
                     <div className="about-stat-card__number">{stat.number}</div>
@@ -231,7 +231,7 @@ class AboutValues extends React.Component {
           <div className="row g-3">
             {valuesData.map((val) => (
               <div key={val.number} className="col-12 col-sm-6 col-lg-3">
-                <div className="about-value-card h-100">
+                <div className="about-value-card h-100 position-relative">
                   <div className="about-value-card__num">{val.number}</div>
                   <div className="about-value-card__icon">{val.emoji}</div>
                   <div className="about-value-card__title syne-h1">
@@ -269,7 +269,7 @@ class AboutTeam extends React.Component {
           <div className="row g-3 justify-content-center">
             {teamData.map((member, index) => (
               <div key={index} className="col-6 col-md-3">
-                <div className="about-member-card">
+                <div className="about-member-card position-relative">
                   <div
                     className="about-member-card__avatar"
                     style={{ background: member.avatarBg }}
@@ -347,7 +347,7 @@ class AboutImpact extends React.Component {
           <div className="row g-3 mt-3">
             {impactStatsData.map((stat) => (
               <div key={stat.label} className="col-6 col-md-4 col-lg-2">
-                <div className="about-impact-card">
+                <div className="about-impact-card position-relative">
                   <div className="syne-h1 about-impact-card__number">
                     {stat.number}
                   </div>
@@ -369,7 +369,7 @@ const AboutCta = () => {
     <section className="about-cta">
       <div className="container-md px-4 px-md-5">
         <div
-          className="text-center rounded-4 p-5 mx-auto"
+          className="text-center rounded-4 p-5 mx-auto position-relative"
           style={{
             background: "var(--surface)",
             border: "1px solid var(--border)",

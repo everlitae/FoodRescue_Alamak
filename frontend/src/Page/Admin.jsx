@@ -97,9 +97,9 @@ function Admin() {
   ];
 
   return (
-    <div className="container py-4">
-      <h4 className="fw-bold mb-4">
-        <i className="bi bi-shield-check text-primary me-2"></i>Admin Panel
+    <div className="container position-relative outfit py-4">
+      <h4 className="syne-h1 text-green1 mb-4">
+        <i className="bi bi-shield-check me-2"></i>Admin Panel
       </h4>
 
       {msg && <div className="alert alert-success py-2">{msg}</div>}
@@ -108,7 +108,7 @@ function Admin() {
         {tabs.map(t => (
           <li className="nav-item" key={t.key}>
             <button
-              className={`nav-link ${tab === t.key ? 'active text-primary fw-semibold' : 'text-muted'}`}
+              className={`nav-link ${tab === t.key ? 'active fw-semibold' : ''}`}
               onClick={() => setTab(t.key)}>
               {t.label}
               {t.badge > 0 && <span className="badge bg-danger ms-1">{t.badge}</span>}
@@ -132,10 +132,10 @@ function Admin() {
             { label: 'Post Komunitas', value: stats.totalPosts, icon: 'bi-chat-dots', color: 'primary' },
           ].map((s, i) => (
             <div className="col-md-4 col-6" key={i}>
-              <div className="card p-3 text-center">
+              <div className="card p-3 text-center" style={{backgroundColor:" var(--surface)", border: "1px solid var(--border)", boxShadow:"var(--shadow)"}}>
                 <i className={`bi ${s.icon} display-5 text-${s.color} mb-2`}></i>
-                <h3 className="fw-bold mb-0">{s.value}</h3>
-                <small className="text-muted">{s.label}</small>
+                <h3 className="fw-bold text-green1 mb-0">{s.value}</h3>
+                <small className="text-green3">{s.label}</small>
               </div>
             </div>
           ))}
@@ -145,8 +145,8 @@ function Admin() {
       {/* Pengguna */}
       {tab === 'users' && (
         <div className="table-responsive">
-          <table className="table table-hover align-middle">
-            <thead className="table-light">
+          <table className="table table-green align-middle">
+            <thead>
               <tr>
                 <th>Nama</th><th>Email</th><th>Role</th>
                 <th>Trust Score</th><th>Status</th><th>Bergabung</th><th>Aksi</th>
@@ -160,7 +160,7 @@ function Admin() {
                     {u.username && <small className="text-muted d-block">@{u.username}</small>}
                   </td>
                   <td className="text-muted small">{u.email}</td>
-                  <td><span className="badge bg-light text-dark border">{ROLE_LABEL[u.role] || u.role}</span></td>
+                  <td><span className="badge badge-green">{ROLE_LABEL[u.role] || u.role}</span></td>
                   <td>
                     <span className="text-warning">★</span> {u.trust_score?.toFixed(1) || '5.0'}
                   </td>
@@ -181,14 +181,14 @@ function Admin() {
               ))}
             </tbody>
           </table>
-          {users.length === 0 && <p className="text-center text-muted">Belum ada pengguna</p>}
+          {users.length === 0 && <p className="text-center text-green4">Belum ada pengguna</p>}
         </div>
       )}
 
       {/* Donasi */}
       {tab === 'donations' && (
         <div className="table-responsive">
-          <table className="table table-hover align-middle">
+          <table className="table table-green">
             <thead className="table-light">
               <tr>
                 <th>Judul</th><th>Provider</th><th>Kota</th>
@@ -225,14 +225,14 @@ function Admin() {
               ))}
             </tbody>
           </table>
-          {donations.length === 0 && <p className="text-center text-muted">Belum ada donasi</p>}
+          {donations.length === 0 && <p className="text-center text-green4">Belum ada donasi</p>}
         </div>
       )}
 
       {/* Laporan */}
       {tab === 'reports' && (
         <div className="table-responsive">
-          <table className="table table-hover align-middle">
+          <table className="table table-green">
             <thead className="table-light">
               <tr>
                 <th>Pelapor</th><th>Tipe</th><th>Alasan</th>
@@ -277,14 +277,14 @@ function Admin() {
               ))}
             </tbody>
           </table>
-          {reports.length === 0 && <p className="text-center text-muted">Belum ada laporan</p>}
+          {reports.length === 0 && <p className="text-center text-green4">Belum ada laporan</p>}
         </div>
       )}
 
       {/* Chat */}
       {tab === 'conversations' && (
         <div className="table-responsive">
-          <table className="table table-hover align-middle">
+          <table className="table table-green">
             <thead className="table-light">
               <tr>
                 <th>Donasi</th><th>Provider</th><th>Seeker</th>
@@ -305,14 +305,14 @@ function Admin() {
               ))}
             </tbody>
           </table>
-          {conversations.length === 0 && <p className="text-center text-muted">Belum ada percakapan</p>}
+          {conversations.length === 0 && <p className="text-center text-green4">Belum ada percakapan</p>}
         </div>
       )}
 
       {/* Komunitas */}
       {tab === 'community' && (
         <div className="table-responsive">
-          <table className="table table-hover align-middle">
+          <table className="table table-green">
             <thead className="table-light">
               <tr>
                 <th>Judul</th><th>Penulis</th><th>Tipe</th>
@@ -324,7 +324,7 @@ function Admin() {
                 <tr key={p._id}>
                   <td className="fw-semibold small">{p.title}</td>
                   <td className="small">{p.author_id?.first_name} {p.author_id?.last_name}</td>
-                  <td><span className="badge bg-light text-dark border">{p.type}</span></td>
+                  <td><span className="badge badge-green">{p.type}</span></td>
                   <td>{p.like_count}</td>
                   <td>{p.comment_count}</td>
                   <td>{p.is_pinned ? '📌' : '-'}</td>
@@ -339,7 +339,7 @@ function Admin() {
               ))}
             </tbody>
           </table>
-          {community.length === 0 && <p className="text-center text-muted">Belum ada post</p>}
+          {community.length === 0 && <p className="text-center text-green4">Belum ada post</p>}
         </div>
       )}
 
@@ -347,42 +347,42 @@ function Admin() {
       {tab === 'categories' && (
         <>
           <div className="d-flex gap-2 mb-3">
-            <button className="btn btn-outline-primary btn-sm" onClick={seedCategories}>
+            <button className="btn btn-outline-green btn-sm" onClick={seedCategories}>
               <i className="bi bi-database me-1"></i>Seed Kategori Default
             </button>
           </div>
 
           {/* Form Tambah Kategori */}
-          <div className="card p-3 mb-4">
-            <h6 className="fw-bold mb-3">➕ Tambah Kategori Baru</h6>
+          <div className="card p-3 mb-4" style={{backgroundColor:" var(--surface)", border: "1px solid var(--border)", boxShadow:"var(--shadow)"}}>
+            <h6 className="fw-bold text-green1 mb-3">➕ Tambah Kategori Baru</h6>
             <form onSubmit={addCategory}>
               <div className="row g-2">
                 <div className="col-md-3">
-                  <input className="form-control form-control-sm" placeholder="Nama"
+                  <input className="form-control form-control-sm input-green" placeholder="Nama"
                     value={newCategory.name}
                     onChange={e => setNewCategory({ ...newCategory, name: e.target.value })}
                     required />
                 </div>
                 <div className="col-md-3">
-                  <input className="form-control form-control-sm" placeholder="Slug (cth: makanan-siap-saji)"
+                  <input className="form-control form-control-sm input-green" placeholder="Slug (cth: makanan-siap-saji)"
                     value={newCategory.slug}
                     onChange={e => setNewCategory({ ...newCategory, slug: e.target.value })}
                     required />
                 </div>
                 <div className="col-md-2">
-                  <input className="form-control form-control-sm" placeholder="Emoji (cth: 🍚)"
+                  <input className="form-control form-control-sm input-green" placeholder="Emoji (cth: 🍚)"
                     value={newCategory.icon_emoji}
                     onChange={e => setNewCategory({ ...newCategory, icon_emoji: e.target.value })} />
                 </div>
                 <div className="col-md-2">
-                  <button type="submit" className="btn btn-primary btn-sm w-100">Tambah</button>
+                  <button type="submit" className="btn btn-green-gradient btn-sm w-100">Tambah</button>
                 </div>
               </div>
             </form>
           </div>
 
           <div className="table-responsive">
-            <table className="table table-hover align-middle">
+            <table className="table table-green">
               <thead className="table-light">
                 <tr>
                   <th>Emoji</th><th>Nama</th><th>Slug</th><th>Status</th>
@@ -404,7 +404,7 @@ function Admin() {
               </tbody>
             </table>
             {categories.length === 0 && (
-              <p className="text-center text-muted">
+              <p className="text-center text-green4">
                 Belum ada kategori. Klik "Seed Kategori Default" untuk mulai.
               </p>
             )}
