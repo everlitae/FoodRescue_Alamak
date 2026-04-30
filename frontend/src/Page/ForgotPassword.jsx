@@ -885,7 +885,7 @@ class ForgotPassword extends Component {
 
         <div
           className="badge-green mb-3 mx-auto"
-          style={{ display: "inline-flex" }}
+          style={{ display: "inline-flex", border: "none" }}
         >
           <i className="bi bi-stars" /> Password Berhasil Diperbarui
         </div>
