@@ -1,9 +1,14 @@
-const { Timestamp } = require("mongodb");
 const mongoose = require("mongoose");
 
 const otpSchema = new mongoose.Schema(
   {
-    email: String,
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
     otp: String,
     expiresAt: Date,
     attempts: { type: Number, default: 0 },
