@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React from "react";
+import { Link } from "react-router-dom";
 
 const footerLinks = [
   {
@@ -42,7 +42,6 @@ class Footer extends React.Component {
         }}
       >
         <div className="d-flex flex-wrap gap-5 justify-content-between align-items-start mb-5">
-
           {/* Brand */}
           <div style={{ maxWidth: 240 }}>
             <div className="d-flex align-items-center gap-3 mb-3">
@@ -53,16 +52,36 @@ class Footer extends React.Component {
                 alt="FoodRescue Logo"
               />
               <div style={{ lineHeight: 1.2 }}>
-                <p className="syne-h1 text-green1" style={{ fontSize: 15, margin: 0 }}>
+                <p
+                  className="syne-h1 text-green1"
+                  style={{ fontSize: 15, margin: 0 }}
+                >
                   FoodRescue
                 </p>
-                <p className="outfit" style={{ fontSize: 9, color: "var(--txt4)", margin: 0, letterSpacing: "0.1em" }}>
+                <p
+                  className="outfit"
+                  style={{
+                    fontSize: 9,
+                    color: "var(--txt4)",
+                    margin: 0,
+                    letterSpacing: "0.1em",
+                  }}
+                >
                   WEB PLATFORM
                 </p>
               </div>
             </div>
-            <p className="outfit" style={{ fontSize: 13, color: "var(--txt3)", lineHeight: 1.75, margin: 0 }}>
-              Platform digital yang mengurangi food waste dan menghubungkan semua pihak yang peduli terhadap lingkungan.
+            <p
+              className="outfit"
+              style={{
+                fontSize: 13,
+                color: "var(--txt3)",
+                lineHeight: 1.75,
+                margin: 0,
+              }}
+            >
+              Platform digital yang mengurangi food waste dan menghubungkan
+              semua pihak yang peduli terhadap lingkungan.
             </p>
           </div>
 
@@ -72,7 +91,11 @@ class Footer extends React.Component {
               <div key={col.heading} style={{ minWidth: 120 }}>
                 <p
                   className="syne-h1"
-                  style={{ fontSize: 13, color: "var(--txt2)", marginBottom: 14 }}
+                  style={{
+                    fontSize: 13,
+                    color: "var(--txt2)",
+                    marginBottom: 14,
+                  }}
                 >
                   {col.heading}
                 </p>
@@ -88,8 +111,12 @@ class Footer extends React.Component {
                         textDecoration: "none",
                         transition: "color 0.2s",
                       }}
-                      onMouseEnter={e => e.currentTarget.style.color = "var(--g1)"}
-                      onMouseLeave={e => e.currentTarget.style.color = "var(--txt3)"}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.color = "var(--g1)")
+                      }
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.color = "var(--txt3)")
+                      }
                     >
                       {link.label}
                     </Link>
@@ -112,11 +139,18 @@ class Footer extends React.Component {
             gap: 8,
           }}
         >
-          <p className="outfit" style={{ fontSize: 12, color: "var(--txt4)", margin: 0 }}>
+          <p
+            className="outfit"
+            style={{ fontSize: 12, color: "var(--txt4)", margin: 0 }}
+          >
             &copy; 2026 FoodRescue Web — Alamak IF-A Sore. All Rights Reserved.
           </p>
-          <p className="outfit" style={{ fontSize: 12, color: "var(--txt4)", margin: 0 }}>
-            Made with <span style={{ color: "var(--g1)" }}>♥</span> for a better world
+          <p
+            className="outfit"
+            style={{ fontSize: 12, color: "var(--txt4)", margin: 0 }}
+          >
+            Made with <span style={{ color: "var(--g1)" }}>♥</span> for a better
+            world
           </p>
         </div>
       </footer>
