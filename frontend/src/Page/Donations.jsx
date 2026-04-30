@@ -813,9 +813,11 @@ function Donations() {
                               alt={d.title}
                               style={{
                                 width: "100%",
-                                height: 100,
-                                objectFit: "cover",
+                                height: "auto",
+                                maxHeight: 220,
+                                objectFit: "contain",
                                 display: "block",
+                                background: "var(--surf2)",
                               }}
                             />
                           ) : (

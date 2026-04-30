@@ -601,15 +601,17 @@ function DonationDetail() {
           <Card style={{ padding: 0, overflow: "hidden" }}>
             {donation.photos?.length > 0 ? (
               <div>
-                <div style={{ position: "relative", height: 320 }}>
+                <div style={{ position: "relative" }}>
                   <img
                     src={donation.photos[activePhoto].photo_url}
                     alt={donation.title}
                     style={{
                       width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
+                      height: "auto",
+                      maxHeight: 320,
+                      objectFit: "contain",
                       display: "block",
+                      background: "var(--surf2)",
                     }}
                   />
                   <div
@@ -735,6 +737,7 @@ function DonationDetail() {
                           width: 60,
                           height: 60,
                           objectFit: "cover",
+                          objectPosition: "center",
                           borderRadius: 8,
                           cursor: "pointer",
                           flexShrink: 0,
