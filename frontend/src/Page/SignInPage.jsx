@@ -12,9 +12,9 @@ class SignInPage extends React.Component {
     this.state = {
       theme: "light",
       loginError: "",
-      email: "",
-      emailError: "",
-      emailTouched: false,
+      identifier: "",
+      identifierError: "",
+      identifierTouched: false,
       password: "",
       passwordError: "",
       passwordTouched: false,
@@ -26,21 +26,35 @@ class SignInPage extends React.Component {
 
   setTheme = () => {
     const newTheme = this.state.theme === "dark" ? "light" : "dark";
-
     document.documentElement.setAttribute("data-theme", newTheme);
     localStorage.setItem("theme", newTheme);
-
     this.setState({ theme: newTheme });
   };
 
-  validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  // Validasi: bisa berupa email atau username (min 3 karakter)
+  validateIdentifier = (value) => {
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    const isUsername = /^[A-Za-z0-9_]{3,}$/.test(value);
+    return isEmail || isUsername;
+  };
 
-  handleEmailChange = (e) =>
+  handleIdentifierChange = (e) =>
     this.setState({
-      email: e.target.value,
-      emailError: "",
+      identifier: e.target.value,
+      identifierError: "",
       loginError: "",
     });
+
+  handleIdentifierBlur = () => {
+    const { identifier } = this.state;
+    this.setState({
+      identifierError:
+        identifier && !this.validateIdentifier(identifier)
+          ? "Masukkan email atau username yang valid"
+          : "",
+      identifierTouched: true,
+    });
+  };
 
   handlePasswordChange = (e) =>
     this.setState({
@@ -49,16 +63,6 @@ class SignInPage extends React.Component {
       passwordTouched: false,
       loginError: "",
     });
-
-  handleEmailBlur = () => {
-    const { email } = this.state;
-
-    this.setState({
-      emailError:
-        email && !this.validateEmail(email) ? "Format email tidak sesuai" : "",
-      emailTouched: true,
-    });
-  };
 
   handlePasswordBlur = () => {
     const { password } = this.state;
@@ -69,23 +73,25 @@ class SignInPage extends React.Component {
   };
 
   handleSubmit = () => {
-    const { email, password } = this.state;
+    const { identifier, password } = this.state;
 
-    if (!email && !password) {
+    if (!identifier && !password) {
       this.setState({
-        emailError: "Email wajib diisi",
+        identifierError: "Email atau username wajib diisi",
         passwordError: "Password wajib diisi",
       });
       return;
     }
 
-    if (!email) {
-      this.setState({ emailError: "Email wajib diisi" });
+    if (!identifier) {
+      this.setState({ identifierError: "Email atau username wajib diisi" });
       return;
     }
 
-    if (!this.validateEmail(email)) {
-      this.setState({ emailError: "Format email tidak sesuai" });
+    if (!this.validateIdentifier(identifier)) {
+      this.setState({
+        identifierError: "Masukkan email atau username yang valid",
+      });
       return;
     }
 
@@ -101,20 +107,15 @@ class SignInPage extends React.Component {
     this.setState({ showPassword: !this.state.showPassword });
 
   async getUser() {
-    const email = this.state.email.trim().toLowerCase();
+    // Kirim sebagai field 'email' ke backend (backend sudah handle email/username)
+    const email = this.state.identifier.trim().toLowerCase();
     const password = this.state.password;
 
     try {
-      const res = await api.post("/auth/login", {
-        email,
-        password,
-      });
-
+      const res = await api.post("/auth/login", { email, password });
       this.context.login(res.data.token, res.data.user, this.state.rememberMe);
       this.setState({ redirect: true });
     } catch (err) {
-      console.log("LOGIN ERROR:", err.response || err);
-
       this.setState({
         loginError: err.response?.data?.msg || "Login gagal",
       });
@@ -123,7 +124,6 @@ class SignInPage extends React.Component {
 
   componentDidMount() {
     const savedTheme = localStorage.getItem("theme") || "light";
-
     document.documentElement.setAttribute("data-theme", savedTheme);
     this.setState({ theme: savedTheme });
   }
@@ -132,9 +132,11 @@ class SignInPage extends React.Component {
     if (this.state.redirect) {
       return <Navigate to="/home" />;
     }
+
     return (
       <>
         <div className="w-100 min-vh-100 h-100 d-flex flex-row">
+          {/* Left Panel */}
           <div className="d-none d-md-flex col-6 h-100 flex-column justify-content-between p-5 left-signin position-relative grid-detail-light text-white">
             <div className="d-flex flex-wrap align-items-center justify-content-start gap-3">
               <img
@@ -151,12 +153,11 @@ class SignInPage extends React.Component {
               </div>
             </div>
             <div className="fade-in">
-              <h1 className="syne-h1">Selamat Datang Kembali 👋 </h1>
+              <h1 className="syne-h1">Selamat Datang Kembali 👋</h1>
               <p className="outfit mb-3">
                 Masuk ke akun FoodRescue dan lanjutkan misi mulia mengurangi
                 sisa makan bersama.
               </p>
-
               <div className="card-transparent p-3 rounded-4">
                 <p className="outfi fw-light">
                   "Sudah 3 tahun bergabung dan kami telah menyalurkan lebih dari
@@ -171,21 +172,19 @@ class SignInPage extends React.Component {
               <p>Alamak Agile IFA-Sore</p>
             </div>
           </div>
+
+          {/* Right Panel */}
           <div className="col-12 col-md-6 p-5 right-signin h-100">
             <div className="d-flex flex-row align-items-center justify-content-between mb-5">
               <p
                 className="outfit text-green3 fw-light back-btn"
                 onClick={() => window.history.back()}
               >
-                {" "}
                 <i className="bi bi-arrow-left-short"></i> Kembali
               </p>
-
               <button className="theme-btn" onClick={this.setTheme}>
                 <i
-                  className={`bi ${
-                    this.state.theme === "dark" ? "bi-moon-fill" : "bi-sun-fill"
-                  }`}
+                  className={`bi ${this.state.theme === "dark" ? "bi-moon-fill" : "bi-sun-fill"}`}
                 ></i>
               </button>
             </div>
@@ -197,6 +196,13 @@ class SignInPage extends React.Component {
                 <Link
                   to="/register"
                   className="outfit fw-semibold text-green3 login-link"
+                  style={{ textDecoration: "none" }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.textDecoration = "underline")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.textDecoration = "none")
+                  }
                 >
                   Buat Gratis
                 </Link>
@@ -204,35 +210,34 @@ class SignInPage extends React.Component {
             </div>
 
             <div className="d-flex flex-column gap-3">
+              {/* Email atau Username */}
               <div className="d-flex flex-column gap-1">
-                <label className="text-green3 fw-semibold" htmlFor="email">
-                  EMAIL
+                <label className="text-green3 fw-semibold">
+                  EMAIL ATAU USERNAME
                 </label>
                 <div className="input-group rounded-3">
                   <input
-                    type="email"
-                    className={`form-control py-2 px-3 ${this.state.emailError ? "input-error" : "input-green"}`}
-                    placeholder="johndoe@example.com"
-                    value={this.state.email}
-                    onChange={this.handleEmailChange}
-                    onBlur={this.handleEmailBlur}
+                    type="text"
+                    className={`form-control py-2 px-3 ${this.state.identifierError ? "input-error" : "input-green"}`}
+                    placeholder="Email atau username"
+                    value={this.state.identifier}
+                    onChange={this.handleIdentifierChange}
+                    onBlur={this.handleIdentifierBlur}
                   />
                   <span className="input-group-text input-green">
-                    <i className="bi bi-envelope"></i>
+                    <i className="bi bi-person"></i>
                   </span>
                 </div>
-                {this.state.emailTouched && this.state.emailError && (
-                  <small className="text-danger">{this.state.emailError}</small>
+                {this.state.identifierTouched && this.state.identifierError && (
+                  <small className="text-danger">
+                    {this.state.identifierError}
+                  </small>
                 )}
               </div>
 
+              {/* Password */}
               <div className="d-flex flex-column gap-1 rounded-3">
-                <label
-                  className="text-green3 fw-semibold fs-6"
-                  htmlFor="password"
-                >
-                  PASSWORD
-                </label>
+                <label className="text-green3 fw-semibold fs-6">PASSWORD</label>
                 <div className="input-group position-relative">
                   <input
                     type={this.state.showPassword ? "text" : "password"}
@@ -259,16 +264,18 @@ class SignInPage extends React.Component {
                   </small>
                 )}
               </div>
+
+              {/* Error login */}
               {this.state.loginError && (
                 <small className="text-danger">{this.state.loginError}</small>
               )}
 
+              {/* Remember me & Lupa password */}
               <div className="d-flex flex-row justify-content-between">
                 <div className="form-check">
                   <input
                     className="form-check-input"
                     type="checkbox"
-                    value=""
                     id="checkDefault"
                     checked={this.state.rememberMe}
                     onChange={(e) =>
@@ -285,11 +292,19 @@ class SignInPage extends React.Component {
                 <Link
                   to="/forgot-password"
                   className="outfit fw-semibold text-green3 login-link"
+                  style={{ textDecoration: "none" }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.textDecoration = "underline")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.textDecoration = "none")
+                  }
                 >
                   Lupa Password?
                 </Link>
               </div>
 
+              {/* Submit */}
               <button
                 onClick={this.handleSubmit}
                 className="btn btn-outline-dark py-3 fs-6 fw-bold d-flex flex-row justify-content-center gap-2 rounded-3 btn-green-gradient"

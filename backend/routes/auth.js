@@ -98,16 +98,22 @@ router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ msg: "Email dan password wajib diisi" });
+      return res
+        .status(400)
+        .json({ msg: "Email/Username dan password wajib diisi" });
     }
 
-    // Cari user + include password_hash (select: false by default)
-    const emailLower = email.trim().toLowerCase();
-    const user = await User.findOne({ email: emailLower }).select(
-      "+password_hash",
-    );
+    const identifier = email.trim().toLowerCase();
+
+    // Cari berdasarkan email ATAU username
+    const user = await User.findOne({
+      $or: [{ email: identifier }, { username: identifier }],
+    }).select("+password_hash");
+
     if (!user) {
-      return res.status(400).json({ msg: "Email atau Password salah" });
+      return res
+        .status(400)
+        .json({ msg: "Email/Username atau Password salah" });
     }
 
     if (!user.is_active)

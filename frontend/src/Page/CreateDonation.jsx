@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../utils/api";
 import MapPicker from "../Component/MapPicker";
@@ -79,6 +79,12 @@ function CreateDonation() {
   const [msg, setMsg] = useState("");
   const [photos, setPhotos] = useState([]);
   const [coords, setCoords] = useState({ lat: 3.5952, lng: 98.6722 });
+
+  // State custom dropdown kategori
+  const [categoryOpen, setCategoryOpen] = useState(false);
+  const [categorySearch, setCategorySearch] = useState("");
+  const categoryRef = useRef(null);
+
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -98,6 +104,19 @@ function CreateDonation() {
   useEffect(() => {
     api.get("/categories").then((res) => setCategories(res.data));
   }, []);
+
+  // Close dropdown kalau klik di luar
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (categoryRef.current && !categoryRef.current.contains(e.target)) {
+        setCategoryOpen(false);
+        setCategorySearch("");
+      }
+    };
+    if (categoryOpen)
+      document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [categoryOpen]);
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -133,6 +152,14 @@ function CreateDonation() {
     }
   };
 
+  // Kategori yang dipilih
+  const selectedCategory = categories.find((c) => c._id === form.category_id);
+
+  // Kategori yang difilter + diurutkan
+  const filteredCategories = categories
+    .filter((c) => c.name.toLowerCase().includes(categorySearch.toLowerCase()))
+    .sort((a, b) => a.name.localeCompare(b.name));
+
   return (
     <div
       className="outfit"
@@ -164,20 +191,11 @@ function CreateDonation() {
           <div className="d-flex align-items-center gap-2">
             <i
               className="bi-plus-circle"
-              style={{
-                fontSize: 35,
-                color: "var(--g1)",
-                lineHeight: 1,
-              }}
+              style={{ fontSize: 35, color: "var(--g1)", lineHeight: 1 }}
             />
-
             <h4
               className="syne-h1 mb-0"
-              style={{
-                color: "var(--txt)",
-                fontSize: 22,
-                lineHeight: 1,
-              }}
+              style={{ color: "var(--txt)", fontSize: 22, lineHeight: 1 }}
             >
               Buat Donasi Baru
             </h4>
@@ -292,23 +310,184 @@ function CreateDonation() {
                 />
               </div>
 
-              <div style={{ marginBottom: 14 }}>
+              {/* ── Custom Dropdown Kategori ── */}
+              <div
+                style={{ marginBottom: 14, position: "relative" }}
+                ref={categoryRef}
+              >
                 <Label required>Kategori</Label>
-                <select
-                  className="input-green"
-                  name="category_id"
-                  value={form.category_id}
-                  onChange={handleChange}
-                  required
-                  style={{ ...inputStyle }}
+
+                {/* Trigger */}
+                <div
+                  onClick={() => setCategoryOpen(!categoryOpen)}
+                  style={{
+                    ...inputStyle,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    cursor: "pointer",
+                    userSelect: "none",
+                    border: categoryOpen
+                      ? "1px solid var(--g2)"
+                      : "1px solid var(--border)",
+                  }}
                 >
-                  <option value="">Pilih kategori...</option>
-                  {categories.map((c) => (
-                    <option key={c._id} value={c._id}>
-                      {c.icon_emoji} {c.name}
-                    </option>
-                  ))}
-                </select>
+                  <span
+                    style={{
+                      color: selectedCategory ? "var(--txt)" : "var(--txt4)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
+                    }}
+                  >
+                    {selectedCategory ? (
+                      <>
+                        <span style={{ fontSize: 16 }}>
+                          {selectedCategory.icon_emoji}
+                        </span>
+                        {selectedCategory.name}
+                      </>
+                    ) : (
+                      "Pilih kategori..."
+                    )}
+                  </span>
+                  <i
+                    className={`bi bi-chevron-${categoryOpen ? "up" : "down"}`}
+                    style={{
+                      fontSize: 12,
+                      color: "var(--txt4)",
+                      flexShrink: 0,
+                    }}
+                  />
+                </div>
+
+                {/* Dropdown Panel */}
+                {categoryOpen && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "calc(100% + 4px)",
+                      left: 0,
+                      right: 0,
+                      zIndex: 200,
+                      background: "var(--surface)",
+                      border: "1px solid var(--g3)",
+                      borderRadius: 12,
+                      boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {/* Search input */}
+                    <div
+                      style={{
+                        padding: "10px 10px 8px",
+                        borderBottom: "1px solid var(--border)",
+                      }}
+                    >
+                      <div style={{ position: "relative" }}>
+                        <i
+                          className="bi bi-search"
+                          style={{
+                            position: "absolute",
+                            left: 10,
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            color: "var(--txt4)",
+                            fontSize: 12,
+                            pointerEvents: "none",
+                          }}
+                        />
+                        <input
+                          autoFocus
+                          placeholder="Cari kategori..."
+                          value={categorySearch}
+                          onChange={(e) => setCategorySearch(e.target.value)}
+                          style={{
+                            width: "100%",
+                            border: "1px solid var(--border)",
+                            borderRadius: 8,
+                            padding: "7px 10px 7px 30px",
+                            fontSize: 12,
+                            fontFamily: "inherit",
+                            background: "var(--g5)",
+                            outline: "none",
+                            color: "var(--txt)",
+                            boxSizing: "border-box",
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* List */}
+                    <div style={{ maxHeight: 220, overflowY: "auto" }}>
+                      {filteredCategories.length === 0 ? (
+                        <div
+                          style={{
+                            padding: "20px",
+                            textAlign: "center",
+                            color: "var(--txt4)",
+                            fontSize: 13,
+                          }}
+                        >
+                          Tidak ditemukan
+                        </div>
+                      ) : (
+                        filteredCategories.map((c) => {
+                          const isSelected = form.category_id === c._id;
+                          return (
+                            <div
+                              key={c._id}
+                              onClick={() => {
+                                setForm({ ...form, category_id: c._id });
+                                setCategoryOpen(false);
+                                setCategorySearch("");
+                              }}
+                              style={{
+                                padding: "9px 14px",
+                                fontSize: 13,
+                                cursor: "pointer",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 10,
+                                color: isSelected ? "var(--g1)" : "var(--txt)",
+                                background: isSelected
+                                  ? "rgba(95,139,76,0.08)"
+                                  : "transparent",
+                                fontWeight: isSelected ? 600 : 400,
+                                transition: "background 0.15s",
+                              }}
+                              onMouseEnter={(e) => {
+                                if (!isSelected)
+                                  e.currentTarget.style.background =
+                                    "var(--g5)";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.background = isSelected
+                                  ? "rgba(95,139,76,0.08)"
+                                  : "transparent";
+                              }}
+                            >
+                              <span style={{ fontSize: 18, flexShrink: 0 }}>
+                                {c.icon_emoji}
+                              </span>
+                              <span style={{ flex: 1 }}>{c.name}</span>
+                              {isSelected && (
+                                <i
+                                  className="bi bi-check2"
+                                  style={{
+                                    color: "var(--g1)",
+                                    fontSize: 15,
+                                    flexShrink: 0,
+                                  }}
+                                />
+                              )}
+                            </div>
+                          );
+                        })
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div
@@ -677,12 +856,12 @@ function CreateDonation() {
                   <div
                     className="spinner-border spinner-border-sm"
                     style={{ width: 16, height: 16, borderWidth: 2 }}
-                  />{" "}
+                  />
                   Menyimpan...
                 </>
               ) : (
                 <>
-                  <i className="bi bi-check2-circle" style={{ fontSize: 18 }} />{" "}
+                  <i className="bi bi-check2-circle" style={{ fontSize: 18 }} />
                   Buat Donasi
                 </>
               )}

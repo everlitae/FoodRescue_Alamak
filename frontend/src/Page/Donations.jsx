@@ -809,7 +809,7 @@ function Donations() {
                         <div style={{ position: "relative" }}>
                           {d.photos?.length > 0 ? (
                             <img
-                              src={`/uploads/${d.photos[0].photo_url}`}
+                              src={d.photos[0].photo_url}
                               alt={d.title}
                               style={{
                                 width: "100%",
