@@ -46,20 +46,26 @@ function Messages() {
   useEffect(() => {
     socket.connect();
 
+    socket.on("connect", () => {
+      // Kalau ada conversation aktif saat reconnect, join lagi
+      if (active?._id) {
+        socket.emit("join_conversation", active._id);
+      }
+    });
+
     socket.on("new_message", (newMsg) => {
       setActive((prev) => {
         if (!prev) return prev;
-        // Cek duplikat
         const exists = prev.messages.some((m) => m._id === newMsg._id);
         if (exists) return prev;
         return { ...prev, messages: [...prev.messages, newMsg] };
       });
-      // Update unread di sidebar
       fetchConversations();
     });
 
     return () => {
       socket.off("new_message");
+      socket.off("connect");
       socket.disconnect();
     };
   }, []);
@@ -94,6 +100,7 @@ function Messages() {
         content: chatMsg,
       });
       setChatMsg("");
+      fetchActive(active._id);
     } catch {}
   };
 

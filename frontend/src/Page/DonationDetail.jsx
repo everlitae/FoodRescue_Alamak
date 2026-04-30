@@ -1148,7 +1148,7 @@ function DonationDetail() {
                 <input
                   type="number"
                   min={1}
-                  max={donation.quantity_remaining}
+                  max={Math.min(1, donation.quantity_remaining)}
                   value={claimForm.quantity_claimed}
                   onChange={(e) =>
                     setClaimForm({
@@ -1159,6 +1159,17 @@ function DonationDetail() {
                   style={inputStyle}
                   className="input-green"
                 />
+                <small
+                  style={{
+                    fontSize: 11,
+                    color: "var(--txt4)",
+                    marginTop: 4,
+                    display: "block",
+                  }}
+                >
+                  Maksimal {Math.min(1, donation.quantity_remaining)}{" "}
+                  {donation.quantity_unit} per orang
+                </small>
               </div>
               <div style={{ marginBottom: 10 }}>
                 <label

@@ -55,20 +55,36 @@ router.post("/", auth, async (req, res) => {
   try {
     const { donation_id, receiver_id } = req.body;
 
+    // Tentukan siapa provider dan siapa seeker
+    let provId, seekId;
+    if (donation_id) {
+      const don = await require("../models/Donation").findById(donation_id);
+      if (don && don.provider_id.toString() === req.user.id) {
+        provId = req.user.id;
+        seekId = receiver_id;
+      } else {
+        provId = receiver_id;
+        seekId = req.user.id;
+      }
+    } else {
+      provId = req.user.id;
+      seekId = receiver_id;
+    }
+
     // Cari conversation yang sudah ada
     let conversation = await Conversation.findOne({
       donation_id: donation_id || null,
       $or: [
-        { provider_id: req.user.id, seeker_id: receiver_id },
-        { provider_id: receiver_id, seeker_id: req.user.id },
+        { provider_id: provId, seeker_id: seekId },
+        { provider_id: seekId, seeker_id: provId },
       ],
     });
 
     if (!conversation) {
       conversation = new Conversation({
         donation_id: donation_id || null,
-        provider_id: req.user.id,
-        seeker_id: receiver_id,
+        provider_id: provId,
+        seeker_id: seekId,
       });
       await conversation.save();
     }
@@ -119,10 +135,7 @@ router.post("/:id/messages", auth, async (req, res) => {
 
     const io = req.app.get("io");
     io.to(req.params.id).emit("new_message", newMessage);
-    io.to("admin_room").emit("admin_new_message", {
-      conversation_id: req.params.id,
-      message: newMessage,
-    });
+    io.emit("new_message_navbar"); // ← untuk update badge navbar realtime
 
     // Notifikasi ke penerima
     const receiverId = isProvider

@@ -158,6 +158,21 @@ class NavBar extends React.Component {
     if (this.props.auth?.user) {
       this.fetchUnread();
       this.pollInterval = setInterval(this.fetchUnread, 15000);
+
+      // Socket realtime — tidak disconnect karena Messages.jsx juga pakai
+      import("../utils/socket").then(({ default: socket }) => {
+        this.socket = socket;
+        if (!socket.connected) {
+          socket.connect();
+        }
+        socket.on("new_message_navbar", () => {
+          this.fetchUnread();
+        });
+        // Dengarkan event new_message juga
+        socket.on("new_message", () => {
+          this.fetchUnread();
+        });
+      });
     }
   }
 
@@ -171,11 +186,19 @@ class NavBar extends React.Component {
     if (wasLoggedIn && !isLoggedIn) {
       clearInterval(this.pollInterval);
       this.setState({ unreadMessages: 0 });
+      if (this.socket) {
+        this.socket.off("new_message");
+      }
     }
   }
 
   componentWillUnmount() {
     clearInterval(this.pollInterval);
+    if (this.socket) {
+      this.socket.off("new_message");
+      this.socket.off("new_message_navbar");
+      // Jangan disconnect di sini karena Messages.jsx masih pakai
+    }
   }
 
   getLinks() {
