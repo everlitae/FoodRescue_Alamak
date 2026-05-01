@@ -225,7 +225,7 @@ function ToastNotification() {
     const pollNotifications = async () => {
       try {
         const res = await api.get("/notifications");
-        const recent = res.data.filter((n) => {
+        const recent = (res.data.notifications || []).filter((n) => {
           if (n.is_read) return false;
           if (shownIdsRef.current.has(n._id)) return false;
           return new Date(n.created_at) > new Date(lastCheckRef.current);
