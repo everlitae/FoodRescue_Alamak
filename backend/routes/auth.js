@@ -12,9 +12,11 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  tls: {
+    rejectUnauthorized: false,
+  },
 });
 
-// Kirim OTP verifikasi email
 async function sendVerifyOtp(email, otp) {
   await transporter.sendMail({
     from: `"FoodRescue Support" <${process.env.EMAIL_USER}>`,
@@ -199,24 +201,20 @@ router.post("/register", async (req, res) => {
       city,
     } = req.body;
 
-    // Validasi role
     if (!["food_provider", "food_seeker"].includes(role)) {
       return res.status(400).json({ msg: "Role tidak valid" });
     }
 
-    // Validasi field
     if (!first_name || !last_name || !email || !password) {
       return res.status(400).json({ msg: "Field wajib belum lengkap" });
     }
 
-    // Validasi password
     if (password.length < 8) {
       return res.status(400).json({ msg: "Password minimal 8 karakter" });
     }
 
     const emailLower = email.trim().toLowerCase();
 
-    // Cek apakah email sudah dipakai user yang sudah verified
     const existingVerified = await User.findOne({
       email: emailLower,
       is_verified: true,
@@ -224,7 +222,6 @@ router.post("/register", async (req, res) => {
     if (existingVerified)
       return res.status(400).json({ msg: "Email sudah terdaftar" });
 
-    // Cek username duplikat (hanya yang sudah verified)
     if (username) {
       const existingUsername = await User.findOne({
         username,
@@ -234,17 +231,14 @@ router.post("/register", async (req, res) => {
         return res.status(400).json({ msg: "Username sudah dipakai" });
     }
 
-    // Cek phone duplikat (hanya yang sudah verified)
     if (phone) {
       const existingPhone = await User.findOne({ phone, is_verified: true });
       if (existingPhone)
         return res.status(400).json({ msg: "Nomor HP sudah terdaftar" });
     }
 
-    // Hapus user unverified lama dengan email yang sama (kalau ada — retry register)
     await User.deleteOne({ email: emailLower, is_verified: false });
 
-    // Buat user baru dengan is_verified: false
     const user = new User({
       first_name,
       last_name,
@@ -260,7 +254,6 @@ router.post("/register", async (req, res) => {
 
     await user.save();
 
-    // Buat & kirim OTP verifikasi
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const hashedOtp = await bcrypt.hash(otp, 10);
 
@@ -322,7 +315,6 @@ router.post("/verify-email", async (req, res) => {
         .json({ msg: `OTP salah. Sisa percobaan: ${remaining}` });
     }
 
-    // OTP benar — aktifkan user
     const user = await User.findOne({ email: emailLower, is_verified: false });
     if (!user)
       return res
@@ -334,7 +326,6 @@ router.post("/verify-email", async (req, res) => {
 
     await Otp.deleteOne({ email: emailLower });
 
-    // Langsung berikan token agar user auto-login setelah verify
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET || "rahasia123",
@@ -416,7 +407,6 @@ router.post("/login", async (req, res) => {
 
     const identifier = email.trim().toLowerCase();
 
-    // Cari berdasarkan email ATAU username
     const user = await User.findOne({
       $or: [{ email: identifier }, { username: identifier }],
     }).select("+password_hash");
@@ -437,13 +427,11 @@ router.post("/login", async (req, res) => {
         email: user.email,
       });
 
-    // Cek password
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(400).json({ msg: "Email atau Password salah" });
     }
 
-    // Update last_login_at
     user.last_login_at = new Date();
     await user.save();
 

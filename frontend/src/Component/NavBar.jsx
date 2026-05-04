@@ -158,7 +158,7 @@ class NavBar extends React.Component {
     if (this.props.auth?.user) {
       this.fetchUnread();
       // Poll lebih jarang karena socket sudah handle realtime
-      this.pollInterval = setInterval(this.fetchUnread, 30000);
+      this.pollInterval = setInterval(this.fetchUnread, 10000);
       this.setupSocket();
     }
   }
@@ -180,6 +180,9 @@ class NavBar extends React.Component {
       socket.on("new_message_notify", () => {
         this.fetchUnread();
       });
+      socket.on("conversation_updated", () => {
+        this.fetchUnread();
+      });
     });
   };
 
@@ -196,6 +199,7 @@ class NavBar extends React.Component {
       this.setState({ unreadMessages: 0 });
       if (this.socket) {
         this.socket.off("new_message_notify");
+        this.socket.off("conversation_updated");
       }
     }
   }

@@ -3,7 +3,7 @@ const router = express.Router();
 const Notification = require('../models/Notification');
 const { auth } = require('../middleware/auth');
 
-// GET /api/notifications — ambil semua notifikasi user
+// GET /api/notifications
 router.get('/', auth, async (req, res) => {
   try {
     const notifications = await Notification.find({ user_id: req.user.id })
@@ -21,7 +21,7 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
-// PUT /api/notifications/:id/read — tandai 1 notifikasi sudah dibaca
+// PUT /api/notifications/:id/read
 router.put('/:id/read', auth, async (req, res) => {
   try {
     const notification = await Notification.findById(req.params.id);
@@ -40,7 +40,7 @@ router.put('/:id/read', auth, async (req, res) => {
   }
 });
 
-// PUT /api/notifications/read-all — tandai semua sudah dibaca
+// PUT /api/notifications/read-all
 router.put('/read-all', auth, async (req, res) => {
   try {
     await Notification.updateMany(
@@ -53,7 +53,7 @@ router.put('/read-all', auth, async (req, res) => {
   }
 });
 
-// DELETE /api/notifications/:id — hapus 1 notifikasi
+// DELETE /api/notifications/:id
 router.delete('/:id', auth, async (req, res) => {
   try {
     const notification = await Notification.findById(req.params.id);
@@ -69,7 +69,7 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
-// DELETE /api/notifications — hapus semua notifikasi user
+// DELETE /api/notifications
 router.delete('/', auth, async (req, res) => {
   try {
     await Notification.deleteMany({ user_id: req.user.id });

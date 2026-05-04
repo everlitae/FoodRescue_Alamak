@@ -188,6 +188,12 @@ function Messages() {
 
   const handleSelect = (conv) => {
     setOtherOnline(false); // reset dulu, tunggu check_online callback
+    socket.emit("join_conversation", conv._id);
+    socket.emit("mark_as_read", {
+      conversationId: conv._id,
+      userId
+    });
+
     fetchActive(conv._id);
   };
 

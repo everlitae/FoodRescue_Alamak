@@ -28,14 +28,12 @@ router.put('/profile', auth, async (req, res) => {
     if (phone !== undefined) user.phone = phone || undefined;
     if (city !== undefined) user.city = city;
 
-    // Cek username duplikat
     if (username && username !== user.username) {
       const existing = await User.findOne({ username });
       if (existing) return res.status(400).json({ msg: 'Username sudah dipakai' });
       user.username = username;
     }
 
-    // Update bio di profile
     if (bio !== undefined) {
       if (!user.profile) user.profile = {};
       user.profile.bio = bio;
@@ -59,7 +57,7 @@ router.put('/change-password', auth, async (req, res) => {
     const isMatch = await user.comparePassword(oldPassword);
     if (!isMatch) return res.status(400).json({ msg: 'Password lama salah' });
 
-    user.password_hash = newPassword; // akan di-hash otomatis lewat pre-save hook
+    user.password_hash = newPassword;
     await user.save();
 
     res.json({ msg: 'Password berhasil diubah' });
@@ -68,7 +66,7 @@ router.put('/change-password', auth, async (req, res) => {
   }
 });
 
-// GET /api/users/:id — lihat profil user lain
+// GET /api/users/:id
 router.get('/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id)

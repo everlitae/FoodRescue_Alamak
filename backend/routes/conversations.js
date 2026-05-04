@@ -4,7 +4,7 @@ const Conversation = require("../models/Conversation");
 const Notification = require("../models/Notification");
 const { auth } = require("../middleware/auth");
 
-// GET /api/conversations — ambil semua conversation user
+// GET /api/conversations
 router.get("/", auth, async (req, res) => {
   try {
     const conversations = await Conversation.find({
@@ -22,7 +22,7 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-// GET /api/conversations/:id — ambil 1 conversation + messages
+// GET /api/conversations/:id
 router.get("/:id", auth, async (req, res) => {
   try {
     const conversation = await Conversation.findById(req.params.id)
@@ -50,7 +50,7 @@ router.get("/:id", auth, async (req, res) => {
   }
 });
 
-// POST /api/conversations — buat atau ambil conversation
+// POST /api/conversations
 router.post("/", auth, async (req, res) => {
   try {
     const { donation_id, receiver_id } = req.body;
@@ -71,7 +71,6 @@ router.post("/", auth, async (req, res) => {
       seekId = receiver_id;
     }
 
-    // Cari conversation yang sudah ada
     let conversation = await Conversation.findOne({
       donation_id: donation_id || null,
       $or: [
@@ -102,7 +101,7 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
-// POST /api/conversations/:id/messages — kirim pesan
+// POST /api/conversations/:id/messages
 router.post("/:id/messages", auth, async (req, res) => {
   try {
     const { content, message_type } = req.body;
@@ -133,27 +132,23 @@ router.post("/:id/messages", auth, async (req, res) => {
 
     const newMessage = conversation.messages[conversation.messages.length - 1];
 
-    // Tentukan penerima dulu sebelum dipakai
     const receiverId = isProvider
       ? conversation.seeker_id
       : conversation.provider_id;
 
     const io = req.app.get("io");
 
-    // Kirim pesan ke room conversation — keduanya langsung dapat
     io.to(req.params.id).emit("new_message", {
       ...newMessage.toObject(),
       conversationId: req.params.id,
     });
 
-    // Kirim event khusus ke penerima agar badge navbar-nya update
     io.to(`user_${receiverId.toString()}`).emit("new_message_notify", {
       conversationId: req.params.id,
       senderId: req.user.id,
       preview: content.length > 60 ? content.substring(0, 60) + "..." : content,
     });
 
-    // Notifikasi ke penerima
     await Notification.create({
       user_id: receiverId,
       type: "new_message",
@@ -169,7 +164,7 @@ router.post("/:id/messages", auth, async (req, res) => {
   }
 });
 
-// DELETE /api/conversations/:id/messages/:msgId — hapus pesan (sender only)
+// DELETE /api/conversations/:id/messages/:msgId
 router.delete("/:id/messages/:msgId", auth, async (req, res) => {
   try {
     const conversation = await Conversation.findById(req.params.id);
@@ -192,7 +187,7 @@ router.delete("/:id/messages/:msgId", auth, async (req, res) => {
   }
 });
 
-// PUT /api/conversations/:id/archive — arsipkan conversation
+// PUT /api/conversations/:id/archive
 router.put("/:id/archive", auth, async (req, res) => {
   try {
     const conversation = await Conversation.findById(req.params.id);

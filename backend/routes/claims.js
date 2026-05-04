@@ -6,7 +6,7 @@ const User = require("../models/User");
 const Notification = require("../models/Notification");
 const { auth } = require("../middleware/auth");
 
-// POST /api/claims — buat klaim baru
+// POST /api/claims
 router.post("/", auth, async (req, res) => {
   try {
     const { donation_id, quantity_claimed, pickup_scheduled_at, notes } =
@@ -65,7 +65,6 @@ router.post("/", auth, async (req, res) => {
 
     const io = req.app.get("io");
 
-    // Notifikasi ke provider
     await Notification.create({
       user_id: donation.provider_id,
       type: "donation_claimed",
@@ -81,7 +80,6 @@ router.post("/", auth, async (req, res) => {
       for_user: donation.provider_id.toString(),
     });
 
-    // Notifikasi ke seeker
     await Notification.create({
       user_id: req.user.id,
       type: "claim_confirmed",
@@ -103,7 +101,7 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
-// GET /api/claims/my — riwayat klaim user
+// GET /api/claims/my
 router.get("/my", auth, async (req, res) => {
   try {
     const claims = await Claim.find({ seeker_id: req.user.id })
@@ -118,7 +116,7 @@ router.get("/my", auth, async (req, res) => {
   }
 });
 
-// GET /api/claims/donation/:donationId — semua klaim untuk donasi tertentu
+// GET /api/claims/donation/:donationId
 router.get("/donation/:donationId", auth, async (req, res) => {
   try {
     const donation = await Donation.findById(req.params.donationId);

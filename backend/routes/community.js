@@ -3,7 +3,7 @@ const router = express.Router();
 const CommunityPost = require('../models/CommunityPost');
 const { auth } = require('../middleware/auth');
 
-// GET /api/community — ambil semua post
+// GET /api/community
 router.get('/', async (req, res) => {
   try {
     const { type, search, sort } = req.query;
@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET /api/community/:id — ambil 1 post
+// GET /api/community/:id
 router.get('/:id', async (req, res) => {
   try {
     const post = await CommunityPost.findById(req.params.id)
@@ -49,7 +49,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST /api/community — buat post baru
+// POST /api/community
 router.post('/', auth, async (req, res) => {
   try {
     const { type, title, content, tags, cover_image_url } = req.body;
@@ -72,7 +72,7 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
-// PUT /api/community/:id — edit post
+// PUT /api/community/:id
 router.put('/:id', auth, async (req, res) => {
   try {
     const post = await CommunityPost.findById(req.params.id);
@@ -96,7 +96,7 @@ router.put('/:id', auth, async (req, res) => {
   }
 });
 
-// DELETE /api/community/:id — soft delete post
+// DELETE /api/community/:id
 router.delete('/:id', auth, async (req, res) => {
   try {
     const post = await CommunityPost.findById(req.params.id);
@@ -116,7 +116,7 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
-// PUT /api/community/:id/like — like/unlike post
+// PUT /api/community/:id/like
 router.put('/:id/like', auth, async (req, res) => {
   try {
     const post = await CommunityPost.findById(req.params.id);
@@ -140,7 +140,7 @@ router.put('/:id/like', auth, async (req, res) => {
   }
 });
 
-// POST /api/community/:id/comments — tambah komentar
+// POST /api/community/:id/comments
 router.post('/:id/comments', auth, async (req, res) => {
   try {
     const { content } = req.body;
@@ -164,7 +164,7 @@ router.post('/:id/comments', auth, async (req, res) => {
   }
 });
 
-// DELETE /api/community/:id/comments/:commentId — hapus komentar
+// DELETE /api/community/:id/comments/:commentId
 router.delete('/:id/comments/:commentId', auth, async (req, res) => {
   try {
     const post = await CommunityPost.findById(req.params.id);

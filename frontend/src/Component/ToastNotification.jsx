@@ -54,6 +54,11 @@ function ToastItem({ toast, onRemove }) {
   const [visible, setVisible] = useState(false);
   const [leaving, setLeaving] = useState(false);
 
+  const handleClose = useCallback(() => {
+    setLeaving(true);
+    setTimeout(() => onRemove(toast.id), 350);
+  }, [onRemove, toast.id]);
+
   useEffect(() => {
     const t1 = setTimeout(() => setVisible(true), 10);
     const t2 = setTimeout(() => handleClose(), 4500);
@@ -61,12 +66,7 @@ function ToastItem({ toast, onRemove }) {
       clearTimeout(t1);
       clearTimeout(t2);
     };
-  }, []);
-
-  const handleClose = () => {
-    setLeaving(true);
-    setTimeout(() => onRemove(toast.id), 350);
-  };
+  }, [handleClose]);
 
   const cfg = TOAST_ICONS[toast.type] || TOAST_ICONS.default;
 
@@ -196,9 +196,7 @@ function ToastItem({ toast, onRemove }) {
 function ToastNotification() {
   const { user } = useAuth();
   const [toasts, setToasts] = useState([]);
-  // Pakai ref agar lastCheck tidak reset saat re-render
   const lastCheckRef = useRef(new Date().toISOString());
-  // Set untuk track notif id yang sudah ditampilkan (cegah duplikat)
   const shownIdsRef = useRef(new Set());
 
   const addToast = useCallback((title, body, type) => {
@@ -219,25 +217,21 @@ function ToastNotification() {
     const userId = user?.id || user?._id;
     const userIdStr = userId?.toString();
 
-    // ── Connect socket kalau belum (untuk halaman selain Messages) ──
     if (!socket.connected) {
       socket.connect();
     }
-    // Join personal room agar dapat new_message_notify
     socket.emit("join_user", userIdStr);
 
-    // ── Polling notifikasi (klaim, rating, dll) ──────────────────────
     const pollNotifications = async () => {
       try {
         const res = await api.get("/notifications");
-        const recent = res.data.filter((n) => {
+        const recent = (res.data.notifications || []).filter((n) => {
           if (n.is_read) return false;
           if (shownIdsRef.current.has(n._id)) return false;
           return new Date(n.created_at) > new Date(lastCheckRef.current);
         });
         recent.forEach((n) => {
           shownIdsRef.current.add(n._id);
-          // Jangan tampilkan toast pesan baru dari polling — sudah ada via socket
           if (n.type !== "new_message") {
             addToast(n.title, n.body, n.type);
           }
@@ -248,12 +242,8 @@ function ToastNotification() {
       } catch {}
     };
 
-    pollNotifications(); // langsung cek sekali saat mount
+    pollNotifications();
     const pollInterval = setInterval(pollNotifications, 15000);
-
-    // ── Socket: pesan baru khusus untuk user ini ─────────────────────
-    // Gunakan new_message_notify (targeted ke user room) — bukan new_message
-    // agar tidak double dengan Messages.jsx dan hanya penerima yang dapat toast
     const handleNewMessageNotify = (data) => {
       addToast(
         "Pesan Baru 💬",
@@ -262,10 +252,12 @@ function ToastNotification() {
       );
     };
 
-    // ── Socket: notifikasi push dari backend (klaim, dll) ────────────
     const handlePushNotif = (data) => {
       addToast(data.title, data.body, data.type);
     };
+
+    socket.off("new_message_notify", handleNewMessageNotify);
+    socket.off("push_notification", handlePushNotif);
 
     socket.on("new_message_notify", handleNewMessageNotify);
     socket.on("push_notification", handlePushNotif);
@@ -274,7 +266,6 @@ function ToastNotification() {
       clearInterval(pollInterval);
       socket.off("new_message_notify", handleNewMessageNotify);
       socket.off("push_notification", handlePushNotif);
-      // Jangan disconnect — NavBar dan Messages juga pakai socket yang sama
     };
   }, [user, addToast]);
 

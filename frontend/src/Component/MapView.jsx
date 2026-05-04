@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import L from "leaflet";
 
-// ── User location pin ──
 const userPinHTML = `
 <div style="display:flex;flex-direction:column;align-items:center;filter:drop-shadow(0 4px 10px rgba(224,80,80,0.5));">
   <div style="
@@ -19,7 +18,6 @@ const userIcon = L.divIcon({
   iconAnchor: [9, 9],
 });
 
-// ── Donation food marker ──
 function makeFoodIcon(emoji) {
   return L.divIcon({
     html: `

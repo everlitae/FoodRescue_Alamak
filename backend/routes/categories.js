@@ -3,7 +3,7 @@ const router = express.Router();
 const FoodCategory = require('../models/FoodCategory');
 const { auth, adminAuth } = require('../middleware/auth');
 
-// GET /api/categories — ambil semua kategori aktif
+// GET /api/categories
 router.get('/', async (req, res) => {
   try {
     const categories = await FoodCategory.find({ is_active: true }).sort({ name: 1 });
@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// POST /api/categories — tambah kategori (admin only)
+// POST /api/categories
 router.post('/', adminAuth, async (req, res) => {
   try {
     const { name, slug, icon_emoji, color_hex, description } = req.body;
@@ -30,7 +30,7 @@ router.post('/', adminAuth, async (req, res) => {
   }
 });
 
-// PUT /api/categories/:id — update kategori (admin only)
+// PUT /api/categories/:id
 router.put('/:id', adminAuth, async (req, res) => {
   try {
     const { name, slug, icon_emoji, color_hex, description, is_active } = req.body;
@@ -48,7 +48,7 @@ router.put('/:id', adminAuth, async (req, res) => {
   }
 });
 
-// DELETE /api/categories/:id — hapus kategori (admin only)
+// DELETE /api/categories/:id
 router.delete('/:id', adminAuth, async (req, res) => {
   try {
     await FoodCategory.findByIdAndDelete(req.params.id);
@@ -58,7 +58,7 @@ router.delete('/:id', adminAuth, async (req, res) => {
   }
 });
 
-// POST /api/categories/seed — isi kategori default (admin only)
+// POST /api/categories/seed
 router.post('/seed', adminAuth, async (req, res) => {
   try {
     const defaults = [

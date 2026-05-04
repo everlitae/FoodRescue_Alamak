@@ -1,6 +1,7 @@
 import React from "react";
 import api from "../utils/api";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../Context/AuthContext";
 
 const KOTA_LIST = [
   "Banda Aceh",
@@ -47,6 +48,8 @@ const KOTA_LIST = [
 ];
 
 class RegisterPage extends React.Component {
+  static contextType = AuthContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -421,7 +424,7 @@ class RegisterPage extends React.Component {
         email: this.state.verifyEmail,
         otp: otpValue,
       });
-      localStorage.setItem("token", res.data.token);
+      this.context.login(res.data.token, res.data.user, true);
       this.setState({ otpSuccess: true });
       setTimeout(() => {
         window.location.href = "/home";

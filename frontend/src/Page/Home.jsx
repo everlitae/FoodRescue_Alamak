@@ -123,15 +123,17 @@ class Home extends React.Component {
             className="card-transparent text-white fw-semibold py-1 px-2 rounded-5"
             style={{ fontSize: "small" }}
           >
-            {this.state.profile?.role === "food_provider"
-              ? "🍱 Food Provider"
-              : this.state.profile?.role === "admin"
-                ? "⚙️ Admin"
-                : "🤲 Food Seeker"}
+            {(() => {
+              const role = this.state.profile?.role ?? this.props.auth?.user?.role;
+              if (role === "food_provider") return "🍱 Food Provider";
+              if (role === "admin") return "⚙️ Admin";
+              if (role === "food_seeker") return "🤲 Food Seeker";
+              return null;
+            })()}
           </span>
 
           <h1 className="text-white syne-h1 my-3">
-            Selamat Datang Kembali, {this.state.profile?.user?.first_name} 👋
+            Selamat Datang Kembali, {this.state.profile?.first_name ?? this.props.auth?.user?.first_name} 👋
           </h1>
 
           <p className="text-light">

@@ -1091,7 +1091,43 @@ class PrivacyPolicy extends Component {
             className="grid-detail-light position-absolute"
             style={{ inset: 0 }}
           />
+          <button
+            onClick={() => this.props.navigate(-1)}
+            className="outfit"
+            style={{
+              position: "absolute",
+              top: 18,
+              right: 20,
+              zIndex: 10,
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              background: "rgba(255,255,255,0.15)",
+              border: "1px solid rgba(255,255,255,0.3)",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
+              borderRadius: 10,
+              padding: "7px 14px",
+              fontSize: 13,
+              fontWeight: 600,
+              color: "#fff",
+              cursor: "pointer",
+              transition: "background 0.2s, border-color 0.2s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "rgba(255,255,255,0.25)";
+              e.currentTarget.style.borderColor = "rgba(255,255,255,0.5)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "rgba(255,255,255,0.15)";
+              e.currentTarget.style.borderColor = "rgba(255,255,255,0.3)";
+            }}
+          >
+            <i className="bi bi-arrow-left" style={{ fontSize: 12 }} />
+            Kembali
+            </button>
           <div className="container about-hero__inner py-0 px-4 px-md-5">
+          
             <div className="row align-items-center g-3">
               {/* Left */}
               <div className="col-lg-8">

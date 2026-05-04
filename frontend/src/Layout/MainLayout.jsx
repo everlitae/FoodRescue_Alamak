@@ -10,7 +10,7 @@ class MainLayout extends React.Component {
       <>
         <div className="position-relative grid-detail-responsive main-bg-color">
           <NavBar />
-          <ToastNotification /> {/* ← tambahkan ini */}
+          <ToastNotification />
           <Outlet />
           <Footer />
         </div>

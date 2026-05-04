@@ -6,7 +6,7 @@ const User = require('../models/User');
 const Notification = require('../models/Notification');
 const { auth } = require('../middleware/auth');
 
-// POST /api/ratings — beri rating
+// POST /api/ratings
 router.post('/', auth, async (req, res) => {
   try {
     const { claim_id, score, review } = req.body;
@@ -21,12 +21,10 @@ router.post('/', auth, async (req, res) => {
       return res.status(400).json({ msg: 'Klaim belum selesai' });
     }
 
-    // Hanya seeker yang bisa rating provider
     if (claim.seeker_id.toString() !== req.user.id) {
       return res.status(403).json({ msg: 'Hanya penerima donasi yang bisa memberi rating' });
     }
 
-    // Cek sudah rating belum
     const existing = await Rating.findOne({ claim_id });
     if (existing) return res.status(400).json({ msg: 'Kamu sudah memberi rating untuk klaim ini' });
 
@@ -41,14 +39,12 @@ router.post('/', auth, async (req, res) => {
     });
     await rating.save();
 
-    // Update trust_score provider
     const allRatings = await Rating.find({ ratee_id });
     const avg = allRatings.reduce((sum, r) => sum + r.score, 0) / allRatings.length;
     await User.findByIdAndUpdate(ratee_id, {
       trust_score: Math.round(avg * 10) / 10,
     });
 
-    // Notifikasi ke provider
     await Notification.create({
       user_id: ratee_id,
       type: 'new_rating',
@@ -64,7 +60,7 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
-// GET /api/ratings/check/:claimId — cek sudah rating belum
+// GET /api/ratings/check/:claimId
 router.get('/check/:claimId', auth, async (req, res) => {
   try {
     const existing = await Rating.findOne({
@@ -77,7 +73,7 @@ router.get('/check/:claimId', auth, async (req, res) => {
   }
 });
 
-// GET /api/ratings/user/:userId — lihat semua rating user
+// GET /api/ratings/user/:userId
 router.get('/user/:userId', async (req, res) => {
   try {
     const ratings = await Rating.find({ ratee_id: req.params.userId })

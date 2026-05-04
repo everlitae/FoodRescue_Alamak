@@ -80,7 +80,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// POST /api/donations — hanya food_provider & admin
+// POST /api/donations
 router.post(
   "/",
   auth,
@@ -160,7 +160,7 @@ router.post(
   },
 );
 
-// PUT /api/donations/:id — hanya food_provider & admin
+// PUT /api/donations/:id
 router.put(
   "/:id",
   auth,
@@ -198,7 +198,7 @@ router.put(
   },
 );
 
-// DELETE /api/donations/:id — hanya food_provider & admin
+// DELETE /api/donations/:id
 router.delete(
   "/:id",
   auth,
