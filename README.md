@@ -272,14 +272,14 @@ Keduanya bisa chat secara real-time tanpa perlu port berbeda.
 
 ## 👨‍💻 Tim Pengembang
 
-**241112931 - Pauline Angelicca G.**
-**241110842 - Everlita Evenlyn**
-**241112170 - John Herbert**
-**241111817 - Jerisco Geraldine**
+| NIM | Nama |
+|---|---|
+| 241112931 | Pauline Angelicca G. |
+| 241110842 | Everlita Evenlyn |
+| 241112170 | John Herbert |
+| 241111817 | Jerisco Geraldine |
+
 **Alamak IF-A Sore** — Tugas Kelompok UTS Pengembangan Web Back End 2025/2026
-
----
-
 ## 🔗 Link
 
 |                          |                                                                                                                                                                                                                                                                                                                                                                          |
