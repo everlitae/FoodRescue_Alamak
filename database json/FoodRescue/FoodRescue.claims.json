@@ -1,0 +1,82 @@
+[{
+  "_id": {
+    "$oid": "69f4c1e9b3727a3c8a2ca3b4"
+  },
+  "donation_id": {
+    "$oid": "69f4c150b3727a3c8a2ca319"
+  },
+  "seeker_id": {
+    "$oid": "69f4bf6cb3727a3c8a2ca237"
+  },
+  "quantity_claimed": 3,
+  "status": "completed",
+  "pickup_scheduled_at": null,
+  "notes": "",
+  "tracking_log": [
+    {
+      "new_status": "pending",
+      "changed_by": {
+        "$oid": "69f4bf6cb3727a3c8a2ca237"
+      },
+      "note": "Klaim dibuat",
+      "_id": {
+        "$oid": "69f4c1e9b3727a3c8a2ca3b5"
+      },
+      "created_at": {
+        "$date": "2026-05-01T15:08:25.615Z"
+      }
+    },
+    {
+      "previous_status": "pending",
+      "new_status": "confirmed",
+      "changed_by": {
+        "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+      },
+      "_id": {
+        "$oid": "69f4c266b3727a3c8a2ca5b5"
+      },
+      "created_at": {
+        "$date": "2026-05-01T15:10:30.766Z"
+      }
+    },
+    {
+      "previous_status": "confirmed",
+      "new_status": "picked_up",
+      "changed_by": {
+        "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+      },
+      "_id": {
+        "$oid": "69f4c26fb3727a3c8a2ca5e8"
+      },
+      "created_at": {
+        "$date": "2026-05-01T15:10:39.434Z"
+      }
+    },
+    {
+      "previous_status": "picked_up",
+      "new_status": "completed",
+      "changed_by": {
+        "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+      },
+      "_id": {
+        "$oid": "69f4c270b3727a3c8a2ca610"
+      },
+      "created_at": {
+        "$date": "2026-05-01T15:10:40.986Z"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2026-05-01T15:08:25.617Z"
+  },
+  "updated_at": {
+    "$date": "2026-05-01T15:10:40.987Z"
+  },
+  "__v": 3,
+  "picked_up_at": {
+    "$date": "2026-05-01T15:10:39.434Z"
+  },
+  "completed_at": {
+    "$date": "2026-05-01T15:10:40.986Z"
+  }
+}]

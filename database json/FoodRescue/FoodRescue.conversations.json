@@ -1,0 +1,179 @@
+[{
+  "_id": {
+    "$oid": "69f4c1f3b3727a3c8a2ca3d4"
+  },
+  "donation_id": {
+    "$oid": "69f4c150b3727a3c8a2ca319"
+  },
+  "provider_id": {
+    "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+  },
+  "seeker_id": {
+    "$oid": "69f4bf6cb3727a3c8a2ca237"
+  },
+  "provider_unread": 0,
+  "seeker_unread": 0,
+  "is_archived": false,
+  "messages": [
+    {
+      "sender_id": {
+        "$oid": "69f4bf6cb3727a3c8a2ca237"
+      },
+      "content": "halo",
+      "message_type": "text",
+      "is_read": false,
+      "is_deleted_by_sender": false,
+      "_id": {
+        "$oid": "69f4c1f9b3727a3c8a2ca3de"
+      },
+      "created_at": {
+        "$date": "2026-05-01T15:08:41.333Z"
+      }
+    },
+    {
+      "sender_id": {
+        "$oid": "69f4bf6cb3727a3c8a2ca237"
+      },
+      "content": "nama saya nethered",
+      "message_type": "text",
+      "is_read": false,
+      "is_deleted_by_sender": false,
+      "_id": {
+        "$oid": "69f4c1fbb3727a3c8a2ca3ef"
+      },
+      "created_at": {
+        "$date": "2026-05-01T15:08:43.546Z"
+      }
+    },
+    {
+      "sender_id": {
+        "$oid": "69f4bf6cb3727a3c8a2ca237"
+      },
+      "content": "saya mau klaim",
+      "message_type": "text",
+      "is_read": false,
+      "is_deleted_by_sender": false,
+      "_id": {
+        "$oid": "69f4c1fdb3727a3c8a2ca405"
+      },
+      "created_at": {
+        "$date": "2026-05-01T15:08:45.647Z"
+      }
+    },
+    {
+      "sender_id": {
+        "$oid": "69f4bf6cb3727a3c8a2ca237"
+      },
+      "content": "tes 1 2 3",
+      "message_type": "text",
+      "is_read": false,
+      "is_deleted_by_sender": false,
+      "_id": {
+        "$oid": "69f4c22ab3727a3c8a2ca46c"
+      },
+      "created_at": {
+        "$date": "2026-05-01T15:09:30.033Z"
+      }
+    },
+    {
+      "sender_id": {
+        "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+      },
+      "content": "halo",
+      "message_type": "text",
+      "is_read": false,
+      "is_deleted_by_sender": false,
+      "_id": {
+        "$oid": "69f4c24eb3727a3c8a2ca4c9"
+      },
+      "created_at": {
+        "$date": "2026-05-01T15:10:06.696Z"
+      }
+    },
+    {
+      "sender_id": {
+        "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+      },
+      "content": "saya jerisco",
+      "message_type": "text",
+      "is_read": false,
+      "is_deleted_by_sender": false,
+      "_id": {
+        "$oid": "69f4c250b3727a3c8a2ca4ee"
+      },
+      "created_at": {
+        "$date": "2026-05-01T15:10:08.130Z"
+      }
+    },
+    {
+      "sender_id": {
+        "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+      },
+      "content": "oke",
+      "message_type": "text",
+      "is_read": false,
+      "is_deleted_by_sender": false,
+      "_id": {
+        "$oid": "69f4c251b3727a3c8a2ca521"
+      },
+      "created_at": {
+        "$date": "2026-05-01T15:10:09.410Z"
+      }
+    },
+    {
+      "sender_id": {
+        "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+      },
+      "content": "saya klaim",
+      "message_type": "text",
+      "is_read": false,
+      "is_deleted_by_sender": false,
+      "_id": {
+        "$oid": "69f4c252b3727a3c8a2ca54e"
+      },
+      "created_at": {
+        "$date": "2026-05-01T15:10:10.449Z"
+      }
+    },
+    {
+      "sender_id": {
+        "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+      },
+      "content": "hei lupa tips",
+      "message_type": "text",
+      "is_read": false,
+      "is_deleted_by_sender": false,
+      "_id": {
+        "$oid": "69f4c283b3727a3c8a2ca69b"
+      },
+      "created_at": {
+        "$date": "2026-05-01T15:10:59.412Z"
+      }
+    },
+    {
+      "sender_id": {
+        "$oid": "69f4bf6cb3727a3c8a2ca237"
+      },
+      "content": "oke",
+      "message_type": "text",
+      "is_read": false,
+      "is_deleted_by_sender": false,
+      "_id": {
+        "$oid": "69f4c29eb3727a3c8a2ca707"
+      },
+      "created_at": {
+        "$date": "2026-05-01T15:11:26.913Z"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2026-05-01T15:08:35.978Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-01T15:14:41.614Z"
+  },
+  "__v": 10,
+  "last_message_at": {
+    "$date": "2026-05-01T15:11:26.913Z"
+  }
+}]

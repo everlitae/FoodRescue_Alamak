@@ -1,0 +1,97 @@
+[{
+  "_id": {
+    "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+  },
+  "first_name": "Jerisco",
+  "last_name": "Geraldine",
+  "email": "jerisco.geraldine@gmail.com",
+  "username": "jerisco_g",
+  "phone": "+6281270250559",
+  "password_hash": "$2a$10$zmQcznMDxpCiUvwbpTzUSe26KHfaBimMMbdGhEZTW9zcNb45XHTIa",
+  "role": "food_provider",
+  "city": "Medan",
+  "is_active": true,
+  "is_verified": true,
+  "trust_score": 3,
+  "total_points": 0,
+  "deleted_at": null,
+  "profile": {
+    "total_donations": 1,
+    "total_claims": 0,
+    "bio": "saya laki-laki"
+  },
+  "created_at": {
+    "$date": "2026-05-01T14:51:33.349Z"
+  },
+  "updated_at": {
+    "$date": "2026-05-01T15:14:34.372Z"
+  },
+  "__v": 0,
+  "last_login_at": {
+    "$date": "2026-05-01T15:14:34.369Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69f4bf6cb3727a3c8a2ca237"
+  },
+  "first_name": "Nethered",
+  "last_name": "Human",
+  "email": "nethered.human@gmail.com",
+  "username": "neth_h",
+  "phone": "+6281358385550",
+  "password_hash": "$2a$10$bd5E2NHvU84/3xLbyxMg0eBf55YMlrUUI9y3Xrw6omj7mN9hSB4Au",
+  "role": "food_seeker",
+  "city": "Medan",
+  "is_active": true,
+  "is_verified": true,
+  "trust_score": 5,
+  "total_points": 0,
+  "deleted_at": null,
+  "profile": {
+    "total_donations": 0,
+    "total_claims": 1
+  },
+  "created_at": {
+    "$date": "2026-05-01T14:57:48.598Z"
+  },
+  "updated_at": {
+    "$date": "2026-05-01T15:11:20.748Z"
+  },
+  "__v": 0,
+  "last_login_at": {
+    "$date": "2026-05-01T15:11:20.746Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69f4bfe6b3727a3c8a2ca289"
+  },
+  "first_name": "Jeko",
+  "last_name": "Ger",
+  "email": "jekoojer@gmail.com",
+  "username": "jeko_ger",
+  "phone": "+6282258399904",
+  "password_hash": "$2a$10$DN5D8KW166evOcuCSIn/VOJuGpMcuLzS/6k8asg.xKnhrQfb6BrtO",
+  "role": "admin",
+  "city": "Medan",
+  "is_active": true,
+  "is_verified": true,
+  "trust_score": 5,
+  "total_points": 0,
+  "deleted_at": null,
+  "profile": {
+    "total_donations": 0,
+    "total_claims": 0
+  },
+  "created_at": {
+    "$date": "2026-05-01T14:59:50.723Z"
+  },
+  "updated_at": {
+    "$date": "2026-05-01T15:12:23.277Z"
+  },
+  "__v": 0,
+  "last_login_at": {
+    "$date": "2026-05-01T15:12:23.275Z"
+  }
+}]

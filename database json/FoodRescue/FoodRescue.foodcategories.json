@@ -1,0 +1,112 @@
+[{
+  "_id": {
+    "$oid": "69f4c0cc58f1eac3c9318e08"
+  },
+  "slug": "makanan-siap-saji",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2026-05-01T15:03:41.387Z"
+  },
+  "icon_emoji": "🍚",
+  "is_active": true,
+  "name": "Makanan Siap Saji",
+  "updatedAt": {
+    "$date": "2026-05-01T15:03:41.387Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69f4c0cc58f1eac3c9318e09"
+  },
+  "slug": "roti-pastry",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2026-05-01T15:03:41.483Z"
+  },
+  "icon_emoji": "🥖",
+  "is_active": true,
+  "name": "Roti & Pastry",
+  "updatedAt": {
+    "$date": "2026-05-01T15:03:41.483Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69f4c0cc58f1eac3c9318e0a"
+  },
+  "slug": "sayur-buah",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2026-05-01T15:03:41.569Z"
+  },
+  "icon_emoji": "🥦",
+  "is_active": true,
+  "name": "Sayur & Buah",
+  "updatedAt": {
+    "$date": "2026-05-01T15:03:41.569Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69f4c0cc58f1eac3c9318e0b"
+  },
+  "slug": "minuman",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2026-05-01T15:03:41.664Z"
+  },
+  "icon_emoji": "🥤",
+  "is_active": true,
+  "name": "Minuman",
+  "updatedAt": {
+    "$date": "2026-05-01T15:03:41.664Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69f4c0cd58f1eac3c9318e0c"
+  },
+  "slug": "snack",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2026-05-01T15:03:41.753Z"
+  },
+  "icon_emoji": "🍪",
+  "is_active": true,
+  "name": "Snack",
+  "updatedAt": {
+    "$date": "2026-05-01T15:03:41.753Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69f4c0cd58f1eac3c9318e0d"
+  },
+  "slug": "frozen-food",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2026-05-01T15:03:41.844Z"
+  },
+  "icon_emoji": "🧊",
+  "is_active": true,
+  "name": "Frozen Food",
+  "updatedAt": {
+    "$date": "2026-05-01T15:03:41.844Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69f4c0cd58f1eac3c9318e0e"
+  },
+  "slug": "makanan-bayi",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2026-05-01T15:03:41.932Z"
+  },
+  "icon_emoji": "👶",
+  "is_active": true,
+  "name": "Makanan Bayi",
+  "updatedAt": {
+    "$date": "2026-05-01T15:03:41.932Z"
+  }
+}]

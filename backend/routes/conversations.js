@@ -138,8 +138,10 @@ router.post("/:id/messages", auth, async (req, res) => {
 
     const io = req.app.get("io");
 
+    const msgObj = newMessage.toObject();
     io.to(req.params.id).emit("new_message", {
-      ...newMessage.toObject(),
+      ...msgObj,
+      sender_id: msgObj.sender_id.toString(), // ← convert ke string
       conversationId: req.params.id,
     });
 

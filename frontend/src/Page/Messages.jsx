@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useRef, useCallback } from "react";
 import api from "../utils/api";
 import { useAuth } from "../Context/AuthContext";
@@ -21,6 +22,7 @@ function Messages() {
   const isTypingRef = useRef(false);
 
   const userId = user?.id || user?._id;
+  const userIdStr = userId?.toString();
 
   // Sync activeRef
   useEffect(() => {
@@ -46,7 +48,13 @@ function Messages() {
     } catch {}
   };
 
-  // ── Cek status online lawan bicara ───────────────────────────────
+  const getOtherUserId = (conv) => {
+    if (!conv) return null;
+    const provId = (conv.provider_id?._id || conv.provider_id)?.toString();
+    const seekId = (conv.seeker_id?._id || conv.seeker_id)?.toString();
+    return provId === userIdStr ? seekId : provId;
+  };
+
   const checkOtherOnline = useCallback((conv) => {
     if (!conv || !socket.connected) return;
     const otherId = getOtherUserId(conv);
@@ -54,56 +62,71 @@ function Messages() {
     socket.emit("check_online", otherId, ({ status }) => {
       setOtherOnline(status === "online");
     });
-  }, []);
+  }, [userIdStr]);
 
-  const getOtherUserId = (conv) => {
-    if (!conv) return null;
-    const provId =
-      conv.provider_id?._id ||
-      conv.provider_id?.toString?.() ||
-      conv.provider_id;
-    const seekId =
-      conv.seeker_id?._id || conv.seeker_id?.toString?.() || conv.seeker_id;
-    const provStr = provId?.toString?.() || provId;
-    const seekStr = seekId?.toString?.() || seekId;
-    return provStr === userId?.toString() ? seekStr : provStr;
+  // ── isSender helper — handle semua kemungkinan format sender_id ──
+  const isSender = (senderId) => {
+    if (!senderId || !userIdStr) return false;
+    if (typeof senderId === "string") return senderId === userIdStr;
+    if (senderId._id) return senderId._id.toString() === userIdStr;
+    if (typeof senderId.toString === "function")
+      return senderId.toString() === userIdStr;
+    return false;
   };
 
-  // ── Mount: connect socket + setup semua listeners ─────────────────
+  // ── Mount: connect socket + setup listeners ───────────────────────
   useEffect(() => {
     if (!userId) return;
 
     fetchConversations().finally(() => setLoading(false));
 
     if (!socket.connected) socket.connect();
+    socket.emit("join_user", userIdStr);
 
-    // Join personal room
-    socket.emit("join_user", userId);
-
-    // Pesan baru masuk
+    // ── Pesan baru dari server ──
     socket.on("new_message", (newMsg) => {
       const cur = activeRef.current;
-      if (cur?._id === newMsg.conversationId) {
-        setActive((prev) => {
-          if (!prev) return prev;
-          const filtered = prev.messages.filter(
-            (m) => !String(m._id).startsWith("temp_"),
-          );
-          const exists = filtered.some((m) => m._id === newMsg._id);
-          if (exists) return { ...prev, messages: filtered };
-          return { ...prev, messages: [...filtered, newMsg] };
-        });
-        setIsTyping(false);
-      }
+
+      // Update conversation list sidebar
       fetchConversations();
+
+      // Kalau bukan conversation yang aktif, skip update chat area
+      if (!cur || cur._id !== newMsg.conversationId) return;
+
+      const fromMe = newMsg.sender_id?.toString() === userIdStr;
+
+      setActive((prev) => {
+        if (!prev) return prev;
+
+        if (fromMe) {
+          // Pesan dari diri sendiri:
+          // ganti temp message dengan pesan asli dari server
+          const withoutTemps = prev.messages.filter(
+            (m) => !String(m._id).startsWith("temp_")
+          );
+          const alreadyExists = withoutTemps.some(
+            (m) => String(m._id) === String(newMsg._id)
+          );
+          if (alreadyExists) return { ...prev, messages: withoutTemps };
+          return { ...prev, messages: [...withoutTemps, newMsg] };
+        } else {
+          // Pesan dari lawan bicara:
+          // tambahkan langsung tanpa hapus temp
+          const alreadyExists = prev.messages.some(
+            (m) => String(m._id) === String(newMsg._id)
+          );
+          if (alreadyExists) return prev;
+          return { ...prev, messages: [...prev.messages, newMsg] };
+        }
+      });
+
+      setIsTyping(false);
     });
 
-    // Badge navbar
     socket.on("new_message_notify", () => {
       fetchConversations();
     });
 
-    // Typing dari lawan bicara
     socket.on("user_typing", ({ isTyping: typing }) => {
       setIsTyping(typing);
       if (typing) {
@@ -114,7 +137,6 @@ function Messages() {
       }
     });
 
-    // Presence update (online/offline) dari siapapun
     socket.on("presence_update", ({ userId: uid, status }) => {
       const cur = activeRef.current;
       if (!cur) return;
@@ -122,12 +144,10 @@ function Messages() {
       if (uid?.toString() === otherId?.toString()) {
         setOtherOnline(status === "online");
       }
-      // Update unread badge di sidebar juga kalau perlu
     });
 
-    // Saat socket reconnect (misal balik dari halaman lain), join ulang user room
     const handleReconnect = () => {
-      if (userId) socket.emit("join_user", userId);
+      socket.emit("join_user", userIdStr);
       if (activeRef.current?._id) {
         socket.emit("join_conversation", activeRef.current._id);
       }
@@ -142,31 +162,26 @@ function Messages() {
       socket.off("connect", handleReconnect);
       clearTimeout(typingTimeoutRef.current);
       clearTimeout(myTypingTimeoutRef.current);
-      // JANGAN disconnect — NavBar dan ToastNotification juga pakai socket yang sama
-      // Cukup leave conversation yang sedang aktif
       if (activeRef.current?._id) {
         socket.emit("leave_conversation", activeRef.current._id);
       }
     };
-  }, [userId]);
+  }, [userIdStr]);
 
-  // ── Ganti conversation: join room baru, cek online ────────────────
+  // ── Ganti conversation ────────────────────────────────────────────
   useEffect(() => {
     if (!active?._id) return;
 
     if (prevConvIdRef.current && prevConvIdRef.current !== active._id) {
       socket.emit("leave_conversation", prevConvIdRef.current);
-      // Stop typing di room lama
       socket.emit("typing_stop", {
         conversationId: prevConvIdRef.current,
-        userId,
+        userId: userIdStr,
       });
     }
 
     socket.emit("join_conversation", active._id);
     setIsTyping(false);
-
-    // Cek status online lawan bicara
     checkOtherOnline(active);
   }, [active?._id]);
 
@@ -187,13 +202,8 @@ function Messages() {
   }, [active?._id, active?.messages?.length]);
 
   const handleSelect = (conv) => {
-    setOtherOnline(false); // reset dulu, tunggu check_online callback
+    setOtherOnline(false);
     socket.emit("join_conversation", conv._id);
-    socket.emit("mark_as_read", {
-      conversationId: conv._id,
-      userId
-    });
-
     fetchActive(conv._id);
   };
 
@@ -204,15 +214,17 @@ function Messages() {
     const content = chatMsg.trim();
     setChatMsg("");
 
-    // Stop typing
     if (isTypingRef.current) {
-      socket.emit("typing_stop", { conversationId: active._id, userId });
+      socket.emit("typing_stop", {
+        conversationId: active._id,
+        userId: userIdStr,
+      });
       isTypingRef.current = false;
     }
     clearTimeout(myTypingTimeoutRef.current);
 
-    // Optimistic update
-    const tempId = "temp_" + Date.now();
+    // Optimistic update — tampilkan dulu sebelum server balas
+    const tempId = "temp_" + Date.now() + "_" + Math.random();
     setActive((prev) => {
       if (!prev) return prev;
       return {
@@ -221,7 +233,7 @@ function Messages() {
           ...prev.messages,
           {
             _id: tempId,
-            sender_id: userId,
+            sender_id: userIdStr, // ← string agar isSender() benar
             content,
             created_at: new Date().toISOString(),
             message_type: "text",
@@ -232,7 +244,9 @@ function Messages() {
 
     try {
       await api.post(`/conversations/${active._id}/messages`, { content });
+      // Socket new_message akan replace temp dengan pesan asli
     } catch {
+      // Kalau gagal, hapus temp dan kembalikan teks
       setActive((prev) => {
         if (!prev) return prev;
         return {
@@ -250,13 +264,19 @@ function Messages() {
     if (!active) return;
 
     if (!isTypingRef.current) {
-      socket.emit("typing_start", { conversationId: active._id, userId });
+      socket.emit("typing_start", {
+        conversationId: active._id,
+        userId: userIdStr,
+      });
       isTypingRef.current = true;
     }
 
     clearTimeout(myTypingTimeoutRef.current);
     myTypingTimeoutRef.current = setTimeout(() => {
-      socket.emit("typing_stop", { conversationId: active._id, userId });
+      socket.emit("typing_stop", {
+        conversationId: active._id,
+        userId: userIdStr,
+      });
       isTypingRef.current = false;
     }, 2000);
   };
@@ -264,11 +284,8 @@ function Messages() {
   // ── Helpers ───────────────────────────────────────────────────────
   const getOtherUser = (conv) => {
     if (!conv) return null;
-    const provId =
-      conv.provider_id?._id?.toString?.() ||
-      conv.provider_id?.toString?.() ||
-      conv.provider_id;
-    return provId === userId?.toString() ? conv.seeker_id : conv.provider_id;
+    const provId = (conv.provider_id?._id || conv.provider_id)?.toString();
+    return provId === userIdStr ? conv.seeker_id : conv.provider_id;
   };
 
   const formatTime = (date) =>
@@ -304,7 +321,8 @@ function Messages() {
   const getInitials = (u) => {
     if (!u) return "?";
     return (
-      `${u.first_name?.[0] || ""}${u.last_name?.[0] || ""}`.toUpperCase() || "?"
+      `${u.first_name?.[0] || ""}${u.last_name?.[0] || ""}`.toUpperCase() ||
+      "?"
     );
   };
 
@@ -479,7 +497,7 @@ function Messages() {
               const lastMsg = conv.messages?.[conv.messages.length - 1];
               const isProvider =
                 (conv.provider_id?._id || conv.provider_id)?.toString() ===
-                userId?.toString();
+                userIdStr;
               const unread = isProvider
                 ? conv.provider_unread
                 : conv.seeker_unread;
@@ -524,6 +542,7 @@ function Messages() {
                           fontSize: 14,
                           fontWeight: 700,
                           color: isActiveCon ? "#fff" : "var(--txt3)",
+                          overflow: "hidden",
                         }}
                       >
                         {other?.avatar_url ? (
@@ -586,7 +605,8 @@ function Messages() {
                         <small
                           style={{
                             fontSize: 11,
-                            color: unread > 0 ? "var(--txt2)" : "var(--txt4)",
+                            color:
+                              unread > 0 ? "var(--txt2)" : "var(--txt4)",
                             fontWeight: unread > 0 ? 600 : 400,
                             overflow: "hidden",
                             textOverflow: "ellipsis",
@@ -702,7 +722,6 @@ function Messages() {
                   boxShadow: "var(--shadow)",
                 }}
               >
-                {/* Avatar */}
                 <div style={{ position: "relative", flexShrink: 0 }}>
                   <div
                     style={{
@@ -733,7 +752,6 @@ function Messages() {
                       getInitials(otherActive)
                     )}
                   </div>
-                  {/* Online dot */}
                   <span
                     style={{
                       position: "absolute",
@@ -749,7 +767,6 @@ function Messages() {
                   />
                 </div>
 
-                {/* Nama + status */}
                 <div style={{ flex: 1 }}>
                   <p
                     style={{
@@ -780,7 +797,6 @@ function Messages() {
                   </p>
                 </div>
 
-                {/* Donation tag */}
                 {active.donation_id && (
                   <div
                     style={{
@@ -856,10 +872,8 @@ function Messages() {
                   </div>
                 ) : (
                   active.messages.map((m, idx) => {
-                    const isMe =
-                      m.sender_id === userId ||
-                      m.sender_id?.toString?.() === userId?.toString() ||
-                      m.sender_id?._id === userId;
+                    // ── isMe pakai isSender helper ──
+                    const isMe = isSender(m.sender_id);
                     const isTemp = String(m._id).startsWith("temp_");
 
                     const prevMsg = active.messages[idx - 1];
@@ -870,7 +884,6 @@ function Messages() {
                       new Date(m.created_at).toDateString() !==
                         new Date(prevMsg.created_at).toDateString();
 
-                    // Grouping: apakah pesan berikutnya dari sender yang sama?
                     const isLastInGroup =
                       !nextMsg ||
                       nextMsg.sender_id?.toString?.() !==
@@ -948,8 +961,12 @@ function Messages() {
                                   : isLastInGroup
                                     ? "4px 16px 16px 16px"
                                     : "4px 4px 4px 16px",
-                              background: isMe ? "var(--g1)" : "var(--surface)",
-                              border: isMe ? "none" : "1px solid var(--border)",
+                              background: isMe
+                                ? "var(--g1)"
+                                : "var(--surface)",
+                              border: isMe
+                                ? "none"
+                                : "1px solid var(--border)",
                               color: isMe ? "#fff" : "var(--txt)",
                               fontSize: 13,
                               lineHeight: 1.5,
