@@ -1,0 +1,55 @@
+[{
+  "_id": {
+    "$oid": "69f4c150b3727a3c8a2ca319"
+  },
+  "provider_id": {
+    "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+  },
+  "category_id": {
+    "$oid": "69f4c0cc58f1eac3c9318e08"
+  },
+  "title": "Nasi Putih Pake Telur",
+  "description": "Enak",
+  "quantity": 5,
+  "quantity_unit": "bungkus",
+  "status": "cancelled",
+  "is_halal": true,
+  "view_count": 11,
+  "pickup_address": "Jalan K. L. Yos Sudarso, Tanjung Mulia",
+  "pickup_city": "Kota Medan",
+  "pickup_start_time": "00:00",
+  "pickup_end_time": "12:00",
+  "pickup_location": {
+    "type": "Point",
+    "coordinates": [
+      98.66372823715211,
+      3.641359368390832
+    ]
+  },
+  "expired_at": {
+    "$date": "2026-05-02T05:00:00.000Z"
+  },
+  "deleted_at": {
+    "$date": "2026-05-01T15:13:51.707Z"
+  },
+  "photos": [
+    {
+      "photo_url": "https://res.cloudinary.com/dt7qzcics/image/upload/v1777647950/foodrescue/donations/jxevnscmggmv91iy17m3.jpg",
+      "sort_order": 0,
+      "_id": {
+        "$oid": "69f4c150b3727a3c8a2ca31a"
+      },
+      "created_at": {
+        "$date": "2026-05-01T15:05:52.519Z"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2026-05-01T15:05:52.524Z"
+  },
+  "updated_at": {
+    "$date": "2026-05-01T15:13:51.709Z"
+  },
+  "quantity_remaining": 2,
+  "__v": 0
+}]

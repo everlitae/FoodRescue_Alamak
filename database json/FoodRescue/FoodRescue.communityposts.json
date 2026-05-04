@@ -1,0 +1,68 @@
+[{
+  "_id": {
+    "$oid": "69f4be4eb3727a3c8a2ca1c5"
+  },
+  "author_id": {
+    "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+  },
+  "type": "question",
+  "title": "Gimana sih?",
+  "content": "Cara untuk bikin mie goreng",
+  "tags": [
+    "miegoreng",
+    "makanan",
+    "gorengan"
+  ],
+  "like_count": 2,
+  "liked_by": [
+    {
+      "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+    },
+    {
+      "$oid": "69f4bf6cb3727a3c8a2ca237"
+    }
+  ],
+  "comment_count": 2,
+  "view_count": 2,
+  "is_pinned": false,
+  "deleted_at": null,
+  "comments": [
+    {
+      "author_id": {
+        "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+      },
+      "content": "hai",
+      "like_count": 0,
+      "liked_by": [],
+      "is_deleted": false,
+      "_id": {
+        "$oid": "69f4be65b3727a3c8a2ca1df"
+      },
+      "created_at": {
+        "$date": "2026-05-01T14:53:25.266Z"
+      }
+    },
+    {
+      "author_id": {
+        "$oid": "69f4bf6cb3727a3c8a2ca237"
+      },
+      "content": "halo",
+      "like_count": 0,
+      "liked_by": [],
+      "is_deleted": false,
+      "_id": {
+        "$oid": "69f4bf93b3727a3c8a2ca267"
+      },
+      "created_at": {
+        "$date": "2026-05-01T14:58:27.598Z"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2026-05-01T14:53:02.654Z"
+  },
+  "updated_at": {
+    "$date": "2026-05-01T15:12:58.123Z"
+  },
+  "__v": 4
+}]

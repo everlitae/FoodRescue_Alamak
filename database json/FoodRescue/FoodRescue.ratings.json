@@ -1,0 +1,23 @@
+[{
+  "_id": {
+    "$oid": "69f4c2b4b3727a3c8a2ca792"
+  },
+  "claim_id": {
+    "$oid": "69f4c1e9b3727a3c8a2ca3b4"
+  },
+  "rater_id": {
+    "$oid": "69f4bf6cb3727a3c8a2ca237"
+  },
+  "ratee_id": {
+    "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+  },
+  "score": 3,
+  "review": "jelek kali",
+  "created_at": {
+    "$date": "2026-05-01T15:11:48.971Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-01T15:11:48.971Z"
+  },
+  "__v": 0
+}]

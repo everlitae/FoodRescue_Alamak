@@ -1,0 +1,390 @@
+[{
+  "_id": {
+    "$oid": "69f4c1e9b3727a3c8a2ca3b8"
+  },
+  "user_id": {
+    "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+  },
+  "type": "donation_claimed",
+  "title": "Donasi Diklaim!",
+  "body": "Donasi \"Nasi Putih Pake Telur\" diklaim sebanyak 3 bungkus",
+  "reference_type": "claim",
+  "reference_id": {
+    "$oid": "69f4c1e9b3727a3c8a2ca3b4"
+  },
+  "is_read": false,
+  "expires_at": {
+    "$date": "2026-07-30T15:08:25.813Z"
+  },
+  "created_at": {
+    "$date": "2026-05-01T15:08:25.815Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-01T15:08:25.815Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4c1e9b3727a3c8a2ca3ba"
+  },
+  "user_id": {
+    "$oid": "69f4bf6cb3727a3c8a2ca237"
+  },
+  "type": "claim_confirmed",
+  "title": "Klaim Berhasil!",
+  "body": "Kamu berhasil mengklaim \"Nasi Putih Pake Telur\" sebanyak 3 bungkus. Tunggu konfirmasi dari provider.",
+  "reference_type": "claim",
+  "reference_id": {
+    "$oid": "69f4c1e9b3727a3c8a2ca3b4"
+  },
+  "is_read": false,
+  "expires_at": {
+    "$date": "2026-07-30T15:08:25.914Z"
+  },
+  "created_at": {
+    "$date": "2026-05-01T15:08:25.914Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-01T15:08:25.914Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4c1f9b3727a3c8a2ca3e0"
+  },
+  "user_id": {
+    "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+  },
+  "type": "new_message",
+  "title": "Pesan Baru",
+  "body": "halo",
+  "reference_type": "message",
+  "reference_id": {
+    "$oid": "69f4c1f3b3727a3c8a2ca3d4"
+  },
+  "is_read": false,
+  "expires_at": {
+    "$date": "2026-07-30T15:08:41.417Z"
+  },
+  "created_at": {
+    "$date": "2026-05-01T15:08:41.417Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-01T15:08:41.417Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4c1fbb3727a3c8a2ca3f1"
+  },
+  "user_id": {
+    "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+  },
+  "type": "new_message",
+  "title": "Pesan Baru",
+  "body": "nama saya nethered",
+  "reference_type": "message",
+  "reference_id": {
+    "$oid": "69f4c1f3b3727a3c8a2ca3d4"
+  },
+  "is_read": false,
+  "expires_at": {
+    "$date": "2026-07-30T15:08:43.635Z"
+  },
+  "created_at": {
+    "$date": "2026-05-01T15:08:43.636Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-01T15:08:43.636Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4c1fdb3727a3c8a2ca407"
+  },
+  "user_id": {
+    "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+  },
+  "type": "new_message",
+  "title": "Pesan Baru",
+  "body": "saya mau klaim",
+  "reference_type": "message",
+  "reference_id": {
+    "$oid": "69f4c1f3b3727a3c8a2ca3d4"
+  },
+  "is_read": false,
+  "expires_at": {
+    "$date": "2026-07-30T15:08:45.744Z"
+  },
+  "created_at": {
+    "$date": "2026-05-01T15:08:45.744Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-01T15:08:45.744Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4c22ab3727a3c8a2ca46e"
+  },
+  "user_id": {
+    "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+  },
+  "type": "new_message",
+  "title": "Pesan Baru",
+  "body": "tes 1 2 3",
+  "reference_type": "message",
+  "reference_id": {
+    "$oid": "69f4c1f3b3727a3c8a2ca3d4"
+  },
+  "is_read": false,
+  "expires_at": {
+    "$date": "2026-07-30T15:09:30.120Z"
+  },
+  "created_at": {
+    "$date": "2026-05-01T15:09:30.120Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-01T15:09:30.120Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4c24eb3727a3c8a2ca4cb"
+  },
+  "user_id": {
+    "$oid": "69f4bf6cb3727a3c8a2ca237"
+  },
+  "type": "new_message",
+  "title": "Pesan Baru",
+  "body": "halo",
+  "reference_type": "message",
+  "reference_id": {
+    "$oid": "69f4c1f3b3727a3c8a2ca3d4"
+  },
+  "is_read": false,
+  "expires_at": {
+    "$date": "2026-07-30T15:10:06.775Z"
+  },
+  "created_at": {
+    "$date": "2026-05-01T15:10:06.776Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-01T15:10:06.776Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4c250b3727a3c8a2ca4f0"
+  },
+  "user_id": {
+    "$oid": "69f4bf6cb3727a3c8a2ca237"
+  },
+  "type": "new_message",
+  "title": "Pesan Baru",
+  "body": "saya jerisco",
+  "reference_type": "message",
+  "reference_id": {
+    "$oid": "69f4c1f3b3727a3c8a2ca3d4"
+  },
+  "is_read": false,
+  "expires_at": {
+    "$date": "2026-07-30T15:10:08.217Z"
+  },
+  "created_at": {
+    "$date": "2026-05-01T15:10:08.218Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-01T15:10:08.218Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4c251b3727a3c8a2ca523"
+  },
+  "user_id": {
+    "$oid": "69f4bf6cb3727a3c8a2ca237"
+  },
+  "type": "new_message",
+  "title": "Pesan Baru",
+  "body": "oke",
+  "reference_type": "message",
+  "reference_id": {
+    "$oid": "69f4c1f3b3727a3c8a2ca3d4"
+  },
+  "is_read": false,
+  "expires_at": {
+    "$date": "2026-07-30T15:10:09.605Z"
+  },
+  "created_at": {
+    "$date": "2026-05-01T15:10:09.605Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-01T15:10:09.605Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4c252b3727a3c8a2ca550"
+  },
+  "user_id": {
+    "$oid": "69f4bf6cb3727a3c8a2ca237"
+  },
+  "type": "new_message",
+  "title": "Pesan Baru",
+  "body": "saya klaim",
+  "reference_type": "message",
+  "reference_id": {
+    "$oid": "69f4c1f3b3727a3c8a2ca3d4"
+  },
+  "is_read": false,
+  "expires_at": {
+    "$date": "2026-07-30T15:10:10.552Z"
+  },
+  "created_at": {
+    "$date": "2026-05-01T15:10:10.552Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-01T15:10:10.552Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4c266b3727a3c8a2ca5b7"
+  },
+  "user_id": {
+    "$oid": "69f4bf6cb3727a3c8a2ca237"
+  },
+  "type": "claim_confirmed",
+  "title": "Klaim Dikonfirmasi!",
+  "body": "Klaim kamu untuk \"Nasi Putih Pake Telur\" telah dikonfirmasi",
+  "reference_type": "claim",
+  "reference_id": {
+    "$oid": "69f4c1e9b3727a3c8a2ca3b4"
+  },
+  "is_read": false,
+  "expires_at": {
+    "$date": "2026-07-30T15:10:30.863Z"
+  },
+  "created_at": {
+    "$date": "2026-05-01T15:10:30.863Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-01T15:10:30.863Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4c271b3727a3c8a2ca617"
+  },
+  "user_id": {
+    "$oid": "69f4bf6cb3727a3c8a2ca237"
+  },
+  "type": "donation_completed",
+  "title": "Donasi Selesai!",
+  "body": "Donasi \"Nasi Putih Pake Telur\" telah selesai. Jangan lupa beri rating!",
+  "reference_type": "claim",
+  "reference_id": {
+    "$oid": "69f4c1e9b3727a3c8a2ca3b4"
+  },
+  "is_read": false,
+  "expires_at": {
+    "$date": "2026-07-30T15:10:41.456Z"
+  },
+  "created_at": {
+    "$date": "2026-05-01T15:10:41.456Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-01T15:10:41.456Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4c283b3727a3c8a2ca69d"
+  },
+  "user_id": {
+    "$oid": "69f4bf6cb3727a3c8a2ca237"
+  },
+  "type": "new_message",
+  "title": "Pesan Baru",
+  "body": "hei lupa tips",
+  "reference_type": "message",
+  "reference_id": {
+    "$oid": "69f4c1f3b3727a3c8a2ca3d4"
+  },
+  "is_read": false,
+  "expires_at": {
+    "$date": "2026-07-30T15:10:59.498Z"
+  },
+  "created_at": {
+    "$date": "2026-05-01T15:10:59.500Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-01T15:10:59.500Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4c29fb3727a3c8a2ca709"
+  },
+  "user_id": {
+    "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+  },
+  "type": "new_message",
+  "title": "Pesan Baru",
+  "body": "oke",
+  "reference_type": "message",
+  "reference_id": {
+    "$oid": "69f4c1f3b3727a3c8a2ca3d4"
+  },
+  "is_read": false,
+  "expires_at": {
+    "$date": "2026-07-30T15:11:27.015Z"
+  },
+  "created_at": {
+    "$date": "2026-05-01T15:11:27.016Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-01T15:11:27.016Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4c2b5b3727a3c8a2ca796"
+  },
+  "user_id": {
+    "$oid": "69f4bdf5b3727a3c8a2ca1a0"
+  },
+  "type": "new_rating",
+  "title": "Rating Baru!",
+  "body": "Kamu mendapat rating 3/5 untuk donasi \"Nasi Putih Pake Telur\"",
+  "reference_type": "donation",
+  "reference_id": {
+    "$oid": "69f4c150b3727a3c8a2ca319"
+  },
+  "is_read": false,
+  "expires_at": {
+    "$date": "2026-07-30T15:11:49.254Z"
+  },
+  "created_at": {
+    "$date": "2026-05-01T15:11:49.255Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-01T15:11:49.255Z"
+  },
+  "__v": 0
+}]
