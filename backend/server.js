@@ -11,6 +11,7 @@ const { Server } = require("socket.io");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
+const passport = require("./config/passport");
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -101,15 +102,19 @@ io.on("connection", (socket) => {
 });
 
 // Middleware
-app.use(cors({
-  origin: [
-    process.env.CLIENT_URL || "http://localhost:3000",
-    "http://localhost:3001",
-  ],
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: [
+      process.env.CLIENT_URL || "http://localhost:3000",
+      "http://localhost:3001",
+    ],
+    credentials: true,
+  }),
+);
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+app.use(passport.initialize());
 
 // Routes
 app.use("/api/auth", require("./routes/auth"));

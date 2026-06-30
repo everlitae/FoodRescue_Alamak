@@ -6,6 +6,7 @@ import "leaflet/dist/leaflet.css";
 
 import SignInPage from "./Page/SignInPage";
 import RegisterPage from "./Page/RegisterPage";
+import CompleteProfile from "./Page/CompleteProfile";
 import Donations from "./Page/Donations";
 import DonationDetail from "./Page/DonationDetail";
 import CreateDonation from "./Page/CreateDonation";
@@ -21,20 +22,10 @@ import ForgotPassword from "./Page/ForgotPassword";
 import Contact from "./Page/Contact";
 import PrivacyPolicy from "./Page/PrivacyPolicy";
 import TermsAndCondition from "./Page/TermsAndCondition";
+import OAuthCallback from "./Page/OAuthCallback";
 
 import MainLayout from "./Layout/MainLayout";
 import LandingPage from "./Page/LandingPage";
-
-function PrivateRoute({ children }) {
-  const { user, loading } = useAuth();
-  if (loading)
-    return (
-      <div className="text-center py-5">
-        <div className="spinner-border text-primary"></div>
-      </div>
-    );
-  return user ? children : <Navigate to="/login" />;
-}
 
 function AdminRoute({ children }) {
   const { user, loading } = useAuth();
@@ -62,6 +53,20 @@ function ProviderRoute({ children }) {
   );
 }
 
+// Guard: kalau sudah login tapi belum complete profile → redirect ke complete-profile
+function ProfileCompleteRoute({ children }) {
+  const { user, loading } = useAuth();
+  if (loading)
+    return (
+      <div className="text-center py-5">
+        <div className="spinner-border text-primary"></div>
+      </div>
+    );
+  if (!user) return <Navigate to="/login" />;
+  if (!user.is_profile_complete) return <Navigate to="/complete-profile" />;
+  return children;
+}
+
 function AppRoutes() {
   return (
     <>
@@ -71,22 +76,21 @@ function AppRoutes() {
           <Route
             path="home"
             element={
-              <PrivateRoute>
+              <ProfileCompleteRoute>
                 <Home />
-              </PrivateRoute>
+              </ProfileCompleteRoute>
             }
           />
           <Route path="donations" element={<Donations />} />
 
-          {/* ✅ create HARUS sebelum :id */}
           <Route
             path="donations/create"
             element={
-              <PrivateRoute>
+              <ProfileCompleteRoute>
                 <ProviderRoute>
                   <CreateDonation />
                 </ProviderRoute>
-              </PrivateRoute>
+              </ProfileCompleteRoute>
             }
           />
 
@@ -95,33 +99,33 @@ function AppRoutes() {
           <Route
             path="profile"
             element={
-              <PrivateRoute>
+              <ProfileCompleteRoute>
                 <Profile />
-              </PrivateRoute>
+              </ProfileCompleteRoute>
             }
           />
           <Route
             path="history"
             element={
-              <PrivateRoute>
+              <ProfileCompleteRoute>
                 <History />
-              </PrivateRoute>
+              </ProfileCompleteRoute>
             }
           />
           <Route
             path="messages"
             element={
-              <PrivateRoute>
+              <ProfileCompleteRoute>
                 <Messages />
-              </PrivateRoute>
+              </ProfileCompleteRoute>
             }
           />
           <Route
             path="community"
             element={
-              <PrivateRoute>
+              <ProfileCompleteRoute>
                 <Community />
-              </PrivateRoute>
+              </ProfileCompleteRoute>
             }
           />
           <Route
@@ -144,6 +148,8 @@ function AppRoutes() {
 
         <Route path="/login" element={<SignInPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/oauth-callback" element={<OAuthCallback />} />
+        <Route path="/complete-profile" element={<CompleteProfile />} />
 
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

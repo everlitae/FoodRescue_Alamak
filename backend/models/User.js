@@ -32,22 +32,32 @@ const UserSchema = new Schema(
       trim: true,
       minlength: 6,
     },
+    oauth_provider: {
+      type: String,
+      enum: ["local", "google"],
+      default: "local",
+    },
+    oauth_id: {
+      type: String,
+      sparse: true,
+    },
     phone: {
       type: String,
       unique: true,
       sparse: true,
       match: [/^(?:\+62|62|0)\d{9,13}$/, "Nomor tidak valid"],
     },
-    password_hash: { type: String, required: true, select: false },
+    password_hash: { type: String, select: false },
     role: {
       type: String,
       enum: ["food_provider", "food_seeker", "admin"],
-      required: true,
+      default: "food_seeker",
     },
     city: String,
     avatar_url: String,
     is_active: { type: Boolean, default: true },
-    is_verified: { type: Boolean, default: false }, // email sudah diverifikasi
+    is_verified: { type: Boolean, default: false },
+    is_profile_complete: { type: Boolean, default: false }, // ← BARU
     trust_score: { type: Number, default: 5.0, min: 1, max: 5 },
     total_points: { type: Number, default: 0 },
     last_login_at: Date,

@@ -22,9 +22,9 @@ class SignInPage extends React.Component {
       redirect: false,
       rememberMe: false,
       loading: false,
-      // Email belum diverifikasi
       needVerify: false,
       needVerifyEmail: "",
+      googleError: "",
     };
   }
 
@@ -35,7 +35,6 @@ class SignInPage extends React.Component {
     this.setState({ theme: newTheme });
   };
 
-  // Validasi: bisa berupa email atau username (min 3 karakter)
   validateIdentifier = (value) => {
     const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
     const isUsername = /^[A-Za-z0-9_]{3,}$/.test(value);
@@ -122,7 +121,6 @@ class SignInPage extends React.Component {
     } catch (err) {
       const data = err.response?.data;
       if (data?.requireVerification) {
-        // Email belum diverifikasi — tampilkan banner dengan opsi kirim ulang OTP
         this.setState({
           needVerify: true,
           needVerifyEmail: data.email || email,
@@ -137,6 +135,17 @@ class SignInPage extends React.Component {
   }
 
   componentDidMount() {
+    // Cek error dari Google OAuth callback
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get("error");
+    if (error === "account_not_found") {
+      this.setState({
+        googleError:
+          "Akun Google ini belum terdaftar. Silakan daftar terlebih dahulu.",
+      });
+    } else if (error === "google_failed") {
+      this.setState({ googleError: "Login dengan Google gagal. Coba lagi." });
+    }
     const savedTheme = localStorage.getItem("theme") || "light";
     document.documentElement.setAttribute("data-theme", savedTheme);
     this.setState({ theme: savedTheme });
@@ -403,6 +412,109 @@ class SignInPage extends React.Component {
                   </>
                 )}
               </button>
+
+              {/* Divider */}
+              <div className="d-flex align-items-center gap-2 my-1">
+                <hr
+                  className="flex-grow-1 m-0"
+                  style={{ borderColor: "var(--border)" }}
+                />
+                <span
+                  className="outfit fw-light"
+                  style={{ fontSize: 12, color: "var(--txt4)" }}
+                >
+                  atau masuk dengan
+                </span>
+                <hr
+                  className="flex-grow-1 m-0"
+                  style={{ borderColor: "var(--border)" }}
+                />
+              </div>
+
+              {/* Google Error */}
+              {this.state.googleError && (
+                <div
+                  style={{
+                    background: "rgba(220,53,69,0.08)",
+                    border: "1px solid rgba(220,53,69,0.3)",
+                    borderRadius: 12,
+                    padding: "12px 16px",
+                    fontSize: 13,
+                    color: "#dc3545",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                  }}
+                >
+                  <i className="bi bi-exclamation-triangle-fill" />
+                  <span>
+                    {this.state.googleError}{" "}
+                    <a
+                      href="/register"
+                      style={{ color: "#dc3545", fontWeight: 700 }}
+                    >
+                      Daftar di sini
+                    </a>
+                  </span>
+                </div>
+              )}
+
+              {/* Google OAuth Button */}
+              <a
+                href={`${process.env.REACT_APP_API_URL}/api/auth/google/login`}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 12,
+                  padding: "11px 20px",
+                  borderRadius: 12,
+                  border: "1.5px solid var(--g3)",
+                  background: "var(--g5)",
+                  color: "var(--txt)",
+                  textDecoration: "none",
+                  fontFamily: "inherit",
+                  fontSize: 14,
+                  fontWeight: 600,
+                  transition: "all 0.2s ease",
+                  boxShadow: "0 0 0 0 rgba(95,139,76,0)",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "var(--g2)";
+                  e.currentTarget.style.boxShadow =
+                    "0 0 16px 2px rgba(95,139,76,0.35)";
+                  e.currentTarget.style.transform = "translateY(-1px)";
+                  e.currentTarget.style.background = "rgba(95,139,76,0.15)";
+                  e.currentTarget.style.color = "var(--txt)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "var(--g3)";
+                  e.currentTarget.style.boxShadow = "0 0 0 0 rgba(95,139,76,0)";
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.color = "var(--txt)";
+                }}
+              >
+                <svg width="20" height="20" viewBox="0 0 48 48">
+                  <path
+                    fill="#EA4335"
+                    d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
+                  />
+                  <path
+                    fill="#4285F4"
+                    d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
+                  />
+                </svg>
+                Masuk dengan Google
+              </a>
             </div>
           </div>
         </div>

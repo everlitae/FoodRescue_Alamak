@@ -3,50 +3,6 @@ import api from "../utils/api";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../Context/AuthContext";
 
-const KOTA_LIST = [
-  "Banda Aceh",
-  "Medan",
-  "Padang",
-  "Pekanbaru",
-  "Batam",
-  "Jambi",
-  "Palembang",
-  "Bengkulu",
-  "Bandar Lampung",
-  "Jakarta",
-  "Bogor",
-  "Depok",
-  "Tangerang",
-  "Bekasi",
-  "Bandung",
-  "Cirebon",
-  "Semarang",
-  "Yogyakarta",
-  "Solo",
-  "Surabaya",
-  "Malang",
-  "Madiun",
-  "Kediri",
-  "Jember",
-  "Denpasar",
-  "Mataram",
-  "Kupang",
-  "Pontianak",
-  "Palangkaraya",
-  "Banjarmasin",
-  "Balikpapan",
-  "Samarinda",
-  "Makassar",
-  "Manado",
-  "Palu",
-  "Kendari",
-  "Gorontalo",
-  "Ambon",
-  "Ternate",
-  "Jayapura",
-  "Lainnya",
-];
-
 class RegisterPage extends React.Component {
   static contextType = AuthContext;
 
@@ -55,37 +11,11 @@ class RegisterPage extends React.Component {
     this.state = {
       loading: false,
       apiError: "",
-      role: "food_provider",
-      username: "",
-      formError: [],
       theme: "light",
-      // ── Verifikasi email ──
-      showVerify: false,
-      verifyEmail: "",
-      otp: ["", "", "", "", "", ""],
-      otpError: "",
-      otpLoading: false,
-      otpSuccess: false,
-      resendCooldown: 0,
-      // ── Form fields ──
-      firstName: "",
-      firstNameError: "",
-      firstNameTouched: false,
-      lastName: "",
-      lastNameError: "",
-      lastNameTouched: false,
-      usernameError: "",
-      usernameTouched: false,
+      // Form fields
       email: "",
       emailError: "",
       emailTouched: false,
-      phone: "",
-      phoneError: "",
-      phoneTouched: false,
-      city: "",
-      customCity: "",
-      cityOpen: false,
-      citySearch: "",
       password: "",
       passwordStrength: 0,
       passwordLabel: "",
@@ -94,11 +24,15 @@ class RegisterPage extends React.Component {
       confirmPasswordTouched: false,
       showPassword: false,
       showConfirmPassword: false,
-      agree: false,
-      agreeError: "",
-      agreeTouched: false,
+      // OTP
+      showVerify: false,
+      verifyEmail: "",
+      otp: ["", "", "", "", "", ""],
+      otpError: "",
+      otpLoading: false,
+      otpSuccess: false,
+      resendCooldown: 0,
     };
-    this.cityDropdownRef = React.createRef();
     this.cooldownTimer = null;
     this.otpRefs = Array(6)
       .fill(null)
@@ -112,26 +46,18 @@ class RegisterPage extends React.Component {
     this.setState({ theme: newTheme });
   };
 
-  validateName = (name) => /^[A-Za-z\s]+$/.test(name);
-  validateUsername = (username) => /^[A-Za-z0-9_]{6,}$/.test(username);
   validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  validatePhone = (phone) => /^(?:\+62|62|0)8[1-9][0-9]{6,10}$/.test(phone);
 
-  handleUsernameChange = (e) =>
-    this.setState({
-      username: e.target.value.toLowerCase(),
-      usernameError: "",
-    });
-  handleRoleSelect = (role) => this.setState({ role });
-  handleFirstNameChange = (e) =>
-    this.setState({ firstName: e.target.value, firstNameError: "" });
-  handleLastNameChange = (e) =>
-    this.setState({ lastName: e.target.value, lastNameError: "" });
   handleEmailChange = (e) =>
     this.setState({ email: e.target.value, emailError: "" });
-  handlePhoneChange = (e) =>
-    this.setState({ phone: e.target.value, phoneError: "" });
-  handleCustomCityChange = (e) => this.setState({ customCity: e.target.value });
+  handleEmailBlur = () => {
+    const { email } = this.state;
+    this.setState({
+      emailError:
+        email && !this.validateEmail(email) ? "Format email tidak sesuai" : "",
+      emailTouched: true,
+    });
+  };
 
   handlePasswordChange = (e) => {
     const value = e.target.value;
@@ -152,150 +78,6 @@ class RegisterPage extends React.Component {
       confirmPassword: e.target.value,
       confirmPasswordError: "",
     });
-
-  handleAgreeChange = (e) =>
-    this.setState({ agree: e.target.checked, agreeError: "" });
-
-  handleSubmit = () => {
-    const {
-      firstName,
-      lastName,
-      email,
-      phone,
-      password,
-      confirmPassword,
-      agree,
-    } = this.state;
-    let missingFields = [];
-
-    if (!firstName) missingFields.push("Nama Depan");
-    if (!lastName) missingFields.push("Nama Belakang");
-
-    if (!this.state.username) {
-      missingFields.push("Username");
-    } else if (!this.validateUsername(this.state.username)) {
-      this.setState({
-        usernameError: "Username minimal 6 karakter (huruf/angka)",
-        usernameTouched: true,
-      });
-      return;
-    }
-
-    if (!email) {
-      missingFields.push("Email");
-    } else if (!this.validateEmail(email)) {
-      this.setState({
-        emailError: "Format email tidak sesuai",
-        emailTouched: true,
-      });
-      return;
-    }
-
-    if (phone && !this.validatePhone(phone)) {
-      this.setState({
-        phoneError: "Format nomor HP tidak sesuai",
-        phoneTouched: true,
-      });
-      return;
-    }
-
-    if (!password) {
-      missingFields.push("Password");
-    } else if (password.length < 8) {
-      this.setState({ formError: ["Password minimal 8 karakter"] });
-      return;
-    }
-
-    if (!confirmPassword) {
-      missingFields.push("Konfirmasi Password");
-    } else if (password !== confirmPassword) {
-      this.setState({
-        confirmPasswordError: "Password tidak sesuai",
-        confirmPasswordTouched: true,
-      });
-      return;
-    }
-
-    if (!this.state.city) {
-      missingFields.push("Kota / Kabupaten");
-    } else if (this.state.city === "Lainnya" && !this.state.customCity.trim()) {
-      missingFields.push("Kota (Lainnya)");
-    }
-
-    if (missingFields.length > 0) {
-      this.setState({
-        formError: missingFields,
-        agreeError: "",
-        agreeTouched: false,
-      });
-      return;
-    }
-
-    if (!agree) {
-      this.setState({
-        agreeError: "Anda harus menyetujui syarat & ketentuan",
-        agreeTouched: true,
-        formError: [],
-      });
-      return;
-    }
-
-    this.setState({ formError: [] });
-    this.postUser();
-  };
-
-  handleFirstNameBlur = () => {
-    const { firstName } = this.state;
-    this.setState({
-      firstNameError:
-        firstName && !this.validateName(firstName)
-          ? "Nama depan hanya boleh berisi A-Z"
-          : "",
-      firstNameTouched: true,
-    });
-  };
-
-  handleLastNameBlur = () => {
-    const { lastName } = this.state;
-    this.setState({
-      lastNameError:
-        lastName && !this.validateName(lastName)
-          ? "Nama belakang hanya boleh berisi A-Z"
-          : "",
-      lastNameTouched: true,
-    });
-  };
-
-  handleUsernameBlur = () => {
-    const { username } = this.state;
-    this.setState({
-      usernameError:
-        username && !this.validateUsername(username)
-          ? "Username minimal 6 karakter (huruf/angka)"
-          : "",
-      usernameTouched: true,
-    });
-  };
-
-  handleEmailBlur = () => {
-    const { email } = this.state;
-    this.setState({
-      emailError:
-        email && !this.validateEmail(email) ? "Format email tidak sesuai" : "",
-      emailTouched: true,
-    });
-  };
-
-  handlePhoneBlur = () => {
-    const { phone } = this.state;
-    this.setState({
-      phoneError:
-        phone && !this.validatePhone(phone)
-          ? "Format nomor HP tidak sesuai"
-          : "",
-      phoneTouched: true,
-    });
-  };
 
   handleConfirmPasswordBlur = () => {
     const { password, confirmPassword } = this.state;
@@ -334,23 +116,46 @@ class RegisterPage extends React.Component {
     return { strength, label };
   };
 
-  // ── POST REGISTER ─────────────────────────────────────────────────
-  async postUser() {
+  handleSubmit = async () => {
+    const { email, password, confirmPassword } = this.state;
+
+    if (!email) {
+      this.setState({ emailError: "Email wajib diisi", emailTouched: true });
+      return;
+    }
+    if (!this.validateEmail(email)) {
+      this.setState({
+        emailError: "Format email tidak sesuai",
+        emailTouched: true,
+      });
+      return;
+    }
+    if (!password) {
+      this.setState({ apiError: "Password wajib diisi" });
+      return;
+    }
+    if (password.length < 8) {
+      this.setState({ apiError: "Password minimal 8 karakter" });
+      return;
+    }
+    if (!confirmPassword) {
+      this.setState({
+        confirmPasswordError: "Konfirmasi password wajib diisi",
+        confirmPasswordTouched: true,
+      });
+      return;
+    }
+    if (password !== confirmPassword) {
+      this.setState({
+        confirmPasswordError: "Password tidak sesuai",
+        confirmPasswordTouched: true,
+      });
+      return;
+    }
+
     this.setState({ loading: true, apiError: "" });
     try {
-      const res = await api.post("/auth/register", {
-        first_name: this.state.firstName,
-        last_name: this.state.lastName,
-        email: this.state.email,
-        username: this.state.username,
-        phone: this.state.phone || null,
-        password: this.state.password,
-        role: this.state.role,
-        city:
-          this.state.city.trim() === "Lainnya"
-            ? this.state.customCity.trim()
-            : this.state.city,
-      });
+      const res = await api.post("/auth/register", { email, password });
       this.setState({
         showVerify: true,
         verifyEmail: res.data.email,
@@ -366,9 +171,8 @@ class RegisterPage extends React.Component {
     } finally {
       this.setState({ loading: false });
     }
-  }
+  };
 
-  // ── COOLDOWN TIMER ────────────────────────────────────────────────
   startCooldown = () => {
     clearInterval(this.cooldownTimer);
     this.cooldownTimer = setInterval(() => {
@@ -382,7 +186,6 @@ class RegisterPage extends React.Component {
     }, 1000);
   };
 
-  // ── OTP HANDLERS ──────────────────────────────────────────────────
   handleOtpChange = (index, value) => {
     if (!/^\d*$/.test(value)) return;
     const otp = [...this.state.otp];
@@ -392,9 +195,8 @@ class RegisterPage extends React.Component {
   };
 
   handleOtpKeyDown = (index, e) => {
-    if (e.key === "Backspace" && !this.state.otp[index] && index > 0) {
+    if (e.key === "Backspace" && !this.state.otp[index] && index > 0)
       this.otpRefs[index - 1].current?.focus();
-    }
     if (e.key === "Enter") this.handleVerifyOtp();
   };
 
@@ -424,11 +226,12 @@ class RegisterPage extends React.Component {
         email: this.state.verifyEmail,
         otp: otpValue,
       });
+      // Simpan token dulu, redirect ke complete-profile
       this.context.login(res.data.token, res.data.user, true);
       this.setState({ otpSuccess: true });
       setTimeout(() => {
-        window.location.href = "/home";
-      }, 2200);
+        window.location.href = "/complete-profile";
+      }, 2000);
     } catch (err) {
       this.setState({
         otpError: err.response?.data?.msg || "Verifikasi gagal",
@@ -461,29 +264,14 @@ class RegisterPage extends React.Component {
     const savedTheme = localStorage.getItem("theme") || "light";
     document.documentElement.setAttribute("data-theme", savedTheme);
     this.setState({ theme: savedTheme });
-    this.handleClickOutside = (e) => {
-      if (
-        this.cityDropdownRef.current &&
-        !this.cityDropdownRef.current.contains(e.target)
-      ) {
-        this.setState({ cityOpen: false, citySearch: "" });
-      }
-    };
-    document.addEventListener("mousedown", this.handleClickOutside);
   }
 
   componentWillUnmount() {
-    document.removeEventListener("mousedown", this.handleClickOutside);
     clearInterval(this.cooldownTimer);
   }
 
   render() {
-    const { cityOpen, citySearch, city } = this.state;
-    const filteredKota = KOTA_LIST.filter((k) =>
-      k.toLowerCase().includes((citySearch || "").toLowerCase()),
-    );
-
-    // ── LAYAR VERIFIKASI OTP ──────────────────────────────────────────
+    // ── LAYAR OTP ──────────────────────────────────────────────────────
     if (this.state.showVerify) {
       const {
         verifyEmail,
@@ -497,7 +285,6 @@ class RegisterPage extends React.Component {
 
       return (
         <>
-          {/* Toast sukses — pakai class dari index.css */}
           {otpSuccess && (
             <div className="success-overlay">
               <div className="success-modal">
@@ -506,9 +293,9 @@ class RegisterPage extends React.Component {
                 </div>
                 <h2 className="success-title">Email Terverifikasi!</h2>
                 <p className="success-text">
-                  Akun kamu sudah aktif.
+                  Melengkapi profil kamu...
                   <br />
-                  Mengalihkan ke beranda...
+                  Sebentar lagi...
                 </p>
                 <div
                   className="spinner-border spinner-border-sm"
@@ -517,7 +304,6 @@ class RegisterPage extends React.Component {
               </div>
             </div>
           )}
-
           <div
             className="main-bg-color grid-detail-responsive"
             style={{
@@ -526,39 +312,9 @@ class RegisterPage extends React.Component {
               alignItems: "center",
               justifyContent: "center",
               padding: "20px 16px",
-              position: "relative",
             }}
           >
-            {/* Glow blobs */}
-            <div
-              style={{
-                position: "fixed",
-                top: -120,
-                left: -120,
-                width: 400,
-                height: 400,
-                borderRadius: "50%",
-                background:
-                  "radial-gradient(circle, rgba(95,139,76,0.12) 0%, transparent 70%)",
-                pointerEvents: "none",
-              }}
-            />
-            <div
-              style={{
-                position: "fixed",
-                bottom: -80,
-                right: -80,
-                width: 320,
-                height: 320,
-                borderRadius: "50%",
-                background:
-                  "radial-gradient(circle, rgba(184,105,74,0.10) 0%, transparent 70%)",
-                pointerEvents: "none",
-              }}
-            />
-
             <div style={{ width: "100%", maxWidth: 420 }}>
-              {/* Logo */}
               <div className="text-center mb-4">
                 <div
                   className="syne-h1"
@@ -583,7 +339,6 @@ class RegisterPage extends React.Component {
                 </p>
               </div>
 
-              {/* Card */}
               <div
                 className="card-basic"
                 style={{
@@ -597,7 +352,7 @@ class RegisterPage extends React.Component {
                   {[
                     { num: 1, label: "Daftar" },
                     { num: 2, label: "Verifikasi" },
-                    { num: 3, label: "Selesai" },
+                    { num: 3, label: "Profil" },
                   ].map((s, i, arr) => (
                     <React.Fragment key={s.num}>
                       <div
@@ -614,8 +369,6 @@ class RegisterPage extends React.Component {
                             justifyContent: "center",
                             fontSize: 13,
                             fontWeight: 700,
-                            fontFamily: '"Syne", sans-serif',
-                            transition: "all 0.3s ease",
                             background:
                               s.num === 1
                                 ? "var(--g1)"
@@ -637,7 +390,6 @@ class RegisterPage extends React.Component {
                           style={{
                             fontSize: 10,
                             fontWeight: 700,
-                            letterSpacing: "0.05em",
                             color: s.num <= 2 ? "var(--txt2)" : "var(--txt4)",
                           }}
                         >
@@ -655,7 +407,6 @@ class RegisterPage extends React.Component {
                               s.num < 2
                                 ? "linear-gradient(90deg, var(--g1), var(--g2))"
                                 : "var(--border)",
-                            transition: "background 0.4s ease",
                             maxWidth: 60,
                           }}
                         />
@@ -664,173 +415,157 @@ class RegisterPage extends React.Component {
                   ))}
                 </div>
 
-                <div className="fade-in">
-                  {/* Header */}
-                  <div className="text-center mb-4">
-                    <div
-                      style={{
-                        width: 64,
-                        height: 64,
-                        borderRadius: 18,
-                        background:
-                          "linear-gradient(135deg, var(--g1), var(--g2))",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        margin: "0 auto 16px",
-                        boxShadow: "0 8px 24px rgba(95,139,76,0.35)",
-                      }}
-                    >
-                      <i
-                        className="bi bi-envelope-check-fill"
-                        style={{ fontSize: 28, color: "#fff" }}
-                      />
-                    </div>
-                    <h2
-                      className="syne-h1"
-                      style={{
-                        fontSize: 22,
-                        color: "var(--txt)",
-                        marginBottom: 6,
-                      }}
-                    >
-                      Cek Email Kamu
-                    </h2>
-                    <p
-                      style={{
-                        fontSize: 13,
-                        color: "var(--txt3)",
-                        lineHeight: 1.7,
-                      }}
-                    >
-                      Kami mengirimkan kode 6 digit ke{" "}
-                      <span style={{ fontWeight: 700, color: "var(--txt2)" }}>
-                        {verifyEmail}
-                      </span>
-                    </p>
-                  </div>
-
-                  {/* OTP boxes */}
-                  <div className="mb-4">
-                    <label
-                      className="form-label text-center d-block"
-                      style={{
-                        fontSize: 13,
-                        fontWeight: 600,
-                        color: "var(--txt2)",
-                      }}
-                    >
-                      Masukkan Kode OTP
-                    </label>
-                    <div className="d-flex justify-content-center gap-2">
-                      {otp.map((digit, i) => (
-                        <input
-                          key={i}
-                          ref={this.otpRefs[i]}
-                          type="text"
-                          inputMode="numeric"
-                          maxLength={1}
-                          value={digit}
-                          onChange={(e) =>
-                            this.handleOtpChange(i, e.target.value)
-                          }
-                          onKeyDown={(e) => this.handleOtpKeyDown(i, e)}
-                          onPaste={i === 0 ? this.handleOtpPaste : undefined}
-                          autoFocus={i === 0}
-                          style={{
-                            width: 46,
-                            height: 54,
-                            textAlign: "center",
-                            fontSize: 22,
-                            fontWeight: 800,
-                            fontFamily: '"Syne", sans-serif',
-                            borderRadius: 12,
-                            border: `2px solid ${otpError ? "#e05050" : digit ? "var(--g2)" : "var(--border)"}`,
-                            background: digit ? "var(--g5)" : "var(--surface)",
-                            color: "var(--txt)",
-                            outline: "none",
-                            transition: "all 0.2s ease",
-                            boxShadow: digit ? "0 0 0 3px var(--g4)" : "none",
-                          }}
-                        />
-                      ))}
-                    </div>
-                    {otpError && (
-                      <div
-                        className="text-center"
-                        style={{
-                          fontSize: 12,
-                          color: "#e05050",
-                          marginTop: 8,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          gap: 5,
-                        }}
-                      >
-                        <i className="bi bi-exclamation-circle" />
-                        {otpError}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Resend */}
-                  <div className="text-center mb-3">
-                    <span style={{ fontSize: 13, color: "var(--txt3)" }}>
-                      Tidak menerima kode?{" "}
-                    </span>
-                    {resendCooldown > 0 ? (
-                      <span
-                        style={{
-                          fontSize: 13,
-                          color: "var(--txt4)",
-                          fontWeight: 600,
-                        }}
-                      >
-                        Kirim ulang dalam {resendCooldown}s
-                      </span>
-                    ) : (
-                      <span
-                        className="login-link text-cream1"
-                        onClick={this.handleResendOtp}
-                        style={{
-                          cursor: "pointer",
-                          fontSize: 13,
-                          fontWeight: 600,
-                        }}
-                      >
-                        Kirim Ulang
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Submit */}
-                  <button
-                    className="btn btn-green-gradient w-100 outfit"
+                <div className="text-center mb-4">
+                  <div
                     style={{
-                      padding: "12px",
-                      fontSize: 14,
-                      fontWeight: 700,
-                      borderRadius: 12,
+                      width: 64,
+                      height: 64,
+                      borderRadius: 18,
+                      background:
+                        "linear-gradient(135deg, var(--g1), var(--g2))",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      margin: "0 auto 16px",
+                      boxShadow: "0 8px 24px rgba(95,139,76,0.35)",
                     }}
-                    onClick={this.handleVerifyOtp}
-                    disabled={otpLoading || !otpComplete}
                   >
-                    {otpLoading ? (
-                      <span className="d-flex align-items-center justify-content-center gap-2">
-                        <span className="spinner-border spinner-border-sm" />
-                        Memverifikasi...
-                      </span>
-                    ) : (
-                      <span className="d-flex align-items-center justify-content-center gap-2">
-                        <i className="bi bi-check2-circle" />
-                        Verifikasi Email
-                      </span>
-                    )}
-                  </button>
+                    <i
+                      className="bi bi-envelope-check-fill"
+                      style={{ fontSize: 28, color: "#fff" }}
+                    />
+                  </div>
+                  <h2
+                    className="syne-h1"
+                    style={{
+                      fontSize: 22,
+                      color: "var(--txt)",
+                      marginBottom: 6,
+                    }}
+                  >
+                    Cek Email Kamu
+                  </h2>
+                  <p
+                    style={{
+                      fontSize: 13,
+                      color: "var(--txt3)",
+                      lineHeight: 1.7,
+                    }}
+                  >
+                    Kami mengirimkan kode 6 digit ke{" "}
+                    <span style={{ fontWeight: 700, color: "var(--txt2)" }}>
+                      {verifyEmail}
+                    </span>
+                  </p>
                 </div>
 
-                {/* Back */}
+                <div className="mb-4">
+                  <label
+                    className="form-label text-center d-block"
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 600,
+                      color: "var(--txt2)",
+                    }}
+                  >
+                    Masukkan Kode OTP
+                  </label>
+                  <div className="d-flex justify-content-center gap-2">
+                    {otp.map((digit, i) => (
+                      <input
+                        key={i}
+                        ref={this.otpRefs[i]}
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={1}
+                        value={digit}
+                        onChange={(e) =>
+                          this.handleOtpChange(i, e.target.value)
+                        }
+                        onKeyDown={(e) => this.handleOtpKeyDown(i, e)}
+                        onPaste={i === 0 ? this.handleOtpPaste : undefined}
+                        autoFocus={i === 0}
+                        style={{
+                          width: 46,
+                          height: 54,
+                          textAlign: "center",
+                          fontSize: 22,
+                          fontWeight: 800,
+                          borderRadius: 12,
+                          border: `2px solid ${otpError ? "#e05050" : digit ? "var(--g2)" : "var(--border)"}`,
+                          background: digit ? "var(--g5)" : "var(--surface)",
+                          color: "var(--txt)",
+                          outline: "none",
+                          transition: "all 0.2s ease",
+                          boxShadow: digit ? "0 0 0 3px var(--g4)" : "none",
+                        }}
+                      />
+                    ))}
+                  </div>
+                  {otpError && (
+                    <div
+                      className="text-center"
+                      style={{ fontSize: 12, color: "#e05050", marginTop: 8 }}
+                    >
+                      <i className="bi bi-exclamation-circle me-1" />
+                      {otpError}
+                    </div>
+                  )}
+                </div>
+
+                <div className="text-center mb-3">
+                  <span style={{ fontSize: 13, color: "var(--txt3)" }}>
+                    Tidak menerima kode?{" "}
+                  </span>
+                  {resendCooldown > 0 ? (
+                    <span
+                      style={{
+                        fontSize: 13,
+                        color: "var(--txt4)",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Kirim ulang dalam {resendCooldown}s
+                    </span>
+                  ) : (
+                    <span
+                      className="login-link text-cream1"
+                      onClick={this.handleResendOtp}
+                      style={{
+                        cursor: "pointer",
+                        fontSize: 13,
+                        fontWeight: 600,
+                      }}
+                    >
+                      Kirim Ulang
+                    </span>
+                  )}
+                </div>
+
+                <button
+                  className="btn btn-green-gradient w-100 outfit"
+                  style={{
+                    padding: "12px",
+                    fontSize: 14,
+                    fontWeight: 700,
+                    borderRadius: 12,
+                  }}
+                  onClick={this.handleVerifyOtp}
+                  disabled={otpLoading || !otpComplete}
+                >
+                  {otpLoading ? (
+                    <span className="d-flex align-items-center justify-content-center gap-2">
+                      <span className="spinner-border spinner-border-sm" />
+                      Memverifikasi...
+                    </span>
+                  ) : (
+                    <span className="d-flex align-items-center justify-content-center gap-2">
+                      <i className="bi bi-check2-circle" />
+                      Verifikasi Email
+                    </span>
+                  )}
+                </button>
+
                 <div className="text-center mt-3">
                   <span
                     className="back-btn"
@@ -852,8 +587,8 @@ class RegisterPage extends React.Component {
         </>
       );
     }
-    // ── END LAYAR VERIFIKASI ──────────────────────────────────────────
 
+    // ── FORM REGISTER ─────────────────────────────────────────────────
     return (
       <>
         <div className="w-100 min-vh-100 h-100 d-flex flex-row">
@@ -924,7 +659,7 @@ class RegisterPage extends React.Component {
               </button>
             </div>
 
-            <div className="mb-5">
+            <div className="mb-4">
               <h3 className="syne-h1 text-green1">Buat Akun Baru</h3>
               <p className="outfit fw-light text-green3">
                 Sudah punya akun?{" "}
@@ -938,134 +673,82 @@ class RegisterPage extends React.Component {
               </p>
             </div>
 
-            {/* Role Selector */}
-            <div className="d-flex flex-column gap-1">
-              <div style={{ marginBottom: "20px" }}>
-                <label className="text-green3 fw-semibold mb-2">
-                  PILIH PERANMU
-                </label>
-                <div className="role-container">
-                  <div
-                    className={`role-card ${this.state.role === "food_provider" ? "active-provider" : ""}`}
-                    onClick={() => this.handleRoleSelect("food_provider")}
-                  >
-                    <div className="role-check">
-                      {this.state.role === "food_provider" && (
-                        <i className="bi bi-check"></i>
-                      )}
-                    </div>
-                    <div className="role-icon">🍱</div>
-                    <div className="role-title">Food Provider</div>
-                    <div className="role-description">
-                      Saya memiliki makanan lebih untuk didonasikan
-                    </div>
-                  </div>
-                  <div
-                    className={`role-card ${this.state.role === "food_seeker" ? "active-seeker" : ""}`}
-                    onClick={() => this.handleRoleSelect("food_seeker")}
-                  >
-                    <div className="role-check">
-                      {this.state.role === "food_seeker" && (
-                        <i className="bi bi-check"></i>
-                      )}
-                    </div>
-                    <div className="role-icon">🙏</div>
-                    <div className="role-title">Food Seeker</div>
-                    <div className="role-description">
-                      Saya mencari donasi makanan yang tersedia
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <div className="d-flex flex-column gap-3">
-              {/* Nama */}
-              <div className="d-flex flex-column flex-md-row gap-3">
-                <div className="flex-grow-1 d-flex flex-column gap-1">
-                  <label
-                    className="text-green3 fw-semibold"
-                    htmlFor="namaDepan"
-                  >
-                    NAMA DEPAN
-                  </label>
-                  <div className="input-group rounded-3">
-                    <input
-                      type="text"
-                      className={`form-control py-2 px-3 ${this.state.firstNameTouched && this.state.firstNameError ? "input-error" : "input-green"}`}
-                      placeholder="John"
-                      value={this.state.firstName}
-                      onChange={this.handleFirstNameChange}
-                      onBlur={this.handleFirstNameBlur}
-                    />
-                    <span className="input-group-text input-green">
-                      <i className="bi bi-person"></i>
-                    </span>
-                  </div>
-                  {this.state.firstNameTouched && this.state.firstNameError && (
-                    <small className="text-danger">
-                      {this.state.firstNameError}
-                    </small>
-                  )}
-                </div>
-                <div className="flex-grow-1 d-flex flex-column gap-1">
-                  <label
-                    className="text-green3 fw-semibold"
-                    htmlFor="namaBelakang"
-                  >
-                    NAMA BELAKANG
-                  </label>
-                  <div className="input-group rounded-3">
-                    <input
-                      type="text"
-                      className={`form-control py-2 px-3 ${this.state.lastNameTouched && this.state.lastNameError ? "input-error" : "input-green"}`}
-                      placeholder="Doe"
-                      value={this.state.lastName}
-                      onChange={this.handleLastNameChange}
-                      onBlur={this.handleLastNameBlur}
-                    />
-                    <span className="input-group-text input-green">
-                      <i className="bi bi-person"></i>
-                    </span>
-                  </div>
-                  {this.state.lastNameTouched && this.state.lastNameError && (
-                    <small className="text-danger">
-                      {this.state.lastNameError}
-                    </small>
-                  )}
-                </div>
-              </div>
-
-              {/* Username */}
-              <div className="d-flex flex-column gap-1">
-                <label className="text-green3 fw-semibold">USERNAME</label>
-                <div className="input-group rounded-3">
-                  <input
-                    type="text"
-                    className={`form-control py-2 px-3 ${this.state.usernameTouched && this.state.usernameError ? "input-error" : "input-green"}`}
-                    placeholder="Minimal 6 karakter"
-                    value={this.state.username}
-                    onChange={this.handleUsernameChange}
-                    onBlur={this.handleUsernameBlur}
+              {/* Google OAuth */}
+              <a
+                href={`${process.env.REACT_APP_API_URL}/api/auth/google/register`}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 12,
+                  padding: "11px 20px",
+                  borderRadius: 12,
+                  border: "1.5px solid var(--g3)",
+                  background: "transparent",
+                  color: "var(--txt)",
+                  textDecoration: "none",
+                  fontFamily: "inherit",
+                  fontSize: 14,
+                  fontWeight: 600,
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "var(--g2)";
+                  e.currentTarget.style.boxShadow =
+                    "0 0 16px 2px rgba(95,139,76,0.35)";
+                  e.currentTarget.style.transform = "translateY(-1px)";
+                  e.currentTarget.style.color = "var(--txt)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "var(--g3)";
+                  e.currentTarget.style.boxShadow = "none";
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.color = "var(--txt)";
+                }}
+              >
+                <svg width="20" height="20" viewBox="0 0 48 48">
+                  <path
+                    fill="#EA4335"
+                    d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
                   />
-                  <span
-                    className={`input-group-text ${this.state.usernameTouched && this.state.usernameError ? "input-error" : "input-green"}`}
-                  >
-                    <i className="bi bi-person"></i>
-                  </span>
-                </div>
-                {this.state.usernameTouched && this.state.usernameError && (
-                  <small className="text-danger">
-                    {this.state.usernameError}
-                  </small>
-                )}
+                  <path
+                    fill="#4285F4"
+                    d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
+                  />
+                </svg>
+                Daftar dengan Google
+              </a>
+
+              {/* Divider */}
+              <div className="d-flex align-items-center gap-2">
+                <hr
+                  className="flex-grow-1 m-0"
+                  style={{ borderColor: "var(--border)" }}
+                />
+                <span
+                  className="outfit fw-light"
+                  style={{ fontSize: 12, color: "var(--txt4)" }}
+                >
+                  atau daftar dengan email
+                </span>
+                <hr
+                  className="flex-grow-1 m-0"
+                  style={{ borderColor: "var(--border)" }}
+                />
               </div>
 
               {/* Email */}
               <div className="d-flex flex-column gap-1">
-                <label className="text-green3 fw-semibold" htmlFor="email">
-                  EMAIL
-                </label>
+                <label className="text-green3 fw-semibold">EMAIL</label>
                 <div className="input-group rounded-3">
                   <input
                     type="email"
@@ -1086,232 +769,9 @@ class RegisterPage extends React.Component {
                 )}
               </div>
 
-              {/* Nomor HP */}
-              <div className="d-flex flex-column gap-1">
-                <label className="text-green3 fw-semibold" htmlFor="NomorHP">
-                  NOMOR HP
-                </label>
-                <div className="input-group rounded-3">
-                  <input
-                    type="tel"
-                    className={`form-control py-2 px-3 ${this.state.phoneTouched && this.state.phoneError ? "input-error" : "input-green"}`}
-                    placeholder="+628123456789"
-                    value={this.state.phone}
-                    onChange={this.handlePhoneChange}
-                    onBlur={this.handlePhoneBlur}
-                  />
-                  <span
-                    className={`input-group-text ${this.state.phoneTouched && this.state.phoneError ? "input-error" : "input-green"}`}
-                  >
-                    <i className="bi bi-telephone"></i>
-                  </span>
-                </div>
-                {this.state.phoneTouched && this.state.phoneError && (
-                  <small className="text-danger mt-1">
-                    {this.state.phoneError}
-                  </small>
-                )}
-              </div>
-
-              {/* Kota */}
-              <div className="d-flex flex-column gap-1">
-                <label className="text-green3 fw-semibold" htmlFor="Kota">
-                  KOTA / KABUPATEN
-                </label>
-                <div
-                  style={{ position: "relative" }}
-                  ref={this.cityDropdownRef}
-                >
-                  <div
-                    onClick={() =>
-                      this.setState({ cityOpen: !cityOpen, citySearch: "" })
-                    }
-                    style={{
-                      width: "100%",
-                      borderRadius: 10,
-                      border: cityOpen
-                        ? "1px solid var(--g2)"
-                        : "1px solid var(--border)",
-                      padding: "9px 12px",
-                      fontSize: 13,
-                      fontFamily: "inherit",
-                      background: "var(--g5)",
-                      color: city ? "var(--txt)" : "var(--txt4)",
-                      cursor: "pointer",
-                      userSelect: "none",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      boxSizing: "border-box",
-                    }}
-                  >
-                    <span
-                      style={{ display: "flex", alignItems: "center", gap: 8 }}
-                    >
-                      <i
-                        className="bi bi-geo-alt"
-                        style={{ color: "var(--g2)", fontSize: 13 }}
-                      />
-                      {city || "Pilih Kota..."}
-                    </span>
-                    <i
-                      className={`bi bi-chevron-${cityOpen ? "up" : "down"}`}
-                      style={{ fontSize: 12, color: "var(--txt4)" }}
-                    />
-                  </div>
-                  {cityOpen && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "calc(100% + 4px)",
-                        left: 0,
-                        right: 0,
-                        zIndex: 200,
-                        background: "var(--surface)",
-                        border: "1px solid var(--g3)",
-                        borderRadius: 12,
-                        boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
-                        overflow: "hidden",
-                      }}
-                    >
-                      <div
-                        style={{
-                          padding: "10px 10px 8px",
-                          borderBottom: "1px solid var(--border)",
-                        }}
-                      >
-                        <div style={{ position: "relative" }}>
-                          <i
-                            className="bi bi-search"
-                            style={{
-                              position: "absolute",
-                              left: 10,
-                              top: "50%",
-                              transform: "translateY(-50%)",
-                              color: "var(--txt4)",
-                              fontSize: 12,
-                              pointerEvents: "none",
-                            }}
-                          />
-                          <input
-                            autoFocus
-                            placeholder="Cari kota..."
-                            value={citySearch}
-                            onChange={(e) =>
-                              this.setState({ citySearch: e.target.value })
-                            }
-                            style={{
-                              width: "100%",
-                              border: "1px solid var(--border)",
-                              borderRadius: 8,
-                              padding: "7px 10px 7px 30px",
-                              fontSize: 12,
-                              fontFamily: "inherit",
-                              background: "var(--g5)",
-                              outline: "none",
-                              color: "var(--txt)",
-                              boxSizing: "border-box",
-                            }}
-                          />
-                        </div>
-                      </div>
-                      <div style={{ maxHeight: 220, overflowY: "auto" }}>
-                        {filteredKota.length === 0 ? (
-                          <div
-                            style={{
-                              padding: "20px",
-                              textAlign: "center",
-                              color: "var(--txt4)",
-                              fontSize: 13,
-                            }}
-                          >
-                            Kota tidak ditemukan
-                          </div>
-                        ) : (
-                          filteredKota.map((kota) => {
-                            const isSelected = city === kota;
-                            return (
-                              <div
-                                key={kota}
-                                onClick={() =>
-                                  this.setState({
-                                    city: kota,
-                                    cityOpen: false,
-                                    citySearch: "",
-                                    customCity: "",
-                                  })
-                                }
-                                style={{
-                                  padding: "9px 14px",
-                                  fontSize: 13,
-                                  cursor: "pointer",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: 10,
-                                  color: isSelected
-                                    ? "var(--g1)"
-                                    : "var(--txt)",
-                                  background: isSelected
-                                    ? "rgba(95,139,76,0.08)"
-                                    : "transparent",
-                                  fontWeight: isSelected ? 600 : 400,
-                                  transition: "background 0.15s",
-                                }}
-                                onMouseEnter={(e) => {
-                                  if (!isSelected)
-                                    e.currentTarget.style.background =
-                                      "var(--g5)";
-                                }}
-                                onMouseLeave={(e) => {
-                                  e.currentTarget.style.background = isSelected
-                                    ? "rgba(95,139,76,0.08)"
-                                    : "transparent";
-                                }}
-                              >
-                                <i
-                                  className="bi bi-geo-alt"
-                                  style={{
-                                    color: isSelected
-                                      ? "var(--g1)"
-                                      : "var(--txt4)",
-                                    fontSize: 12,
-                                    flexShrink: 0,
-                                  }}
-                                />
-                                <span style={{ flex: 1 }}>{kota}</span>
-                                {isSelected && (
-                                  <i
-                                    className="bi bi-check2"
-                                    style={{ color: "var(--g1)", fontSize: 15 }}
-                                  />
-                                )}
-                              </div>
-                            );
-                          })
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
-                {city === "Lainnya" && (
-                  <input
-                    type="text"
-                    className="form-control input-green mt-2"
-                    placeholder="Masukkan nama kota..."
-                    value={this.state.customCity}
-                    onChange={this.handleCustomCityChange}
-                  />
-                )}
-              </div>
-
               {/* Password */}
-              <div className="d-flex flex-column gap-1 rounded-3">
-                <label
-                  className="text-green3 fw-semibold fs-6"
-                  htmlFor="password"
-                >
-                  PASSWORD
-                </label>
+              <div className="d-flex flex-column gap-1">
+                <label className="text-green3 fw-semibold">PASSWORD</label>
                 <div className="input-group position-relative">
                   <input
                     type={this.state.showPassword ? "text" : "password"}
@@ -1328,7 +788,7 @@ class RegisterPage extends React.Component {
                     <i className="bi bi-lock"></i>
                   </span>
                 </div>
-                <div className="pw-str mt-2">
+                <div className="pw-str mt-1">
                   <div
                     className="pw-fill"
                     style={{
@@ -1354,7 +814,7 @@ class RegisterPage extends React.Component {
                   style={{
                     borderRadius: 12,
                     padding: "12px 16px",
-                    marginTop: 12,
+                    marginTop: 8,
                   }}
                 >
                   <p
@@ -1407,21 +867,21 @@ class RegisterPage extends React.Component {
               </div>
 
               {/* Konfirmasi Password */}
-              <div className="d-flex flex-column gap-1 rounded-3">
-                <label
-                  className="text-green3 fw-semibold fs-6"
-                  htmlFor="confirmPassword"
-                >
+              <div className="d-flex flex-column gap-1">
+                <label className="text-green3 fw-semibold">
                   KONFIRMASI PASSWORD
                 </label>
                 <div className="input-group position-relative">
                   <input
                     type={this.state.showConfirmPassword ? "text" : "password"}
                     className={`form-control py-2 px-3 ${this.state.confirmPasswordTouched && this.state.confirmPasswordError ? "input-error" : "input-green"} pe-5`}
-                    placeholder="Ulangi Password"
+                    placeholder="Ulangi password"
                     value={this.state.confirmPassword}
                     onChange={this.handleConfirmPasswordChange}
                     onBlur={this.handleConfirmPasswordBlur}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") this.handleSubmit();
+                    }}
                   />
                   <i
                     className={`bi ${this.state.showConfirmPassword ? "bi-eye-slash" : "bi-eye"} eye-inside`}
@@ -1435,63 +895,17 @@ class RegisterPage extends React.Component {
                 </div>
                 {this.state.confirmPasswordTouched &&
                   this.state.confirmPasswordError && (
-                    <small className="text-danger mt-1">
+                    <small className="text-danger">
                       {this.state.confirmPasswordError}
                     </small>
                   )}
               </div>
 
-              {/* Agree */}
-              <div className="d-flex flex-column gap-1">
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    id="checkDefault"
-                    checked={this.state.agree}
-                    onChange={this.handleAgreeChange}
-                  />
-                  <label
-                    className="form-check-label outfit text-green3"
-                    htmlFor="checkDefault"
-                  >
-                    Saya setuju dengan{" "}
-                    <Link
-                      to="/terms-and-condition"
-                      className="outfit fw-semibold text-green3 login-link"
-                      style={{ textDecoration: "none" }}
-                    >
-                      Syarat Ketentuan
-                    </Link>{" "}
-                    dan{" "}
-                    <Link
-                      to="/privacy-policy"
-                      className="outfit fw-semibold text-green3 login-link"
-                      style={{ textDecoration: "none" }}
-                    >
-                      Kebijakan Privasi
-                    </Link>
-                  </label>
-                </div>
+              {this.state.apiError && (
+                <small className="text-danger">{this.state.apiError}</small>
+              )}
 
-                {this.state.apiError && (
-                  <div className="text-danger mb-3">{this.state.apiError}</div>
-                )}
-                {this.state.agreeTouched && this.state.agreeError && (
-                  <small className="text-danger">{this.state.agreeError}</small>
-                )}
-                {this.state.formError.length > 0 && (
-                  <div className="text-danger">
-                    <small>Harap isi:</small>
-                    <ul className="mb-0 ps-3">
-                      {this.state.formError.map((item, index) => (
-                        <li key={index}>{item}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-
+              {/* Submit */}
               <button
                 onClick={this.handleSubmit}
                 disabled={this.state.loading}
@@ -1504,11 +918,33 @@ class RegisterPage extends React.Component {
                   </>
                 ) : (
                   <>
-                    <i className="bi bi-person-plus-fill"></i>
-                    <span>Buat Akun Sekarang</span>
+                    <i className="bi bi-envelope-fill"></i>
+                    <span>Daftar dengan Email</span>
                   </>
                 )}
               </button>
+
+              <p
+                className="outfit fw-light text-green3 text-center"
+                style={{ fontSize: 12 }}
+              >
+                Dengan mendaftar, kamu menyetujui{" "}
+                <Link
+                  to="/terms-and-condition"
+                  className="outfit fw-semibold text-green3 login-link"
+                  style={{ textDecoration: "none" }}
+                >
+                  Syarat Ketentuan
+                </Link>{" "}
+                dan{" "}
+                <Link
+                  to="/privacy-policy"
+                  className="outfit fw-semibold text-green3 login-link"
+                  style={{ textDecoration: "none" }}
+                >
+                  Kebijakan Privasi
+                </Link>
+              </p>
             </div>
           </div>
         </div>
