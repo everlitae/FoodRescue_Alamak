@@ -35,13 +35,15 @@ class Footer extends React.Component {
   render() {
     return (
       <footer
+        className="lp-container-pad"
         style={{
           borderTop: "1px solid var(--border)",
           backgroundColor: "var(--surface)",
-          padding: "48px 40px 28px",
+          paddingTop: 48,
+          paddingBottom: 28,
         }}
       >
-        <div className="d-flex flex-wrap gap-5 justify-content-between align-items-start mb-5">
+        <div className="d-flex flex-wrap gap-5 justify-content-between align-items-start mb-5 lp-footer-top lp-footer-row">
           {/* Brand */}
           <div style={{ maxWidth: 240 }}>
             <div className="d-flex align-items-center gap-3 mb-3">
@@ -86,7 +88,7 @@ class Footer extends React.Component {
           </div>
 
           {/* Link Columns */}
-          <div className="d-flex flex-wrap gap-5">
+          <div className="d-flex flex-wrap gap-5 lp-footer-links">
             {footerLinks.map((col) => (
               <div key={col.heading} style={{ minWidth: 120 }}>
                 <p

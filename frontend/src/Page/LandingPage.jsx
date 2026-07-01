@@ -78,33 +78,30 @@ class LandingPage extends React.Component {
     return (
       <>
         <div className="main-bg-color min-vh-100 h-100 position-relative grid-detail-responsive">
-          <div className="container-md position-relative py-5 px-4 px-md-5">
-            <div className="col-12 col-md-8 pe-5 pe-md-0">
-              <h1 className="syne-h1 text-green1 mb-2">
+          <div className="position-relative py-5 lp-container-pad">
+            <div className="col-12 col-md-8 pe-0 pe-md-0">
+              <h1 className="syne-h1 text-green1 mb-2 lp-hero-title">
                 Selamatkan
                 <br />
                 Makanan,
                 <br /> Nyalakan Harapan
               </h1>
 
-              <p
-                className="outfit text-green3 mt-4"
-                style={{ paddingRight: "200px" }}
-              >
+              <p className="outfit text-green3 mt-4 lp-hero-desc">
                 Platform digital yang mengurangi pemborosan makanan (food waste)
                 dengan menghubungkan donatur dan penerima - lebih cepat,
                 terorganisir dan berdampak.
               </p>
               <Link
                 to="/login"
-                className="btn-green-gradient d-inline-flex flex-row gap-2 py-3 px-5 rounded-3 fw-bold my-4"
+                className="btn-green-gradient lp-cta-btn d-inline-flex flex-row gap-2 py-3 px-5 rounded-3 fw-bold my-4"
                 style={{ textDecoration: "none" }}
               >
                 <i className="bi bi-gift-fill"></i>Donasikan Sekarang
               </Link>
 
               <div
-                className="rounded-4 px-5 py-3 d-inline-flex flex-wrap gap-5"
+                className="rounded-4 px-4 px-md-5 py-3 d-flex flex-wrap gap-4 gap-md-5 lp-stats"
                 style={{
                   backgroundColor: "var(--surface)",
                   border: "1px solid var(--border)",
@@ -117,7 +114,10 @@ class LandingPage extends React.Component {
                   </p>
                 </div>
 
-                <span style={{ border: "1px solid var(--g5)" }}></span>
+                <span
+                  className="lp-stats-divider"
+                  style={{ border: "1px solid var(--g5)" }}
+                ></span>
                 <div className="d-flex flex-column align-items-start justify-content-center text-green3">
                   <h3 className="syne-h1">800+</h3>
                   <p className="office fw-lighter">
@@ -125,7 +125,10 @@ class LandingPage extends React.Component {
                   </p>
                 </div>
 
-                <span style={{ border: "1px solid var(--g5)" }}></span>
+                <span
+                  className="lp-stats-divider"
+                  style={{ border: "1px solid var(--g5)" }}
+                ></span>
 
                 <div className="d-flex flex-column align-items-start justify-content-center text-green3">
                   <h3 className="syne-h1">42</h3>
@@ -138,21 +141,20 @@ class LandingPage extends React.Component {
           </div>
 
           <div
-            className="position-relative py-5 px-4 px-md-5"
+            className="position-relative py-5"
             style={{ backgroundColor: "var(--surf2)" }}
           >
-            <div className="container-md">
-              <p className="outfit fw-semibold text-green3">FITUR UTAMA</p>
-              <h1 className="syne-h1 col-12 col-md-4 my-3 text-green1">
+            <div className="lp-container-pad">
+              <h1 className="syne-h1 my-3 text-green1 lp-section-title lp-feature-heading">
                 Semua yang kamu butuhkan{" "}
                 <span className="text-green4">dalam satu platform</span>
               </h1>
-              <p className="outfit text-green3 col-12 col-md-4 mb-5">
+              <p className="outfit text-green3 mb-5 lp-feature-desc">
                 Dari manajemen akun hingga chat - dirancang lengkap untuk
                 kebutuhan ekosistem donasi makan yang efisien
               </p>
 
-              <div className="d-flex flex-wrap gap-2 align-items-center justify-content-center">
+              <div className="d-flex flex-wrap gap-2 align-items-center justify-content-center lp-feature-grid">
                 {this.featuresData.map((card, index) => (
                   <FeatureListCard
                     key={index}
@@ -167,7 +169,7 @@ class LandingPage extends React.Component {
             </div>
           </div>
 
-          <div className="container-md position-relative py-5 px-4 px-md-5">
+          <div className="position-relative py-5 lp-container-pad">
             <p
               className="outfit text-green3 fw-bold"
               style={{ fontSize: "smaller" }}
@@ -186,7 +188,7 @@ class LandingPage extends React.Component {
           </div>
 
           <div className="left-signin">
-            <div className="position-relative py-5 px-4 px-md-5 d-flex flex-column flex-lg-row gap-5">
+            <div className="position-relative py-5 lp-container-pad d-flex flex-column flex-lg-row gap-5">
               <div className="flex-fill">
                 <p
                   className="outfit text-green3 fw-bold"
@@ -254,23 +256,23 @@ class LandingPage extends React.Component {
           </div>
 
           <div
-            className="position-relative py-5 px-4 px-md-5"
+            className="position-relative py-5"
             style={{ backgroundColor: "var(--surf2)" }}
           >
-            <div className="container-md text-center">
+            <div className="lp-container-pad text-center">
               <p className="outfit fw-semibold text-green3">PERAN PENGGUNA</p>
               <h1 className="syne-h1 col-12 my-3 text-green1">
                 Pilih peranmu,
                 <br />
                 <span className="text-green4">buat perbedaan</span>
               </h1>
-              <p className="outfit text-green3 col-12 mb-5 px-5">
+              <p className="outfit text-green3 col-12 mb-5 px-2 px-md-5">
                 Donoatur atau Penerima - setiap peran mempunyai dampak nyata
                 dalam ekosistem FoodRescue
               </p>
 
-              <div className="d-flex flex-row gap-4 align-items-center justify-content-center">
-                <div className="card-green p-5 rounded-4 text-start">
+              <div className="d-flex flex-column flex-lg-row gap-4 align-items-stretch justify-content-center lp-roles">
+                <div className="card-green p-4 p-md-5 rounded-4 text-start flex-fill">
                   <span
                     className="p-1 fs-1 rounded-3"
                     style={{
@@ -305,7 +307,7 @@ class LandingPage extends React.Component {
                   </p>
                 </div>
 
-                <div className="card-cream p-5 rounded-4 text-start">
+                <div className="card-cream p-4 p-md-5 rounded-4 text-start flex-fill">
                   <span
                     className="p-1 fs-1 rounded-3"
                     style={{
@@ -344,11 +346,11 @@ class LandingPage extends React.Component {
           </div>
 
           <div
-            className="position-relative d-flex flex-row align-items-center justify-content-center p-5"
+            className="position-relative d-flex flex-row align-items-center justify-content-center p-3 p-md-5"
             style={{ backgroundColor: "var(--cr4)" }}
           >
             <div
-              className="position-relative rounded-5 p-5 text-center"
+              className="position-relative rounded-5 p-4 p-md-5 text-center"
               style={{
                 backgroundColor: "var(--surface)",
                 border: "1px solid var(--border)",
@@ -359,16 +361,16 @@ class LandingPage extends React.Component {
               <p className="outfit fw-semibold text-green3">
                 BERGABUNG SEKARANG
               </p>
-              <h1 className="syne-h1 col-12 my-3 text-green1">
+              <h1 className="syne-h1 col-12 my-3 text-green1 lp-section-title">
                 Bersama kita kurangi{" "}
                 <span className="text-green4">foodwaste</span> di Indonesia
               </h1>
-              <p className="outfit text-green3 col-12 mb-5 px-5">
+              <p className="outfit text-green3 col-12 mb-5 px-1 px-md-5">
                 Donoatur atau Penerima - setiap peran mempunyai dampak
               </p>
               <Link
                 to="/login"
-                className="btn-green-gradient px-5 py-4 rounded-4 outfit fw-bold d-inline-block"
+                className="btn-green-gradient lp-cta-btn px-5 py-4 rounded-4 outfit fw-bold d-inline-block"
                 style={{ textDecoration: "none" }}
               >
                 Bergabung Sekarang

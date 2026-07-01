@@ -389,12 +389,12 @@ class NavBar extends React.Component {
                 </span>
               </Link>
             ) : (
-              <div className="d-none d-lg-flex align-items-center gap-2">
+              <div className="d-flex align-items-center gap-2 lp-navbar-auth">
                 <Link
                   to="/login"
                   className="outfit"
                   style={{
-                    padding: "7px 16px",
+                    padding: "7px 12px",
                     borderRadius: 10,
                     border: "1px solid var(--border)",
                     background: "none",
@@ -403,6 +403,7 @@ class NavBar extends React.Component {
                     color: "var(--txt2)",
                     textDecoration: "none",
                     transition: "all 0.2s",
+                    whiteSpace: "nowrap",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.borderColor = "var(--g2)";
@@ -419,7 +420,7 @@ class NavBar extends React.Component {
                   to="/register"
                   className="outfit"
                   style={{
-                    padding: "7px 16px",
+                    padding: "7px 12px",
                     borderRadius: 10,
                     background: "var(--g1)",
                     fontSize: 14,
@@ -427,6 +428,7 @@ class NavBar extends React.Component {
                     color: "#fff",
                     textDecoration: "none",
                     transition: "opacity 0.2s",
+                    whiteSpace: "nowrap",
                   }}
                   onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
                   onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
@@ -444,15 +446,17 @@ class NavBar extends React.Component {
                 className={`bi ${this.state.theme === "dark" ? "bi-moon-fill" : "bi-sun-fill"}`}
               />
             </button>
-            <button
-              className="d-flex d-md-none theme-btn"
-              onClick={() => this.setState({ menuOpen: !menuOpen })}
-            >
-              <i
-                className={`bi ${menuOpen ? "bi-x-lg" : "bi-list"}`}
-                style={{ fontSize: 20 }}
-              />
-            </button>
+            {user && (
+              <button
+                className="d-flex d-md-none theme-btn"
+                onClick={() => this.setState({ menuOpen: !menuOpen })}
+              >
+                <i
+                  className={`bi ${menuOpen ? "bi-x-lg" : "bi-list"}`}
+                  style={{ fontSize: 20 }}
+                />
+              </button>
+            )}
           </div>
         </div>
         {menuOpen && (
