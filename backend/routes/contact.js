@@ -13,6 +13,32 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+/**
+ * @swagger
+ * /api/contact:
+ *   post:
+ *     summary: Kirim pesan lewat form kontak (email ke admin + auto-reply ke pengirim)
+ *     tags: [Contact]
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [name, email, subject, message]
+ *             properties:
+ *               name: { type: string }
+ *               email: { type: string }
+ *               subject: { type: string }
+ *               category: { type: string }
+ *               message: { type: string, minLength: 20, maxLength: 1000 }
+ *     responses:
+ *       200:
+ *         description: Pesan berhasil dikirim
+ *       400:
+ *         description: Field tidak lengkap / email invalid / pesan terlalu pendek-panjang
+ */
 router.post("/", async (req, res) => {
   try {
     const { name, email, subject, category, message } = req.body;

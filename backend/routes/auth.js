@@ -61,6 +61,33 @@ async function sendVerifyOtp(email, otp) {
 }
 
 // ── POST /api/auth/register ──────────────────────────────────────────
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     summary: Registrasi akun baru (email & password)
+ *     tags: [Auth]
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, password]
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: user@example.com
+ *               password:
+ *                 type: string
+ *                 example: password123
+ *     responses:
+ *       200:
+ *         description: Registrasi berhasil, OTP dikirim ke email
+ *       400:
+ *         description: Email sudah terdaftar / input tidak valid
+ */
 router.post("/register", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -112,6 +139,29 @@ router.post("/register", async (req, res) => {
 });
 
 // ── POST /api/auth/verify-email ──────────────────────────────────────
+/**
+ * @swagger
+ * /api/auth/verify-email:
+ *   post:
+ *     summary: Verifikasi email dengan kode OTP setelah register
+ *     tags: [Auth]
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, otp]
+ *             properties:
+ *               email: { type: string }
+ *               otp: { type: string, example: "123456" }
+ *     responses:
+ *       200:
+ *         description: Email terverifikasi, mengembalikan JWT token
+ *       400:
+ *         description: OTP salah/kadaluarsa/terlalu banyak percobaan
+ */
 router.post("/verify-email", async (req, res) => {
   try {
     const { email, otp } = req.body;
@@ -179,6 +229,28 @@ router.post("/verify-email", async (req, res) => {
 });
 
 // ── POST /api/auth/resend-verify-otp ────────────────────────────────
+/**
+ * @swagger
+ * /api/auth/resend-verify-otp:
+ *   post:
+ *     summary: Kirim ulang OTP verifikasi email (rate limit 1 menit)
+ *     tags: [Auth]
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email]
+ *             properties:
+ *               email: { type: string }
+ *     responses:
+ *       200:
+ *         description: OTP baru dikirim
+ *       400:
+ *         description: User tidak ditemukan / harus tunggu sebelum kirim ulang
+ */
 router.post("/resend-verify-otp", async (req, res) => {
   try {
     const { email } = req.body;
@@ -217,6 +289,32 @@ router.post("/resend-verify-otp", async (req, res) => {
 });
 
 // ── POST /api/auth/complete-profile ─────────────────────────────────
+/**
+ * @swagger
+ * /api/auth/complete-profile:
+ *   post:
+ *     summary: Lengkapi profil setelah registrasi/login pertama kali
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [role, first_name]
+ *             properties:
+ *               role: { type: string, enum: [food_provider, food_seeker] }
+ *               first_name: { type: string }
+ *               last_name: { type: string }
+ *               username: { type: string }
+ *               phone: { type: string }
+ *               city: { type: string }
+ *     responses:
+ *       200:
+ *         description: Profil berhasil dilengkapi
+ *       400:
+ *         description: Input tidak valid
+ */
 router.post("/complete-profile", auth, async (req, res) => {
   try {
     const { role, first_name, last_name, username, phone, city } = req.body;
@@ -314,6 +412,33 @@ router.post("/complete-profile", auth, async (req, res) => {
 });
 
 // ── POST /api/auth/login ─────────────────────────────────────────────
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Login dengan email & password
+ *     tags: [Auth]
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, password]
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: user@example.com
+ *               password:
+ *                 type: string
+ *                 example: password123
+ *     responses:
+ *       200:
+ *         description: Login berhasil, mengembalikan JWT token & data user
+ *       400:
+ *         description: Email/password salah
+ */
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -377,6 +502,32 @@ router.post("/login", async (req, res) => {
 });
 
 // ── POST /api/auth/reset-password ───────────────────────────────────
+/**
+ * @swagger
+ * /api/auth/reset-password:
+ *   post:
+ *     summary: Reset password setelah OTP diverifikasi (via /api/otp/verify-otp)
+ *     tags: [Auth]
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, newPassword, otpVerified]
+ *             properties:
+ *               email: { type: string }
+ *               newPassword: { type: string, minLength: 8 }
+ *               otpVerified: { type: boolean, description: "Harus true, didapat dari endpoint verify-otp" }
+ *     responses:
+ *       200:
+ *         description: Password berhasil direset
+ *       400:
+ *         description: OTP belum diverifikasi / input tidak valid
+ *       404:
+ *         description: User tidak ditemukan
+ */
 router.post("/reset-password", async (req, res) => {
   try {
     const { email, newPassword, otpVerified } = req.body;
@@ -402,6 +553,18 @@ router.post("/reset-password", async (req, res) => {
 });
 
 // ── GET /api/auth/me ─────────────────────────────────────────────────
+/**
+ * @swagger
+ * /api/auth/me:
+ *   get:
+ *     summary: Ambil data user yang sedang login (berdasarkan JWT token)
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Data user berhasil diambil
+ *       401:
+ *         description: Token tidak valid/tidak ada
+ */
 router.get("/me", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
@@ -428,6 +591,17 @@ router.get("/me", auth, async (req, res) => {
 });
 
 // ── GOOGLE OAUTH - LOGIN (akun harus sudah ada) ───────────────────────
+/**
+ * @swagger
+ * /api/auth/google/login:
+ *   get:
+ *     summary: Redirect ke Google OAuth untuk login (akun harus sudah pernah terdaftar)
+ *     tags: [Auth]
+ *     security: []
+ *     responses:
+ *       302:
+ *         description: Redirect ke halaman consent Google
+ */
 router.get(
   "/google/login",
   passport.authenticate("google", {
@@ -439,6 +613,17 @@ router.get(
 );
 
 // ── GOOGLE OAUTH - REGISTER (buat akun baru) ─────────────────────────
+/**
+ * @swagger
+ * /api/auth/google/register:
+ *   get:
+ *     summary: Redirect ke Google OAuth untuk registrasi akun baru
+ *     tags: [Auth]
+ *     security: []
+ *     responses:
+ *       302:
+ *         description: Redirect ke halaman consent Google
+ */
 router.get(
   "/google/register",
   passport.authenticate("google", {
@@ -450,6 +635,17 @@ router.get(
 );
 
 // ── GOOGLE CALLBACK ───────────────────────────────────────────────────
+/**
+ * @swagger
+ * /api/auth/google/callback:
+ *   get:
+ *     summary: Callback URL dari Google OAuth (jangan dipanggil manual)
+ *     tags: [Auth]
+ *     security: []
+ *     responses:
+ *       302:
+ *         description: Redirect ke frontend dengan JWT token di query string
+ */
 router.get(
   "/google/callback",
   passport.authenticate("google", {

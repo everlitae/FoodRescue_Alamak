@@ -4,7 +4,16 @@ const Conversation = require("../models/conversation");
 const Notification = require("../models/notification");
 const { auth } = require("../middleware/auth");
 
-// GET /api/conversations
+/**
+ * @swagger
+ * /api/conversations:
+ *   get:
+ *     summary: Ambil semua percakapan milik user login
+ *     tags: [Conversations]
+ *     responses:
+ *       200:
+ *         description: List percakapan berhasil diambil
+ */
 router.get("/", auth, async (req, res) => {
   try {
     const conversations = await Conversation.find({
@@ -22,7 +31,25 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-// GET /api/conversations/:id
+/**
+ * @swagger
+ * /api/conversations/{id}:
+ *   get:
+ *     summary: Ambil detail 1 percakapan + semua pesannya (dan reset unread count)
+ *     tags: [Conversations]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: Detail percakapan berhasil diambil
+ *       403:
+ *         description: Bukan partisipan percakapan ini
+ *       404:
+ *         description: Conversation tidak ditemukan
+ */
 router.get("/:id", auth, async (req, res) => {
   try {
     const conversation = await Conversation.findById(req.params.id)
@@ -50,7 +77,26 @@ router.get("/:id", auth, async (req, res) => {
   }
 });
 
-// POST /api/conversations
+/**
+ * @swagger
+ * /api/conversations:
+ *   post:
+ *     summary: Mulai/ambil percakapan dengan user lain (terkait donasi atau langsung)
+ *     tags: [Conversations]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [receiver_id]
+ *             properties:
+ *               donation_id: { type: string, description: "Opsional, kalau percakapan terkait donasi tertentu" }
+ *               receiver_id: { type: string }
+ *     responses:
+ *       200:
+ *         description: Conversation berhasil diambil/dibuat
+ */
 router.post("/", auth, async (req, res) => {
   try {
     const { donation_id, receiver_id } = req.body;
@@ -101,7 +147,35 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
-// POST /api/conversations/:id/messages
+/**
+ * @swagger
+ * /api/conversations/{id}/messages:
+ *   post:
+ *     summary: Kirim pesan baru dalam sebuah percakapan
+ *     tags: [Conversations]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [content]
+ *             properties:
+ *               content: { type: string }
+ *               message_type: { type: string, enum: [text, image], default: text }
+ *     responses:
+ *       201:
+ *         description: Pesan berhasil dikirim (realtime via Socket.io)
+ *       403:
+ *         description: Akses ditolak
+ *       404:
+ *         description: Conversation tidak ditemukan
+ */
 router.post("/:id/messages", auth, async (req, res) => {
   try {
     const { content, message_type } = req.body;
@@ -166,7 +240,29 @@ router.post("/:id/messages", auth, async (req, res) => {
   }
 });
 
-// DELETE /api/conversations/:id/messages/:msgId
+/**
+ * @swagger
+ * /api/conversations/{id}/messages/{msgId}:
+ *   delete:
+ *     summary: Hapus pesan milik sendiri (soft delete)
+ *     tags: [Conversations]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *       - in: path
+ *         name: msgId
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: Pesan dihapus
+ *       403:
+ *         description: Bukan pesan milik user ini
+ *       404:
+ *         description: Conversation/pesan tidak ditemukan
+ */
 router.delete("/:id/messages/:msgId", auth, async (req, res) => {
   try {
     const conversation = await Conversation.findById(req.params.id);
@@ -189,7 +285,25 @@ router.delete("/:id/messages/:msgId", auth, async (req, res) => {
   }
 });
 
-// PUT /api/conversations/:id/archive
+/**
+ * @swagger
+ * /api/conversations/{id}/archive:
+ *   put:
+ *     summary: Arsipkan percakapan
+ *     tags: [Conversations]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: Conversation diarsipkan
+ *       403:
+ *         description: Akses ditolak
+ *       404:
+ *         description: Conversation tidak ditemukan
+ */
 router.put("/:id/archive", auth, async (req, res) => {
   try {
     const conversation = await Conversation.findById(req.params.id);

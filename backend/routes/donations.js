@@ -20,7 +20,35 @@ const storage = new CloudinaryStorage({
 });
 const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
 
-// GET /api/donations
+/**
+ * @swagger
+ * /api/donations:
+ *   get:
+ *     summary: Ambil daftar donasi (dengan filter)
+ *     tags: [Donations]
+ *     security: []
+ *     parameters:
+ *       - in: query
+ *         name: category
+ *         schema: { type: string }
+ *         description: ID kategori
+ *       - in: query
+ *         name: city
+ *         schema: { type: string }
+ *       - in: query
+ *         name: search
+ *         schema: { type: string }
+ *         description: Cari berdasarkan judul
+ *       - in: query
+ *         name: status
+ *         schema: { type: string, enum: [available, partially_claimed, claimed, completed, cancelled] }
+ *       - in: query
+ *         name: halal
+ *         schema: { type: string, enum: ["true", "false"] }
+ *     responses:
+ *       200:
+ *         description: List donasi berhasil diambil
+ */
 router.get("/", async (req, res) => {
   try {
     const { category, city, search, status, halal } = req.query;
@@ -46,7 +74,16 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET /api/donations/user/history
+/**
+ * @swagger
+ * /api/donations/user/history:
+ *   get:
+ *     summary: Ambil riwayat donasi yang dibuat user login
+ *     tags: [Donations]
+ *     responses:
+ *       200:
+ *         description: Riwayat donasi berhasil diambil
+ */
 router.get("/user/history", auth, async (req, res) => {
   try {
     const provided = await Donation.find({
@@ -61,7 +98,24 @@ router.get("/user/history", auth, async (req, res) => {
   }
 });
 
-// GET /api/donations/:id
+/**
+ * @swagger
+ * /api/donations/{id}:
+ *   get:
+ *     summary: Ambil detail 1 donasi
+ *     tags: [Donations]
+ *     security: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: Detail donasi berhasil diambil
+ *       404:
+ *         description: Donasi tidak ditemukan
+ */
 router.get("/:id", async (req, res) => {
   try {
     const donation = await Donation.findById(req.params.id)
@@ -82,7 +136,44 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// POST /api/donations
+/**
+ * @swagger
+ * /api/donations:
+ *   post:
+ *     summary: Buat donasi baru (khusus role food_provider/admin, upload max 5 foto)
+ *     tags: [Donations]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required: [title, category_id, quantity, quantity_unit, pickup_address, pickup_city, expired_at]
+ *             properties:
+ *               title: { type: string }
+ *               description: { type: string }
+ *               category_id: { type: string }
+ *               quantity: { type: number }
+ *               quantity_unit: { type: string, example: "porsi" }
+ *               pickup_address: { type: string }
+ *               pickup_city: { type: string }
+ *               pickup_notes: { type: string }
+ *               pickup_start_time: { type: string }
+ *               pickup_end_time: { type: string }
+ *               longitude: { type: number }
+ *               latitude: { type: number }
+ *               expired_at: { type: string, format: date-time }
+ *               is_halal: { type: string, enum: ["true", "false"] }
+ *               allergen_notes: { type: string }
+ *               photos:
+ *                 type: array
+ *                 items: { type: string, format: binary }
+ *     responses:
+ *       201:
+ *         description: Donasi berhasil dibuat, +50 poin untuk provider
+ *       400:
+ *         description: Kategori tidak valid / upload error
+ */
 router.post(
   "/",
   auth,
@@ -183,7 +274,41 @@ router.post(
   },
 );
 
-// PUT /api/donations/:id
+/**
+ * @swagger
+ * /api/donations/{id}:
+ *   put:
+ *     summary: Update donasi milik sendiri
+ *     tags: [Donations]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title: { type: string }
+ *               description: { type: string }
+ *               quantity_unit: { type: string }
+ *               pickup_address: { type: string }
+ *               pickup_city: { type: string }
+ *               pickup_notes: { type: string }
+ *               pickup_start_time: { type: string }
+ *               pickup_end_time: { type: string }
+ *               expired_at: { type: string }
+ *               allergen_notes: { type: string }
+ *     responses:
+ *       200:
+ *         description: Donasi berhasil diperbarui
+ *       403:
+ *         description: Bukan donasi milik user ini
+ *       404:
+ *         description: Donasi tidak ditemukan
+ */
 router.put(
   "/:id",
   auth,
@@ -221,7 +346,25 @@ router.put(
   },
 );
 
-// DELETE /api/donations/:id
+/**
+ * @swagger
+ * /api/donations/{id}:
+ *   delete:
+ *     summary: Hapus (soft-delete) donasi milik sendiri
+ *     tags: [Donations]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: Donasi dihapus
+ *       403:
+ *         description: Bukan donasi milik user ini
+ *       404:
+ *         description: Donasi tidak ditemukan
+ */
 router.delete(
   "/:id",
   auth,

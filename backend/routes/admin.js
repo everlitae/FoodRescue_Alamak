@@ -9,7 +9,16 @@ const CommunityPost = require("../models/communitypost");
 const FoodCategory = require("../models/foodcategory");
 const { adminAuth } = require("../middleware/auth");
 
-// GET /api/admin/stats
+/**
+ * @swagger
+ * /api/admin/stats:
+ *   get:
+ *     summary: Ambil statistik ringkasan platform (admin only)
+ *     tags: [Admin]
+ *     responses:
+ *       200:
+ *         description: Statistik berhasil diambil
+ */
 router.get("/stats", adminAuth, async (req, res) => {
   try {
     const totalUsers = await User.countDocuments({
@@ -45,7 +54,16 @@ router.get("/stats", adminAuth, async (req, res) => {
   }
 });
 
-// GET /api/admin/users
+/**
+ * @swagger
+ * /api/admin/users:
+ *   get:
+ *     summary: Ambil semua user non-admin (admin only)
+ *     tags: [Admin]
+ *     responses:
+ *       200:
+ *         description: List user berhasil diambil
+ */
 router.get("/users", adminAuth, async (req, res) => {
   try {
     const users = await User.find({ role: { $ne: "admin" } })
@@ -57,7 +75,23 @@ router.get("/users", adminAuth, async (req, res) => {
   }
 });
 
-// PUT /api/admin/users/:id/toggle
+/**
+ * @swagger
+ * /api/admin/users/{id}/toggle:
+ *   put:
+ *     summary: Aktifkan/nonaktifkan akun user (admin only)
+ *     tags: [Admin]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: Status akun berhasil diubah
+ *       404:
+ *         description: User tidak ditemukan
+ */
 router.put("/users/:id/toggle", adminAuth, async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -72,7 +106,23 @@ router.put("/users/:id/toggle", adminAuth, async (req, res) => {
   }
 });
 
-// DELETE /api/admin/users/:id
+/**
+ * @swagger
+ * /api/admin/users/{id}:
+ *   delete:
+ *     summary: Hapus (soft-delete) akun user (admin only)
+ *     tags: [Admin]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: User dihapus
+ *       404:
+ *         description: User tidak ditemukan
+ */
 router.delete("/users/:id", adminAuth, async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -86,7 +136,16 @@ router.delete("/users/:id", adminAuth, async (req, res) => {
   }
 });
 
-// GET /api/admin/donations
+/**
+ * @swagger
+ * /api/admin/donations:
+ *   get:
+ *     summary: Ambil semua donasi termasuk yang sudah dihapus (admin only)
+ *     tags: [Admin]
+ *     responses:
+ *       200:
+ *         description: List donasi berhasil diambil
+ */
 router.get("/donations", adminAuth, async (req, res) => {
   try {
     const donations = await Donation.find()
@@ -99,7 +158,21 @@ router.get("/donations", adminAuth, async (req, res) => {
   }
 });
 
-// DELETE /api/admin/donations/:id
+/**
+ * @swagger
+ * /api/admin/donations/{id}:
+ *   delete:
+ *     summary: Hapus donasi manapun secara paksa (admin only)
+ *     tags: [Admin]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: Donasi dihapus oleh admin
+ */
 router.delete("/donations/:id", adminAuth, async (req, res) => {
   try {
     await Donation.findByIdAndUpdate(req.params.id, {
@@ -112,7 +185,16 @@ router.delete("/donations/:id", adminAuth, async (req, res) => {
   }
 });
 
-// GET /api/admin/reports
+/**
+ * @swagger
+ * /api/admin/reports:
+ *   get:
+ *     summary: Ambil semua laporan (admin only)
+ *     tags: [Admin]
+ *     responses:
+ *       200:
+ *         description: List laporan berhasil diambil
+ */
 router.get("/reports", adminAuth, async (req, res) => {
   try {
     const reports = await Report.find()
@@ -125,7 +207,23 @@ router.get("/reports", adminAuth, async (req, res) => {
   }
 });
 
-// PUT /api/admin/reports/:id/resolve
+/**
+ * @swagger
+ * /api/admin/reports/{id}/resolve:
+ *   put:
+ *     summary: Tandai laporan sebagai selesai ditangani (admin only)
+ *     tags: [Admin]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: Laporan diselesaikan
+ *       404:
+ *         description: Laporan tidak ditemukan
+ */
 router.put("/reports/:id/resolve", adminAuth, async (req, res) => {
   try {
     const report = await Report.findById(req.params.id);
@@ -143,7 +241,23 @@ router.put("/reports/:id/resolve", adminAuth, async (req, res) => {
   }
 });
 
-// PUT /api/admin/reports/:id/dismiss
+/**
+ * @swagger
+ * /api/admin/reports/{id}/dismiss:
+ *   put:
+ *     summary: Abaikan (dismiss) laporan (admin only)
+ *     tags: [Admin]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: Laporan di-dismiss
+ *       404:
+ *         description: Laporan tidak ditemukan
+ */
 router.put("/reports/:id/dismiss", adminAuth, async (req, res) => {
   try {
     const report = await Report.findById(req.params.id);
@@ -161,7 +275,16 @@ router.put("/reports/:id/dismiss", adminAuth, async (req, res) => {
   }
 });
 
-// GET /api/admin/conversations
+/**
+ * @swagger
+ * /api/admin/conversations:
+ *   get:
+ *     summary: Ambil semua percakapan di platform (admin only, buat moderasi)
+ *     tags: [Admin]
+ *     responses:
+ *       200:
+ *         description: List percakapan berhasil diambil
+ */
 router.get("/conversations", adminAuth, async (req, res) => {
   try {
     const Conversation = require("../models/conversation");
@@ -176,7 +299,16 @@ router.get("/conversations", adminAuth, async (req, res) => {
   }
 });
 
-// GET /api/admin/community
+/**
+ * @swagger
+ * /api/admin/community:
+ *   get:
+ *     summary: Ambil semua post komunitas (admin only, buat moderasi)
+ *     tags: [Admin]
+ *     responses:
+ *       200:
+ *         description: List post berhasil diambil
+ */
 router.get("/community", adminAuth, async (req, res) => {
   try {
     const posts = await CommunityPost.find()
@@ -188,7 +320,23 @@ router.get("/community", adminAuth, async (req, res) => {
   }
 });
 
-// PUT /api/admin/community/:id/pin
+/**
+ * @swagger
+ * /api/admin/community/{id}/pin:
+ *   put:
+ *     summary: Pin/unpin post komunitas (admin only)
+ *     tags: [Admin]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: Status pin berhasil diubah
+ *       404:
+ *         description: Post tidak ditemukan
+ */
 router.put("/community/:id/pin", adminAuth, async (req, res) => {
   try {
     const post = await CommunityPost.findById(req.params.id);
@@ -201,7 +349,16 @@ router.put("/community/:id/pin", adminAuth, async (req, res) => {
   }
 });
 
-// GET /api/admin/categories
+/**
+ * @swagger
+ * /api/admin/categories:
+ *   get:
+ *     summary: Ambil semua kategori termasuk yang non-aktif (admin only)
+ *     tags: [Admin]
+ *     responses:
+ *       200:
+ *         description: List kategori berhasil diambil
+ */
 router.get("/categories", adminAuth, async (req, res) => {
   try {
     const categories = await FoodCategory.find().sort({ name: 1 });

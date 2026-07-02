@@ -4,7 +4,18 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const { auth } = require("../middleware/auth");
 
-// GET /api/users/profile
+/**
+ * @swagger
+ * /api/users/profile:
+ *   get:
+ *     summary: Ambil profil lengkap user login
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: Profil berhasil diambil
+ *       404:
+ *         description: User tidak ditemukan
+ */
 router.get("/profile", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
@@ -15,7 +26,32 @@ router.get("/profile", auth, async (req, res) => {
   }
 });
 
-// PUT /api/users/profile
+/**
+ * @swagger
+ * /api/users/profile:
+ *   put:
+ *     summary: Update profil user login
+ *     tags: [Users]
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               first_name: { type: string }
+ *               last_name: { type: string }
+ *               username: { type: string }
+ *               phone: { type: string }
+ *               city: { type: string }
+ *               bio: { type: string }
+ *     responses:
+ *       200:
+ *         description: Profil berhasil diperbarui
+ *       400:
+ *         description: Username sudah dipakai
+ *       404:
+ *         description: User tidak ditemukan
+ */
 router.put("/profile", auth, async (req, res) => {
   try {
     const { first_name, last_name, username, phone, city, bio } = req.body;
@@ -47,7 +83,30 @@ router.put("/profile", auth, async (req, res) => {
   }
 });
 
-// PUT /api/users/change-password
+/**
+ * @swagger
+ * /api/users/change-password:
+ *   put:
+ *     summary: Ganti password user login
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [oldPassword, newPassword]
+ *             properties:
+ *               oldPassword: { type: string }
+ *               newPassword: { type: string }
+ *     responses:
+ *       200:
+ *         description: Password berhasil diubah
+ *       400:
+ *         description: Password lama salah
+ *       404:
+ *         description: User tidak ditemukan
+ */
 router.put("/change-password", auth, async (req, res) => {
   try {
     const { oldPassword, newPassword } = req.body;
@@ -67,7 +126,24 @@ router.put("/change-password", auth, async (req, res) => {
   }
 });
 
-// GET /api/users/:id
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   get:
+ *     summary: Ambil profil publik seorang user
+ *     tags: [Users]
+ *     security: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: Profil publik berhasil diambil
+ *       404:
+ *         description: User tidak ditemukan
+ */
 router.get("/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select(

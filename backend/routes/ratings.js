@@ -6,7 +6,33 @@ const User = require("../models/user");
 const Notification = require("../models/notification");
 const { auth } = require("../middleware/auth");
 
-// POST /api/ratings
+/**
+ * @swagger
+ * /api/ratings:
+ *   post:
+ *     summary: Beri rating ke provider setelah klaim selesai
+ *     tags: [Ratings]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [claim_id, score]
+ *             properties:
+ *               claim_id: { type: string }
+ *               score: { type: number, minimum: 1, maximum: 5 }
+ *               review: { type: string }
+ *     responses:
+ *       201:
+ *         description: Rating berhasil dikirim, +5 poin untuk rater
+ *       400:
+ *         description: Score invalid / klaim belum selesai / sudah pernah rating
+ *       403:
+ *         description: Hanya penerima donasi yang bisa memberi rating
+ *       404:
+ *         description: Klaim tidak ditemukan
+ */
 router.post("/", auth, async (req, res) => {
   try {
     const { claim_id, score, review } = req.body;
@@ -89,7 +115,21 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
-// GET /api/ratings/check/:claimId
+/**
+ * @swagger
+ * /api/ratings/check/{claimId}:
+ *   get:
+ *     summary: Cek apakah user login sudah memberi rating untuk sebuah klaim
+ *     tags: [Ratings]
+ *     parameters:
+ *       - in: path
+ *         name: claimId
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: Status rating berhasil diambil
+ */
 router.get("/check/:claimId", auth, async (req, res) => {
   try {
     const existing = await Rating.findOne({
@@ -102,7 +142,22 @@ router.get("/check/:claimId", auth, async (req, res) => {
   }
 });
 
-// GET /api/ratings/user/:userId
+/**
+ * @swagger
+ * /api/ratings/user/{userId}:
+ *   get:
+ *     summary: Ambil semua rating yang diterima seorang user + rata-ratanya
+ *     tags: [Ratings]
+ *     security: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: List rating & rata-rata berhasil diambil
+ */
 router.get("/user/:userId", async (req, res) => {
   try {
     const ratings = await Rating.find({ ratee_id: req.params.userId })

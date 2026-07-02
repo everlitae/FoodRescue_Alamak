@@ -3,7 +3,28 @@ const router = express.Router();
 const User = require("../models/user");
 const { auth } = require("../middleware/auth");
 
-// GET /api/leaderboard?type=national&city=Medan&limit=10
+/**
+ * @swagger
+ * /api/leaderboard:
+ *   get:
+ *     summary: Ambil ranking user berdasarkan poin
+ *     tags: [Leaderboard]
+ *     security: []
+ *     parameters:
+ *       - in: query
+ *         name: type
+ *         schema: { type: string, enum: [national, city], default: national }
+ *       - in: query
+ *         name: city
+ *         schema: { type: string }
+ *         description: Wajib diisi kalau type=city
+ *       - in: query
+ *         name: limit
+ *         schema: { type: integer, default: 10 }
+ *     responses:
+ *       200:
+ *         description: List ranking berhasil diambil
+ */
 router.get("/", async (req, res) => {
   try {
     const { type = "national", city, limit = 10 } = req.query;
@@ -31,7 +52,18 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET /api/leaderboard/me — posisi user saat ini di leaderboard
+/**
+ * @swagger
+ * /api/leaderboard/me:
+ *   get:
+ *     summary: Ambil posisi ranking user login (nasional & kota)
+ *     tags: [Leaderboard]
+ *     responses:
+ *       200:
+ *         description: Ranking user berhasil diambil
+ *       404:
+ *         description: User tidak ditemukan
+ */
 router.get("/me", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("total_points city");

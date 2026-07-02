@@ -3,7 +3,17 @@ const router = express.Router();
 const FoodCategory = require("../models/foodcategory");
 const { auth, adminAuth } = require("../middleware/auth");
 
-// GET /api/categories
+/**
+ * @swagger
+ * /api/categories:
+ *   get:
+ *     summary: Ambil semua kategori makanan aktif
+ *     tags: [Categories]
+ *     security: []
+ *     responses:
+ *       200:
+ *         description: List kategori berhasil diambil
+ */
 router.get("/", async (req, res) => {
   try {
     const categories = await FoodCategory.find({ is_active: true }).sort({
@@ -15,7 +25,31 @@ router.get("/", async (req, res) => {
   }
 });
 
-// POST /api/categories
+/**
+ * @swagger
+ * /api/categories:
+ *   post:
+ *     summary: Tambah kategori baru (admin only)
+ *     tags: [Categories]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [name, slug]
+ *             properties:
+ *               name: { type: string, example: "Roti & Pastry" }
+ *               slug: { type: string, example: "roti-pastry" }
+ *               icon_emoji: { type: string, example: "🥖" }
+ *               color_hex: { type: string, example: "#e8b84b" }
+ *               description: { type: string }
+ *     responses:
+ *       201:
+ *         description: Kategori berhasil dibuat
+ *       400:
+ *         description: Slug sudah dipakai
+ */
 router.post("/", adminAuth, async (req, res) => {
   try {
     const { name, slug, icon_emoji, color_hex, description } = req.body;
@@ -38,7 +72,36 @@ router.post("/", adminAuth, async (req, res) => {
   }
 });
 
-// PUT /api/categories/:id
+/**
+ * @swagger
+ * /api/categories/{id}:
+ *   put:
+ *     summary: Update kategori (admin only)
+ *     tags: [Categories]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name: { type: string }
+ *               slug: { type: string }
+ *               icon_emoji: { type: string }
+ *               color_hex: { type: string }
+ *               description: { type: string }
+ *               is_active: { type: boolean }
+ *     responses:
+ *       200:
+ *         description: Kategori berhasil diupdate
+ *       404:
+ *         description: Kategori tidak ditemukan
+ */
 router.put("/:id", adminAuth, async (req, res) => {
   try {
     const { name, slug, icon_emoji, color_hex, description, is_active } =
@@ -58,7 +121,21 @@ router.put("/:id", adminAuth, async (req, res) => {
   }
 });
 
-// DELETE /api/categories/:id
+/**
+ * @swagger
+ * /api/categories/{id}:
+ *   delete:
+ *     summary: Hapus kategori (admin only)
+ *     tags: [Categories]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: Kategori dihapus
+ */
 router.delete("/:id", adminAuth, async (req, res) => {
   try {
     await FoodCategory.findByIdAndDelete(req.params.id);
@@ -68,7 +145,16 @@ router.delete("/:id", adminAuth, async (req, res) => {
   }
 });
 
-// POST /api/categories/seed
+/**
+ * @swagger
+ * /api/categories/seed:
+ *   post:
+ *     summary: Seed kategori default (admin only)
+ *     tags: [Categories]
+ *     responses:
+ *       200:
+ *         description: Kategori default berhasil di-seed
+ */
 router.post("/seed", adminAuth, async (req, res) => {
   try {
     const defaults = [

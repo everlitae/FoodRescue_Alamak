@@ -3,7 +3,16 @@ const router = express.Router();
 const Notification = require("../models/notification");
 const { auth } = require("../middleware/auth");
 
-// GET /api/notifications
+/**
+ * @swagger
+ * /api/notifications:
+ *   get:
+ *     summary: Ambil 50 notifikasi terbaru milik user login
+ *     tags: [Notifications]
+ *     responses:
+ *       200:
+ *         description: List notifikasi & jumlah belum dibaca
+ */
 router.get("/", auth, async (req, res) => {
   try {
     const notifications = await Notification.find({ user_id: req.user.id })
@@ -21,7 +30,25 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-// PUT /api/notifications/:id/read
+/**
+ * @swagger
+ * /api/notifications/{id}/read:
+ *   put:
+ *     summary: Tandai 1 notifikasi sudah dibaca
+ *     tags: [Notifications]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: Notifikasi ditandai sudah dibaca
+ *       403:
+ *         description: Akses ditolak
+ *       404:
+ *         description: Notifikasi tidak ditemukan
+ */
 router.put("/:id/read", auth, async (req, res) => {
   try {
     const notification = await Notification.findById(req.params.id);
@@ -41,7 +68,16 @@ router.put("/:id/read", auth, async (req, res) => {
   }
 });
 
-// PUT /api/notifications/read-all
+/**
+ * @swagger
+ * /api/notifications/read-all:
+ *   put:
+ *     summary: Tandai semua notifikasi milik user login sudah dibaca
+ *     tags: [Notifications]
+ *     responses:
+ *       200:
+ *         description: Semua notifikasi ditandai sudah dibaca
+ */
 router.put("/read-all", auth, async (req, res) => {
   try {
     await Notification.updateMany(
@@ -54,7 +90,25 @@ router.put("/read-all", auth, async (req, res) => {
   }
 });
 
-// DELETE /api/notifications/:id
+/**
+ * @swagger
+ * /api/notifications/{id}:
+ *   delete:
+ *     summary: Hapus 1 notifikasi
+ *     tags: [Notifications]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: Notifikasi dihapus
+ *       403:
+ *         description: Akses ditolak
+ *       404:
+ *         description: Notifikasi tidak ditemukan
+ */
 router.delete("/:id", auth, async (req, res) => {
   try {
     const notification = await Notification.findById(req.params.id);
@@ -71,7 +125,16 @@ router.delete("/:id", auth, async (req, res) => {
   }
 });
 
-// DELETE /api/notifications
+/**
+ * @swagger
+ * /api/notifications:
+ *   delete:
+ *     summary: Hapus semua notifikasi milik user login
+ *     tags: [Notifications]
+ *     responses:
+ *       200:
+ *         description: Semua notifikasi dihapus
+ */
 router.delete("/", auth, async (req, res) => {
   try {
     await Notification.deleteMany({ user_id: req.user.id });

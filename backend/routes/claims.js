@@ -6,7 +6,32 @@ const User = require("../models/user");
 const Notification = require("../models/notification");
 const { auth } = require("../middleware/auth");
 
-// POST /api/claims
+/**
+ * @swagger
+ * /api/claims:
+ *   post:
+ *     summary: Klaim sebuah donasi (max 1 unit per orang)
+ *     tags: [Claims]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [donation_id, quantity_claimed]
+ *             properties:
+ *               donation_id: { type: string }
+ *               quantity_claimed: { type: number, example: 1 }
+ *               pickup_scheduled_at: { type: string, format: date-time }
+ *               notes: { type: string }
+ *     responses:
+ *       201:
+ *         description: Klaim berhasil dibuat, +10 poin untuk seeker
+ *       400:
+ *         description: Donasi tidak tersedia / stok kurang / sudah pernah klaim
+ *       404:
+ *         description: Donasi tidak ditemukan
+ */
 router.post("/", auth, async (req, res) => {
   try {
     const { donation_id, quantity_claimed, pickup_scheduled_at, notes } =
@@ -122,7 +147,16 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
-// GET /api/claims/my
+/**
+ * @swagger
+ * /api/claims/my:
+ *   get:
+ *     summary: Ambil semua klaim milik user login (sebagai seeker)
+ *     tags: [Claims]
+ *     responses:
+ *       200:
+ *         description: List klaim berhasil diambil
+ */
 router.get("/my", auth, async (req, res) => {
   try {
     const claims = await Claim.find({ seeker_id: req.user.id })
@@ -137,7 +171,25 @@ router.get("/my", auth, async (req, res) => {
   }
 });
 
-// GET /api/claims/donation/:donationId
+/**
+ * @swagger
+ * /api/claims/donation/{donationId}:
+ *   get:
+ *     summary: Ambil semua klaim untuk 1 donasi (khusus provider donasi tsb)
+ *     tags: [Claims]
+ *     parameters:
+ *       - in: path
+ *         name: donationId
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: List klaim berhasil diambil
+ *       403:
+ *         description: Akses ditolak (bukan provider donasi ini)
+ *       404:
+ *         description: Donasi tidak ditemukan
+ */
 router.get("/donation/:donationId", auth, async (req, res) => {
   try {
     const donation = await Donation.findById(req.params.donationId);
@@ -158,7 +210,27 @@ router.get("/donation/:donationId", auth, async (req, res) => {
   }
 });
 
-// PUT /api/claims/:id/confirm
+/**
+ * @swagger
+ * /api/claims/{id}/confirm:
+ *   put:
+ *     summary: Provider konfirmasi klaim (pending → confirmed)
+ *     tags: [Claims]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: Klaim dikonfirmasi
+ *       400:
+ *         description: Klaim sudah diproses sebelumnya
+ *       403:
+ *         description: Akses ditolak
+ *       404:
+ *         description: Klaim tidak ditemukan
+ */
 router.put("/:id/confirm", auth, async (req, res) => {
   try {
     const claim = await Claim.findById(req.params.id).populate("donation_id");
@@ -200,7 +272,27 @@ router.put("/:id/confirm", auth, async (req, res) => {
   }
 });
 
-// PUT /api/claims/:id/pickup
+/**
+ * @swagger
+ * /api/claims/{id}/pickup:
+ *   put:
+ *     summary: Tandai makanan sudah diambil (confirmed → picked_up)
+ *     tags: [Claims]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: Ditandai sudah diambil
+ *       400:
+ *         description: Klaim belum dikonfirmasi
+ *       403:
+ *         description: Akses ditolak
+ *       404:
+ *         description: Klaim tidak ditemukan
+ */
 router.put("/:id/pickup", auth, async (req, res) => {
   try {
     const claim = await Claim.findById(req.params.id).populate("donation_id");
@@ -235,7 +327,27 @@ router.put("/:id/pickup", auth, async (req, res) => {
   }
 });
 
-// PUT /api/claims/:id/complete
+/**
+ * @swagger
+ * /api/claims/{id}/complete:
+ *   put:
+ *     summary: Selesaikan klaim (picked_up → completed)
+ *     tags: [Claims]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: Klaim selesai
+ *       400:
+ *         description: Makanan belum diambil
+ *       403:
+ *         description: Akses ditolak
+ *       404:
+ *         description: Klaim tidak ditemukan
+ */
 router.put("/:id/complete", auth, async (req, res) => {
   try {
     const claim = await Claim.findById(req.params.id).populate("donation_id");
@@ -295,7 +407,34 @@ router.put("/:id/complete", auth, async (req, res) => {
   }
 });
 
-// PUT /api/claims/:id/cancel
+/**
+ * @swagger
+ * /api/claims/{id}/cancel:
+ *   put:
+ *     summary: Batalkan klaim (bisa oleh seeker atau provider)
+ *     tags: [Claims]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               cancellation_reason: { type: string }
+ *     responses:
+ *       200:
+ *         description: Klaim dibatalkan
+ *       400:
+ *         description: Klaim tidak bisa dibatalkan (status tidak sesuai)
+ *       403:
+ *         description: Akses ditolak
+ *       404:
+ *         description: Klaim tidak ditemukan
+ */
 router.put("/:id/cancel", auth, async (req, res) => {
   try {
     const { cancellation_reason } = req.body;

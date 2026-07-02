@@ -16,6 +16,28 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+/**
+ * @swagger
+ * /api/otp/send-otp:
+ *   post:
+ *     summary: Kirim kode OTP ke email
+ *     tags: [OTP]
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email]
+ *             properties:
+ *               email: { type: string }
+ *     responses:
+ *       200:
+ *         description: OTP berhasil dikirim
+ *       400:
+ *         description: Email tidak valid
+ */
 router.post("/send-otp", async (req, res) => {
   try {
     const { email } = req.body;
@@ -245,6 +267,29 @@ router.post("/send-otp", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/otp/verify-otp:
+ *   post:
+ *     summary: Verifikasi kode OTP yang dikirim ke email
+ *     tags: [OTP]
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, otp]
+ *             properties:
+ *               email: { type: string }
+ *               otp: { type: string, example: "123456" }
+ *     responses:
+ *       200:
+ *         description: OTP valid
+ *       400:
+ *         description: OTP salah/kadaluarsa/field tidak lengkap
+ */
 router.post("/verify-otp", async (req, res) => {
   try {
     const { email, otp } = req.body;

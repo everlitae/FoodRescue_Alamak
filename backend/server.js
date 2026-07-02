@@ -12,6 +12,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
 const passport = require("./config/passport");
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./config/swagger");
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -118,6 +120,8 @@ app.use(passport.initialize());
 
 // Routes
 app.use("/api/auth", require("./routes/auth"));
+// Dokumentasi API: buka di http://localhost:5000/api-docs
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/users", require("./routes/users"));
 app.use("/api/categories", require("./routes/categories"));
 app.use("/api/donations", require("./routes/donations"));
