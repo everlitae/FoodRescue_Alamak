@@ -26,6 +26,7 @@
 - [Tech Stack](#-tech-stack)
 - [Struktur Proyek](#-struktur-proyek)
 - [Cara Menjalankan](#-cara-menjalankan)
+- [Dokumentasi API](#-dokumentasi-api)
 - [Tim Pengembang](#-tim-pengembang)
 - [Link](#-link)
 
@@ -140,6 +141,7 @@
 | **Email**     | Nodemailer + Gmail SMTP                                                          |
 | **Storage**   | Cloudinary (upload foto)                                                         |
 | **Real-time** | Socket.io (chat & notifikasi)                                                    |
+| **API Docs**  | Swagger (OpenAPI 3.0) via swagger-jsdoc + swagger-ui-express                     |
 
 ---
 
@@ -244,6 +246,8 @@ Server running on port 5000
 MongoDB Connected!
 ```
 
+> 📖 Setelah backend jalan, dokumentasi API interaktif otomatis bisa diakses di `http://localhost:5000/api-docs` — lihat detail di bagian [Dokumentasi API](#-dokumentasi-api).
+
 ---
 
 ### Langkah 3 — Jalankan Frontend
@@ -267,6 +271,31 @@ Buka **2 tab browser** di `http://localhost:3000`:
 - **Tab 2** → Login sebagai **Food Seeker**
 
 Keduanya bisa chat secara real-time tanpa perlu port berbeda.
+
+---
+
+## 📖 Dokumentasi API
+
+Seluruh endpoint API (Auth, Donations, Claims, Community, Conversations, Ratings, Notifications, Users, Leaderboard, Admin, dll) didokumentasikan menggunakan **Swagger (OpenAPI 3.0)** dan bisa dicoba langsung dari browser.
+
+1. Pastikan backend sudah berjalan (`npm run dev` di folder `backend`)
+2. Buka:
+
+   ```
+   http://localhost:5000/api-docs
+   ```
+
+3. Endpoint yang butuh login (bertanda 🔒) bisa dicoba dengan klik tombol **Authorize** di pojok kanan atas, lalu masukkan:
+
+   ```
+   Bearer <JWT_token_kamu>
+   ```
+
+   Token bisa didapat dari response endpoint `/api/auth/login` atau `/api/auth/verify-email`.
+
+4. Klik endpoint yang ingin dicoba → **Try it out** → isi parameter/body → **Execute**.
+
+> Di production (Railway), dokumentasi bisa diakses di `https://<url-backend-kamu>/api-docs`.
 
 ---
 
