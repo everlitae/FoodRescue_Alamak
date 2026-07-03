@@ -189,8 +189,11 @@ function Donations() {
             position: "relative",
             zIndex: 1,
             display: "flex",
+            flexWrap: "wrap",
             alignItems: "center",
             justifyContent: "space-between",
+            gap: 10,
+            rowGap: 12,
           }}
         >
           <div className="d-flex align-items-center gap-2">
@@ -205,7 +208,14 @@ function Donations() {
               Jelajahi Donasi
             </h4>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              gap: 10,
+            }}
+          >
             {isProviderRole && (
               <div
                 style={{

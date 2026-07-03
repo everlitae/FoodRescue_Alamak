@@ -55,14 +55,17 @@ function Messages() {
     return provId === userIdStr ? seekId : provId;
   };
 
-  const checkOtherOnline = useCallback((conv) => {
-    if (!conv || !socket.connected) return;
-    const otherId = getOtherUserId(conv);
-    if (!otherId) return;
-    socket.emit("check_online", otherId, ({ status }) => {
-      setOtherOnline(status === "online");
-    });
-  }, [userIdStr]);
+  const checkOtherOnline = useCallback(
+    (conv) => {
+      if (!conv || !socket.connected) return;
+      const otherId = getOtherUserId(conv);
+      if (!otherId) return;
+      socket.emit("check_online", otherId, ({ status }) => {
+        setOtherOnline(status === "online");
+      });
+    },
+    [userIdStr],
+  );
 
   // ── isSender helper — handle semua kemungkinan format sender_id ──
   const isSender = (senderId) => {
@@ -102,10 +105,10 @@ function Messages() {
           // Pesan dari diri sendiri:
           // ganti temp message dengan pesan asli dari server
           const withoutTemps = prev.messages.filter(
-            (m) => !String(m._id).startsWith("temp_")
+            (m) => !String(m._id).startsWith("temp_"),
           );
           const alreadyExists = withoutTemps.some(
-            (m) => String(m._id) === String(newMsg._id)
+            (m) => String(m._id) === String(newMsg._id),
           );
           if (alreadyExists) return { ...prev, messages: withoutTemps };
           return { ...prev, messages: [...withoutTemps, newMsg] };
@@ -113,7 +116,7 @@ function Messages() {
           // Pesan dari lawan bicara:
           // tambahkan langsung tanpa hapus temp
           const alreadyExists = prev.messages.some(
-            (m) => String(m._id) === String(newMsg._id)
+            (m) => String(m._id) === String(newMsg._id),
           );
           if (alreadyExists) return prev;
           return { ...prev, messages: [...prev.messages, newMsg] };
@@ -321,8 +324,7 @@ function Messages() {
   const getInitials = (u) => {
     if (!u) return "?";
     return (
-      `${u.first_name?.[0] || ""}${u.last_name?.[0] || ""}`.toUpperCase() ||
-      "?"
+      `${u.first_name?.[0] || ""}${u.last_name?.[0] || ""}`.toUpperCase() || "?"
     );
   };
 
@@ -393,8 +395,11 @@ function Messages() {
             position: "relative",
             zIndex: 1,
             display: "flex",
+            flexWrap: "wrap",
             alignItems: "center",
             justifyContent: "space-between",
+            gap: 10,
+            rowGap: 12,
           }}
         >
           <div className="d-flex align-items-center gap-2">
@@ -606,8 +611,7 @@ function Messages() {
                         <small
                           style={{
                             fontSize: 11,
-                            color:
-                              unread > 0 ? "var(--txt2)" : "var(--txt4)",
+                            color: unread > 0 ? "var(--txt2)" : "var(--txt4)",
                             fontWeight: unread > 0 ? 600 : 400,
                             overflow: "hidden",
                             textOverflow: "ellipsis",
@@ -989,12 +993,8 @@ function Messages() {
                                   : isLastInGroup
                                     ? "4px 16px 16px 16px"
                                     : "4px 4px 4px 16px",
-                              background: isMe
-                                ? "var(--g1)"
-                                : "var(--surface)",
-                              border: isMe
-                                ? "none"
-                                : "1px solid var(--border)",
+                              background: isMe ? "var(--g1)" : "var(--surface)",
+                              border: isMe ? "none" : "1px solid var(--border)",
                               color: isMe ? "#fff" : "var(--txt)",
                               fontSize: 13,
                               lineHeight: 1.5,

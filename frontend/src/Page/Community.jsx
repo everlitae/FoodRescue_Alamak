@@ -249,8 +249,11 @@ function Community() {
             position: "relative",
             zIndex: 1,
             display: "flex",
+            flexWrap: "wrap",
             alignItems: "center",
             justifyContent: "space-between",
+            gap: 10,
+            rowGap: 12,
           }}
         >
           <div className="d-flex align-items-center gap-2">
@@ -274,7 +277,14 @@ function Community() {
               Komunitas
             </h4>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              gap: 10,
+            }}
+          >
             <div
               style={{
                 background: "rgba(95,139,76,0.12)",

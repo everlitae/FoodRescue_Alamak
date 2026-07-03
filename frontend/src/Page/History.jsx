@@ -198,8 +198,11 @@ function History() {
             position: "relative",
             zIndex: 1,
             display: "flex",
+            flexWrap: "wrap",
             alignItems: "center",
             justifyContent: "space-between",
+            gap: 10,
+            rowGap: 12,
           }}
         >
           <div className="d-flex align-items-center gap-2">
