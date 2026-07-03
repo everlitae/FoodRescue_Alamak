@@ -347,7 +347,11 @@ router.post("/complete-profile", auth, async (req, res) => {
         return res.status(400).json({ msg: "Nomor HP sudah terdaftar" });
     }
 
-    user.role = role;
+    // Jangan pernah nimpa role admin lewat form ini — admin cuma boleh
+    // diubah manual/lewat proses terpisah, bukan dari form Complete Profile
+    if (user.role !== "admin") {
+      user.role = role;
+    }
     user.first_name = first_name;
     user.last_name = last_name || "";
     user.username = username.toLowerCase();

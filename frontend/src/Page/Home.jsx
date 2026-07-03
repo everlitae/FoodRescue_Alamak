@@ -101,6 +101,7 @@ class Home extends React.Component {
 
   render() {
     const isProvider = this.state.profile?.role === "food_provider";
+    const isAdmin = this.state.profile?.role === "admin";
     const isProfileComplete =
       this.state.profile?.is_profile_complete ??
       this.props.auth?.user?.is_profile_complete;
@@ -288,177 +289,306 @@ class Home extends React.Component {
         </div>
 
         {/* ── QUICK ACTIONS ─────────────────────────────────────────── */}
-        <div className="mt-5 row align-items-center justify-content-center gap-2">
-          {isProvider ? (
-            <Link
-              className="col card-green py-4 px-5 d-flex flex-column gap-1 rounded-4 text-decoration-none align-items-center"
-              to={isProfileComplete ? "/donations/create" : "/complete-profile"}
-              style={
-                !isProfileComplete ? { opacity: 0.6, position: "relative" } : {}
-              }
-            >
-              {!isProfileComplete && (
-                <i
-                  className="bi bi-lock-fill"
+        <div className="mt-5">
+          {isAdmin ? (
+            (() => {
+              const adminCards = [
+                {
+                  to: "/admin?tab=stats",
+                  emoji: "📊",
+                  label: "Statistik",
+                  desc: "Ringkasan platform",
+                  color: "#5f8b4c",
+                },
+                {
+                  to: "/admin?tab=users",
+                  emoji: "👥",
+                  label: "Pengguna",
+                  desc: "Kelola akun",
+                  color: "#1e7ab8",
+                },
+                {
+                  to: "/admin?tab=donations",
+                  emoji: "📦",
+                  label: "Donasi",
+                  desc: "Pantau semua donasi",
+                  color: "#c8900a",
+                },
+                {
+                  to: "/admin?tab=reports",
+                  emoji: "🚩",
+                  label: "Laporan",
+                  desc: "Tinjau laporan masuk",
+                  color: "#e05050",
+                },
+                {
+                  to: "/admin?tab=conversations",
+                  emoji: "💬",
+                  label: "Chat",
+                  desc: "Monitor percakapan",
+                  color: "#7c5cbf",
+                },
+                {
+                  to: "/admin?tab=community",
+                  emoji: "🌐",
+                  label: "Komunitas",
+                  desc: "Moderasi post",
+                  color: "#4eb8d4",
+                },
+                {
+                  to: "/admin?tab=categories",
+                  emoji: "🏷️",
+                  label: "Kategori",
+                  desc: "Kelola kategori",
+                  color: "#b8694a",
+                },
+              ];
+              const rows = [adminCards.slice(0, 4), adminCards.slice(4, 7)];
+
+              const renderCard = (item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className="text-decoration-none d-flex flex-column gap-1 rounded-4 align-items-center adm-quick-card"
                   style={{
-                    position: "absolute",
-                    top: 8,
-                    right: 10,
-                    fontSize: 11,
-                    color: "var(--txt4)",
+                    flex: "1 1 0",
+                    minWidth: 150,
+                    padding: "24px 16px",
+                    background: `${item.color}14`,
+                    border: `1px solid ${item.color}35`,
+                    transition: "all 0.2s ease",
                   }}
-                />
-              )}
-              <h1>🍱</h1>
-              <p
-                className="text-green1 fw-bold text-nowrap"
-                style={{ fontSize: "small" }}
-              >
-                Buat Donasi
-              </p>
-              <p
-                className="text-green4 text-nowrap"
-                style={{ fontSize: "small" }}
-              >
-                Bagikan makanan
-              </p>
-            </Link>
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = `${item.color}22`;
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = `${item.color}14`;
+                    e.currentTarget.style.transform = "translateY(0)";
+                  }}
+                >
+                  <h1 style={{ margin: 0 }}>{item.emoji}</h1>
+                  <p
+                    className="fw-bold text-nowrap"
+                    style={{
+                      fontSize: "small",
+                      color: item.color,
+                      margin: 0,
+                    }}
+                  >
+                    {item.label}
+                  </p>
+                  <p
+                    className="text-green4 text-nowrap"
+                    style={{ fontSize: "small", margin: 0 }}
+                  >
+                    {item.desc}
+                  </p>
+                </Link>
+              );
+
+              return (
+                <div className="d-flex flex-column gap-2">
+                  {rows.map((row, i) => (
+                    <div
+                      key={i}
+                      className="adm-quick-row"
+                      style={{ display: "flex", flexWrap: "wrap", gap: 10 }}
+                    >
+                      {row.map(renderCard)}
+                    </div>
+                  ))}
+                </div>
+              );
+            })()
           ) : (
-            <Link
-              className="col card-green py-4 px-5 d-flex flex-column gap-1 rounded-4 text-decoration-none align-items-center"
-              to={isProfileComplete ? "/donations" : "/complete-profile"}
-              style={
-                !isProfileComplete ? { opacity: 0.6, position: "relative" } : {}
-              }
-            >
-              {!isProfileComplete && (
-                <i
-                  className="bi bi-lock-fill"
-                  style={{
-                    position: "absolute",
-                    top: 8,
-                    right: 10,
-                    fontSize: 11,
-                    color: "var(--txt4)",
-                  }}
-                />
+            <div className="row align-items-center justify-content-center gap-2">
+              {isProvider ? (
+                <Link
+                  className="col card-green py-4 px-5 d-flex flex-column gap-1 rounded-4 text-decoration-none align-items-center"
+                  to={
+                    isProfileComplete
+                      ? "/donations/create"
+                      : "/complete-profile"
+                  }
+                  style={
+                    !isProfileComplete
+                      ? { opacity: 0.6, position: "relative" }
+                      : {}
+                  }
+                >
+                  {!isProfileComplete && (
+                    <i
+                      className="bi bi-lock-fill"
+                      style={{
+                        position: "absolute",
+                        top: 8,
+                        right: 10,
+                        fontSize: 11,
+                        color: "var(--txt4)",
+                      }}
+                    />
+                  )}
+                  <h1>🍱</h1>
+                  <p
+                    className="text-green1 fw-bold text-nowrap"
+                    style={{ fontSize: "small" }}
+                  >
+                    Buat Donasi
+                  </p>
+                  <p
+                    className="text-green4 text-nowrap"
+                    style={{ fontSize: "small" }}
+                  >
+                    Bagikan makanan
+                  </p>
+                </Link>
+              ) : (
+                <Link
+                  className="col card-green py-4 px-5 d-flex flex-column gap-1 rounded-4 text-decoration-none align-items-center"
+                  to={isProfileComplete ? "/donations" : "/complete-profile"}
+                  style={
+                    !isProfileComplete
+                      ? { opacity: 0.6, position: "relative" }
+                      : {}
+                  }
+                >
+                  {!isProfileComplete && (
+                    <i
+                      className="bi bi-lock-fill"
+                      style={{
+                        position: "absolute",
+                        top: 8,
+                        right: 10,
+                        fontSize: 11,
+                        color: "var(--txt4)",
+                      }}
+                    />
+                  )}
+                  <h1>🔎</h1>
+                  <p
+                    className="text-green1 fw-bold text-nowrap"
+                    style={{ fontSize: "small" }}
+                  >
+                    Cari Donasi
+                  </p>
+                  <p
+                    className="text-green4 text-nowrap"
+                    style={{ fontSize: "small" }}
+                  >
+                    Temukan makanan
+                  </p>
+                </Link>
               )}
-              <h1>🔎</h1>
-              <p
-                className="text-green1 fw-bold text-nowrap"
-                style={{ fontSize: "small" }}
+
+              <Link
+                className="col card-green py-4 px-5 d-flex flex-column gap-1 rounded-4 text-decoration-none align-items-center"
+                to={isProfileComplete ? "/messages" : "/complete-profile"}
+                style={
+                  !isProfileComplete
+                    ? { opacity: 0.6, position: "relative" }
+                    : {}
+                }
               >
-                Cari Donasi
-              </p>
-              <p
-                className="text-green4 text-nowrap"
-                style={{ fontSize: "small" }}
+                {!isProfileComplete && (
+                  <i
+                    className="bi bi-lock-fill"
+                    style={{
+                      position: "absolute",
+                      top: 8,
+                      right: 10,
+                      fontSize: 11,
+                      color: "var(--txt4)",
+                    }}
+                  />
+                )}
+                <h1>💬</h1>
+                <p
+                  className="text-green1 fw-bold text-nowrap"
+                  style={{ fontSize: "small" }}
+                >
+                  Chat
+                </p>
+                <p
+                  className="text-green4 text-nowrap"
+                  style={{ fontSize: "small" }}
+                >
+                  Berbicara langsung
+                </p>
+              </Link>
+
+              <Link
+                className="col card-green py-4 px-5 d-flex flex-column gap-1 rounded-4 text-decoration-none align-items-center"
+                to={isProfileComplete ? "/community" : "/complete-profile"}
+                style={
+                  !isProfileComplete
+                    ? { opacity: 0.6, position: "relative" }
+                    : {}
+                }
               >
-                Temukan makanan
-              </p>
-            </Link>
+                {!isProfileComplete && (
+                  <i
+                    className="bi bi-lock-fill"
+                    style={{
+                      position: "absolute",
+                      top: 8,
+                      right: 10,
+                      fontSize: 11,
+                      color: "var(--txt4)",
+                    }}
+                  />
+                )}
+                <h1>👥</h1>
+                <p
+                  className="text-green1 fw-bold text-nowrap"
+                  style={{ fontSize: "small" }}
+                >
+                  Komunitas
+                </p>
+                <p
+                  className="text-green4 text-nowrap"
+                  style={{ fontSize: "small" }}
+                >
+                  Forum Diskusi
+                </p>
+              </Link>
+            </div>
           )}
-
-          <Link
-            className="col card-green py-4 px-5 d-flex flex-column gap-1 rounded-4 text-decoration-none align-items-center"
-            to={isProfileComplete ? "/messages" : "/complete-profile"}
-            style={
-              !isProfileComplete ? { opacity: 0.6, position: "relative" } : {}
-            }
-          >
-            {!isProfileComplete && (
-              <i
-                className="bi bi-lock-fill"
-                style={{
-                  position: "absolute",
-                  top: 8,
-                  right: 10,
-                  fontSize: 11,
-                  color: "var(--txt4)",
-                }}
-              />
-            )}
-            <h1>💬</h1>
-            <p
-              className="text-green1 fw-bold text-nowrap"
-              style={{ fontSize: "small" }}
-            >
-              Chat
-            </p>
-            <p
-              className="text-green4 text-nowrap"
-              style={{ fontSize: "small" }}
-            >
-              Berbicara langsung
-            </p>
-          </Link>
-
-          <Link
-            className="col card-green py-4 px-5 d-flex flex-column gap-1 rounded-4 text-decoration-none align-items-center"
-            to={isProfileComplete ? "/community" : "/complete-profile"}
-            style={
-              !isProfileComplete ? { opacity: 0.6, position: "relative" } : {}
-            }
-          >
-            {!isProfileComplete && (
-              <i
-                className="bi bi-lock-fill"
-                style={{
-                  position: "absolute",
-                  top: 8,
-                  right: 10,
-                  fontSize: 11,
-                  color: "var(--txt4)",
-                }}
-              />
-            )}
-            <h1>👥</h1>
-            <p
-              className="text-green1 fw-bold text-nowrap"
-              style={{ fontSize: "small" }}
-            >
-              Komunitas
-            </p>
-            <p
-              className="text-green4 text-nowrap"
-              style={{ fontSize: "small" }}
-            >
-              Forum Diskusi
-            </p>
-          </Link>
         </div>
 
         {/* ── STATS ─────────────────────────────────────────────────── */}
-        <div className="w-100 row align-items-center justify-content-center mt-3 g-0 gap-2">
-          {isProvider ? (
+        {!isAdmin && (
+          <div className="w-100 row align-items-center justify-content-center mt-3 g-0 gap-2">
+            {isProvider ? (
+              <div className="col card-basic py-4 px-5 rounded-4">
+                <h1 className="syne-h1 text-green1">
+                  {this.state.profile?.profile.total_donations}
+                </h1>
+                <p className="text-green3 text-nowrap">TOTAL DONASI</p>
+              </div>
+            ) : (
+              <div className="col card-basic py-4 px-5 rounded-4">
+                <h1 className="syne-h1 text-green1">
+                  {this.state.profile?.profile.total_claims}
+                </h1>
+                <p className="text-green3 text-nowrap">CLAIM</p>
+              </div>
+            )}
             <div className="col card-basic py-4 px-5 rounded-4">
               <h1 className="syne-h1 text-green1">
-                {this.state.profile?.profile.total_donations}
+                {this.state.profile?.total_points}
               </h1>
-              <p className="text-green3 text-nowrap">TOTAL DONASI</p>
+              <p className="text-green3 text-nowrap">TOTAL POINS</p>
             </div>
-          ) : (
             <div className="col card-basic py-4 px-5 rounded-4">
               <h1 className="syne-h1 text-green1">
-                {this.state.profile?.profile.total_claims}
+                {this.state.profile?.trust_score}{" "}
+                <i className="bi bi-star-fill text-cream3"></i>
               </h1>
-              <p className="text-green3 text-nowrap">CLAIM</p>
+              <p className="text-green3 text-nowrap">RATING KAMU</p>
             </div>
-          )}
-          <div className="col card-basic py-4 px-5 rounded-4">
-            <h1 className="syne-h1 text-green1">
-              {this.state.profile?.total_points}
-            </h1>
-            <p className="text-green3 text-nowrap">TOTAL POINS</p>
           </div>
-          <div className="col card-basic py-4 px-5 rounded-4">
-            <h1 className="syne-h1 text-green1">
-              {this.state.profile?.trust_score}{" "}
-              <i className="bi bi-star-fill text-cream3"></i>
-            </h1>
-            <p className="text-green3 text-nowrap">RATING KAMU</p>
-          </div>
-        </div>
+        )}
 
         {/* ── DONASI TERSEDIA ───────────────────────────────────────── */}
         <div className="mt-5">

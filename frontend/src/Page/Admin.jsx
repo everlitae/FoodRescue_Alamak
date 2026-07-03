@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import api from "../utils/api";
 import socket from "../utils/socket";
 
@@ -118,7 +119,20 @@ function Admin() {
   const [conversations, setConversations] = useState([]);
   const [community, setCommunity] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [tab, setTab] = useState("stats");
+  const location = useLocation();
+  const validTabs = [
+    "stats",
+    "users",
+    "donations",
+    "reports",
+    "conversations",
+    "community",
+    "categories",
+  ];
+  const tabFromUrl = new URLSearchParams(location.search).get("tab");
+  const [tab, setTab] = useState(
+    validTabs.includes(tabFromUrl) ? tabFromUrl : "stats",
+  );
   const [msg, setMsg] = useState("");
   const [newCategory, setNewCategory] = useState({
     name: "",
@@ -229,8 +243,15 @@ function Admin() {
     try {
       await api.post("/categories/seed");
       showMsg("Kategori default berhasil di-seed!");
-      api.get("/admin/categories").then((r) => setCategories(r.data));
-    } catch {}
+      const res = await api.get("/admin/categories");
+      setCategories(res.data);
+    } catch (err) {
+      console.error("Gagal seed kategori:", err);
+      showMsg(
+        err.response?.data?.msg || err.message || "Gagal seed kategori",
+        "error",
+      );
+    }
   };
   const addCategory = async (e) => {
     e.preventDefault();
@@ -285,7 +306,7 @@ function Admin() {
           label: "Total Pengguna",
           value: stats.totalUsers,
           icon: "bi-people-fill",
-          accent: "var(--g1)",
+          accent: "#5f8b4c",
         },
         {
           label: "Food Provider",
@@ -296,20 +317,20 @@ function Admin() {
         {
           label: "Food Seeker",
           value: stats.totalSeekers,
-          icon: "bi-person-heart-fill",
+          icon: "bi-person-fill",
           accent: "#1e7ab8",
         },
         {
           label: "Total Donasi",
           value: stats.totalDonations,
           icon: "bi-gift-fill",
-          accent: "var(--g1)",
+          accent: "#5f8b4c",
         },
         {
           label: "Donasi Tersedia",
           value: stats.availableDonations,
           icon: "bi-check-circle-fill",
-          accent: "var(--g2)",
+          accent: "#7aaf60",
         },
         {
           label: "Donasi Selesai",
@@ -333,7 +354,7 @@ function Admin() {
           label: "Post Komunitas",
           value: stats.totalPosts,
           icon: "bi-chat-square-dots-fill",
-          accent: "var(--g1)",
+          accent: "#5f8b4c",
         },
       ]
     : [];

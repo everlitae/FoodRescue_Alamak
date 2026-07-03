@@ -2004,7 +2004,17 @@ input[type="file"]::file-selector-button:hover {
   }
 }
 
-/* ============ MESSAGES (CHAT) RESPONSIVE ============ */
+@media (max-width: 900px) {
+  .adm-quick-card {
+    flex-basis: 45% !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .adm-quick-card {
+    flex-basis: 100% !important;
+  }
+}
 @media (max-width: 900px) {
   .messages-sidebar {
     width: 100% !important;
