@@ -371,6 +371,7 @@ class NavBar extends React.Component {
                 >
                   {(() => {
                     const badge = getUserBadge(user.total_points || 0);
+                    const isAdmin = user.role === "admin";
                     return (
                       <span
                         style={{
@@ -379,9 +380,11 @@ class NavBar extends React.Component {
                           gap: 4,
                         }}
                       >
-                        <span title={badge.level} style={{ fontSize: 14 }}>
-                          {badge.emoji}
-                        </span>
+                        {!isAdmin && (
+                          <span title={badge.level} style={{ fontSize: 14 }}>
+                            {badge.emoji}
+                          </span>
+                        )}
                         {user.first_name} {user.last_name}
                       </span>
                     );
@@ -535,6 +538,7 @@ class NavBar extends React.Component {
                   </div>
                   {(() => {
                     const badge = getUserBadge(user.total_points || 0);
+                    const isAdmin = user.role === "admin";
                     return (
                       <span
                         style={{
@@ -543,9 +547,11 @@ class NavBar extends React.Component {
                           gap: 4,
                         }}
                       >
-                        <span title={badge.level} style={{ fontSize: 14 }}>
-                          {badge.emoji}
-                        </span>
+                        {!isAdmin && (
+                          <span title={badge.level} style={{ fontSize: 14 }}>
+                            {badge.emoji}
+                          </span>
+                        )}
                         {user.first_name} {user.last_name}
                       </span>
                     );

@@ -256,43 +256,45 @@ function Profile() {
                 </p>
               )}
 
-              {/* Badge Level */}
-              {(() => {
-                const badge = getBadge(profile.total_points || 0);
-                const next = getNextBadge(profile.total_points || 0);
-                return (
-                  <div style={{ marginBottom: 8 }}>
-                    <span
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 6,
-                        padding: "4px 12px",
-                        borderRadius: 999,
-                        background: badge.bgColor,
-                        border: `1px solid ${badge.borderColor}`,
-                        fontSize: 12,
-                        fontWeight: 700,
-                        color: badge.color,
-                      }}
-                    >
-                      {badge.emoji} {badge.level}
-                    </span>
-                    {next && (
-                      <p
+              {/* Badge Level (bukan buat admin, gamifikasi ini cuma relevan buat provider/seeker) */}
+              {profile.role !== "admin" &&
+                (() => {
+                  const badge = getBadge(profile.total_points || 0);
+                  const next = getNextBadge(profile.total_points || 0);
+                  return (
+                    <div style={{ marginBottom: 8 }}>
+                      <span
                         style={{
-                          fontSize: 10,
-                          color: "var(--txt4)",
-                          marginTop: 4,
-                          marginBottom: 0,
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 6,
+                          padding: "4px 12px",
+                          borderRadius: 999,
+                          background: badge.bgColor,
+                          border: `1px solid ${badge.borderColor}`,
+                          fontSize: 12,
+                          fontWeight: 700,
+                          color: badge.color,
                         }}
                       >
-                        {next.needed} poin lagi untuk {next.emoji} {next.level}
-                      </p>
-                    )}
-                  </div>
-                );
-              })()}
+                        {badge.emoji} {badge.level}
+                      </span>
+                      {next && (
+                        <p
+                          style={{
+                            fontSize: 10,
+                            color: "var(--txt4)",
+                            marginTop: 4,
+                            marginBottom: 0,
+                          }}
+                        >
+                          {next.needed} poin lagi untuk {next.emoji}{" "}
+                          {next.level}
+                        </p>
+                      )}
+                    </div>
+                  );
+                })()}
 
               <span
                 className="badge-green"
@@ -311,64 +313,66 @@ function Profile() {
             </div>
           </div>
 
-          {/* Trust score bar */}
-          <div style={{ padding: "0 28px 24px" }}>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: 6,
-              }}
-            >
-              <span
-                style={{
-                  fontSize: 11,
-                  fontWeight: 700,
-                  color: "var(--txt4)",
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                }}
-              >
-                Trust Score
-              </span>
-              <span
-                style={{ fontSize: 13, fontWeight: 700, color: "var(--g1)" }}
-              >
-                {profile.trust_score?.toFixed(1) || "5.0"} / 5.0
-              </span>
-            </div>
-            <div
-              style={{
-                height: 6,
-                borderRadius: 10,
-                background: "var(--border)",
-                overflow: "hidden",
-              }}
-            >
+          {/* Trust score bar (bukan buat admin) */}
+          {profile.role !== "admin" && (
+            <div style={{ padding: "0 28px 24px" }}>
               <div
                 style={{
-                  height: "100%",
-                  borderRadius: 10,
-                  background: "linear-gradient(90deg,var(--g1),var(--g2))",
-                  width: `${((profile.trust_score || 5) / 5) * 100}%`,
-                  transition: "width 0.6s ease",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginBottom: 6,
                 }}
-              />
-            </div>
-            <div style={{ display: "flex", gap: 2, marginTop: 6 }}>
-              {[1, 2, 3, 4, 5].map((i) => (
-                <i
-                  key={i}
-                  className={`bi ${i <= trustRounded ? "bi-star-fill" : "bi-star"}`}
+              >
+                <span
                   style={{
-                    fontSize: 12,
-                    color: i <= trustRounded ? "var(--g2)" : "var(--border)",
+                    fontSize: 11,
+                    fontWeight: 700,
+                    color: "var(--txt4)",
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Trust Score
+                </span>
+                <span
+                  style={{ fontSize: 13, fontWeight: 700, color: "var(--g1)" }}
+                >
+                  {profile.trust_score?.toFixed(1) || "5.0"} / 5.0
+                </span>
+              </div>
+              <div
+                style={{
+                  height: 6,
+                  borderRadius: 10,
+                  background: "var(--border)",
+                  overflow: "hidden",
+                }}
+              >
+                <div
+                  style={{
+                    height: "100%",
+                    borderRadius: 10,
+                    background: "linear-gradient(90deg,var(--g1),var(--g2))",
+                    width: `${((profile.trust_score || 5) / 5) * 100}%`,
+                    transition: "width 0.6s ease",
                   }}
                 />
-              ))}
+              </div>
+              <div style={{ display: "flex", gap: 2, marginTop: 6 }}>
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <i
+                    key={i}
+                    className={`bi ${i <= trustRounded ? "bi-star-fill" : "bi-star"}`}
+                    style={{
+                      fontSize: 12,
+                      color: i <= trustRounded ? "var(--g2)" : "var(--border)",
+                    }}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Stats */}
           <div
@@ -378,23 +382,47 @@ function Profile() {
               borderTop: "1px solid var(--border)",
             }}
           >
-            {[
-              {
-                label: "Donasi",
-                value: profile.profile?.total_donations || 0,
-                icon: "bi-box-seam",
-              },
-              {
-                label: "Klaim",
-                value: profile.profile?.total_claims || 0,
-                icon: "bi-hand-index",
-              },
-              {
-                label: "Poin",
-                value: profile.total_points || 0,
-                icon: "bi-lightning-charge",
-              },
-            ].map((s, i) => (
+            {(profile.role === "admin"
+              ? [
+                  {
+                    label: "Role",
+                    value: "Admin",
+                    icon: "bi-shield-check",
+                  },
+                  {
+                    label: "Status",
+                    value: profile.is_active ? "Aktif" : "Nonaktif",
+                    icon: "bi-toggle-on",
+                  },
+                  {
+                    label: "Bergabung",
+                    value: profile.created_at
+                      ? new Date(profile.created_at).toLocaleDateString(
+                          "id-ID",
+                          { month: "short", year: "numeric" },
+                        )
+                      : "-",
+                    icon: "bi-calendar-check",
+                  },
+                ]
+              : [
+                  {
+                    label: "Donasi",
+                    value: profile.profile?.total_donations || 0,
+                    icon: "bi-box-seam",
+                  },
+                  {
+                    label: "Klaim",
+                    value: profile.profile?.total_claims || 0,
+                    icon: "bi-hand-index",
+                  },
+                  {
+                    label: "Poin",
+                    value: profile.total_points || 0,
+                    icon: "bi-lightning-charge",
+                  },
+                ]
+            ).map((s, i) => (
               <div
                 key={i}
                 style={{
