@@ -19,8 +19,11 @@ function Profile() {
   const [editMode, setEditMode] = useState(false);
   const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(null);
 
-  useEffect(() => {
+  const fetchProfile = () => {
+    setLoading(true);
+    setFetchError(null);
     api
       .get("/users/profile")
       .then((res) => {
@@ -34,7 +37,20 @@ function Profile() {
           bio: res.data.profile?.bio || "",
         });
       })
+      .catch((err) => {
+        console.error("Gagal ambil profile:", err);
+        setFetchError(
+          err.response?.data?.msg ||
+            err.message ||
+            "Gagal memuat profil. Coba lagi.",
+        );
+      })
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLogout = () => {
@@ -76,7 +92,37 @@ function Profile() {
       </div>
     );
 
-  if (!profile) return null;
+  if (!profile)
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          background: "var(--bg)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 14,
+          padding: 20,
+          textAlign: "center",
+        }}
+      >
+        <i
+          className="bi bi-exclamation-triangle"
+          style={{ fontSize: 32, color: "var(--sa1)" }}
+        />
+        <p className="outfit text-green3" style={{ maxWidth: 360 }}>
+          {fetchError || "Gagal memuat profil."}
+        </p>
+        <button
+          className="btn-green-gradient px-4 py-2 rounded-3 fw-bold"
+          style={{ border: "none" }}
+          onClick={fetchProfile}
+        >
+          Coba Lagi
+        </button>
+      </div>
+    );
 
   const role = ROLE_LABEL[profile.role] || {};
   const trustRounded = Math.round(profile.trust_score || 0);
